@@ -1,5 +1,5 @@
 import { _decorator, Component,  Node, resources, Sprite, SpriteFrame } from 'cc';
-import { MyGame } from './Game';
+import { MyGame } from './MyGame';
 const { ccclass, property } = _decorator;
 
 @ccclass('Rocket')

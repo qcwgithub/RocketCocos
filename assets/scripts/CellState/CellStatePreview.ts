@@ -2,7 +2,7 @@ import { assert, Vec3 } from "cc";
 import { Cell } from "../Cell";
 import { Shape } from "../Shape";
 import { CellState } from "./CellState";
-import { clamp01 } from "../Unity";
+import { sc } from "../sc";
 
 export class CellStatePreview extends CellState {
     public override AskRotate(): boolean {
@@ -39,7 +39,7 @@ export class CellStatePreview extends CellState {
     }
 
     Refresh1(): number {
-        let t: number = clamp01(this.previewTimer / this.duration_half);
+        let t: number = sc.clamp01(this.previewTimer / this.duration_half);
 
         let lerpResult = new Vec3();
         if (this.zoomIn) {

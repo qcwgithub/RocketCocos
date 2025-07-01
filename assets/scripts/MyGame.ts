@@ -13,7 +13,7 @@ import { Board } from './Board';
 const { ccclass, property } = _decorator;
 
 @ccclass('MyGame')
-export class MyGamde extends Component {
+export class MyGame extends Component {
     public gameData: GameData;
     public board: Board;
     public rockets: Rocket[] = [];
@@ -143,14 +143,14 @@ export class MyGamde extends Component {
         }
     }
 
-    OnPreviewFinish(poses: Vec2[]): void {
+    OnPreviewFinish(poses: number[]): void {
         assert(!this.fireGroup.firing);
         if (!this.fireGroup.firing) {
             this.fireGroup.Start(poses, this.OnFireFinish);
         }
     }
 
-    OnFireFinish(poses: Vec2[]): void {
+    OnFireFinish(poses: number[]): void {
         this.moveGroup.Move(poses, this.OnCellMoveFinish);
         this.SetDirty();
         this.HandleDirty();

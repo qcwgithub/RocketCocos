@@ -6,6 +6,19 @@ export class sc {
 
     public static tempVec3: Vec3 = new Vec3();
     public static tempQuat: Quat = new Quat();
+
+    public static clamp01(value: number): number {
+        return Math.min(1, Math.max(0, value));
+    }
+
+    public static encodePos(x: number, y: number): number {
+        return x * 100 + y;
+    }
+    public static decodePos(v: number): [number, number] {
+        let y = v % 100;
+        let x = (v - y) / 100;
+        return [x, y];
+    }
 }
 
 

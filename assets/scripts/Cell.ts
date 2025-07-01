@@ -2,7 +2,7 @@ import { _decorator, Color, Component, Node, resources, Sprite, SpriteFrame } fr
 import { Shape } from './Shape';
 import { CellData } from './CellData';
 import { RotateDir } from './RotateDir';
-import { MyGame } from './Game';
+import { MyGame } from './MyGame';
 import { CellStateMove } from './CellState/CellStateMove';
 import { CellStateFire } from './CellState/CellStateFire';
 import { CellStatePreview } from './CellState/CellStatePreview';

@@ -1,6 +1,7 @@
 import { assert, Vec2 } from "cc";
 import { Cell } from "../Cell";
-import { MyGame } from "../Game";
+import { MyGame } from "../MyGame";
+import { sc } from "../sc";
 
 export class FireGroup {
     game: MyGame;
@@ -9,9 +10,9 @@ export class FireGroup {
         this.firing = false;
     }
     public firing: boolean;
-    public poses: Vec2[] = [];
-    public onFinish: (poses: Vec2[]) => void;
-    public Start(poses: Vec2[], onFinish: (poses: Vec2[]) => void): void {
+    public poses: number[] = [];
+    public onFinish: (poses: number[]) => void;
+    public Start(poses: number[], onFinish: (poses: number[]) => void): void {
         assert(!this.firing);
 
         if (!this.firing) {
@@ -20,9 +21,9 @@ export class FireGroup {
             this.poses = poses.slice();
             this.onFinish = onFinish;
 
-            for (let i = 0; i < this.poses.length; i++) {
-                let pos: Vec2 = this.poses[i];
-                let cell: Cell = this.game.board.At(pos.x, pos.y);
+            for (const pos of this.poses) {
+                const [x, y] = sc.decodePos(pos);
+                let cell: Cell = this.game.board.At(x, y);
                 cell.Fire(this.OnCellFireFinish);
             }
         }
@@ -31,9 +32,9 @@ export class FireGroup {
     OnCellFireFinish(_cell: Cell): void {
         assert(this.firing);
         if (this.firing) {
-            for (let i = 0; i < this.poses.length; i++) {
-                let pos: Vec2 = this.poses[i];
-                let cell: Cell = this.game.board.At(pos.x, pos.y);
+            for (const pos of this.poses) {
+                const [x, y] = sc.decodePos(pos);
+                let cell: Cell = this.game.board.At(x, y);
                 if (cell.firing) {
                     return;
                 }

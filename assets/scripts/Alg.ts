@@ -4,6 +4,7 @@ import { CellData } from "./CellData";
 import { PreviewGroupData } from "./PreviewGroupData";
 import { ShapeExt } from "./Shape";
 import { Dir, DirExt } from "./Dir";
+import { sc } from "./sc";
 
 export class Alg {
     public static RefreshLink(board: BoardData): void {
@@ -137,7 +138,7 @@ export class Alg {
                 if (ShapeExt.GetSettings(cell.shape).linkedDirs.indexOf(reverseDir) >= 0) {
                     cell.linkedLRHandled = true;
 
-                    board.currentPreviewGroupData.poses.push(new Vec2(x, y));
+                    board.currentPreviewGroupData.poses.push(sc.encodePos(x, y));
                     Alg.Propagate(board, x, y, what);
                 }
             }

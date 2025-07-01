@@ -1,7 +1,7 @@
 import { _decorator, assert, Component, instantiate, Node, Vec3 } from 'cc';
 import { Cell } from './Cell';
 import { BoardData } from './BoardData';
-import { MyGame } from './Game';
+import { MyGame } from './MyGame';
 const { ccclass, property } = _decorator;
 
 @ccclass('Board')

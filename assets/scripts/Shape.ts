@@ -24,7 +24,6 @@ export enum Shape {
 
 export class ShapeSettings {
     public linkedDirs: Dir[];
-    public linkedOffsets: Vec2[];
     public linkedL: boolean;
     public linkedR: boolean;
     public linkedT: boolean;
@@ -84,23 +83,18 @@ export class ShapeExt {
     static CreateSettings(e: Shape): ShapeSettings {
         let settings = new ShapeSettings();
         settings.linkedDirs = [];
-        settings.linkedOffsets = [];
 
         if (settings.linkedL = ShapeExt.Linked_L(e)) {
             settings.linkedDirs.push(Dir.L);
-            settings.linkedOffsets.push(new Vec2(-1, 0));
         }
         if (settings.linkedR = ShapeExt.Linked_R(e)) {
             settings.linkedDirs.push(Dir.R);
-            settings.linkedOffsets.push(new Vec2(1, 0));
         }
         if (settings.linkedT = ShapeExt.Linked_T(e)) {
             settings.linkedDirs.push(Dir.T);
-            settings.linkedOffsets.push(new Vec2(0, 1));
         }
         if (settings.linkedB = ShapeExt.Linked_B(e)) {
             settings.linkedDirs.push(Dir.B);
-            settings.linkedOffsets.push(new Vec2(0, -1));
         }
         settings.rotateCW = ShapeExt.RotateCW(e);
         settings.rotateCCW = ShapeExt.RotateCCW(e);

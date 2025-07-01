@@ -3,7 +3,8 @@ import { Cell } from "../Cell";
 import { BoardData } from "../BoardData";
 import { CellData } from "../CellData";
 import { Board } from "../Board";
-import { MyGame } from "../Game";
+import { MyGame } from "../MyGame";
+import { sc } from "../sc";
 
 export class MoveGroup {
     game: MyGame;
@@ -12,7 +13,7 @@ export class MoveGroup {
     }
 
     onCellMoveFinish: (cell: Cell) => void;
-    public Move(poses: Vec2[], onCellMoveFinish: (cell: Cell) => void): void {
+    public Move(poses: number[], onCellMoveFinish: (cell: Cell) => void): void {
         // Debug.Log("OnFireFinish");
         this.onCellMoveFinish = onCellMoveFinish;
 
@@ -33,8 +34,9 @@ export class MoveGroup {
         for (let i = 0; i < boardData.width; i++) {
             emptyY.clear();
             for (const pos of poses) {
-                if (pos.x == i) {
-                    emptyY.add(pos.y);
+                const [x, y] = sc.decodePos(pos);
+                if (x == i) {
+                    emptyY.add(y);
                 }
             }
 

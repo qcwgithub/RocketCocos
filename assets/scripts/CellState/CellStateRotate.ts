@@ -3,7 +3,6 @@ import { Cell } from "../Cell";
 import { CellData } from "../CellData";
 import { RotateDir, RotateDirExt } from "../RotateDir";
 import { Shape, ShapeExt } from "../Shape";
-import { clamp01 } from "../Unity";
 import { CellState } from "./CellState";
 import { sc } from "../sc";
 
@@ -53,7 +52,7 @@ export class CellStateRotate extends CellState {
     public override MyUpdate(dt: number): void {
         if (this.rotating) {
             this.rotateTimer += dt;
-            let t: number = clamp01(this.rotateTimer / 0.2);
+            let t: number = sc.clamp01(this.rotateTimer / 0.2);
             Quat.lerp(sc.tempQuat, this.startRotation, this.targetRotation, t)
             this.cell.node.setRotation(sc.tempQuat);
             if (t >= 1) {
