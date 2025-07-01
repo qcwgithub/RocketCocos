@@ -13,7 +13,7 @@ import { Board } from './Board';
 const { ccclass, property } = _decorator;
 
 @ccclass('MyGame')
-export class MyGame extends Component {
+export class MyGamde extends Component {
     public gameData: GameData;
     public board: Board;
     public rockets: Rocket[] = [];
