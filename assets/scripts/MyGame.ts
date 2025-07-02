@@ -24,7 +24,7 @@ export class MyGame extends Component {
     public previewGroup: PreviewGroup = new PreviewGroup();
     public fireGroup: FireGroup = new FireGroup();
     public moveGroup: MoveGroup = new MoveGroup();
-    public init(gameData: GameData): void {
+    public startGame(gameData: GameData): void {
         this.gameData = gameData;
         this.board.init(this);
 

@@ -8,15 +8,18 @@ import { Shape, ShapeExt } from "./Shape";
 import { Alg } from "./Alg";
 
 export class GameData {
+    public level: number;
+    public levelConfig: LevelConfig;
     public boardData: BoardData;
     public rocketDatas: RocketData[] = [];
-    public init(): void {
-        let levelConfig: LevelConfig = sc.configManager.getLevelConfig(1);
+    public init(level: number): void {
+        this.level = level;
+        this.levelConfig = sc.configManager.getLevelConfig(level);
         this.boardData = new BoardData();
-        this.boardData.init(levelConfig.width, levelConfig.height);
+        this.boardData.init(this.levelConfig.width, this.levelConfig.height);
 
-        for (let x = 0; x < levelConfig.width; x++) {
-            for (let y = 0; y < levelConfig.height; y++) {
+        for (let x = 0; x < this.levelConfig.width; x++) {
+            for (let y = 0; y < this.levelConfig.height; y++) {
                 let cell: CellData = this.boardData.at(x, y);
                 cell.forbidLink = false;
                 cell.shape = this.randomShape();
@@ -24,7 +27,7 @@ export class GameData {
         }
 
         this.rocketDatas.length = 0;
-        for (let y = 0; y < levelConfig.height; y++) {
+        for (let y = 0; y < this.levelConfig.height; y++) {
             let rocketData: RocketData = new RocketData();
             rocketData.level = this.randomRocketLevel();
             this.rocketDatas.push(rocketData);

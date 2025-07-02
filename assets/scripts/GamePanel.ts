@@ -5,15 +5,8 @@ const { ccclass, property } = _decorator;
 
 @ccclass('GamePanel')
 export class GamePanel extends Component {
-    start() {
-        this.onClickStart();
-    }
-
-    onClickStart(): void {
-        var gameData = new GameData();
-        gameData.init();
-
-        sc.game.init(gameData);
+    public show(gameData: GameData): void {
+        // sc.game.startGame(gameData);
     }
 }
 

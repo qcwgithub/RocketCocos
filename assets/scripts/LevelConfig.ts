@@ -1,5 +1,5 @@
 export class LevelConfig {
-    public level: number = 0;
-    public width: number = 0;
-    public height: number = 0;
+    public level: number;
+    public width: number;
+    public height: number;
 }

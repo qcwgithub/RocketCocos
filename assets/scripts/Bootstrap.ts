@@ -4,6 +4,7 @@ import { MyGame } from './MyGame';
 import { sc } from './sc';
 import { ConfigManager } from './ConfigManager';
 import { MyAssets } from './MyAssets';
+import { Profile } from './Profile';
 const { ccclass, property } = _decorator;
 
 @ccclass('Bootstrap')
@@ -17,8 +18,12 @@ export class Bootstrap extends Component {
 
     onLoad() {
         sc.bootstrap = this;
+        sc.gamePanel = this.gamePanel;
         sc.game = this.game;
         sc.myAssets = this.myAssets;
+
+        sc.profile = new Profile("qiucw");
+        sc.profile.load();
 
         sc.configManager = new ConfigManager();
         sc.configManager.load();
