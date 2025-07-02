@@ -8,6 +8,8 @@ const { ccclass, property } = _decorator;
 @ccclass('Board')
 export class Board extends Component {
     @property({ type: Node })
+    public cellBgTemplate: Node;
+    @property({ type: Node })
     public cellTemplate: Node;
 
     cells: Cell[][];
@@ -17,13 +19,45 @@ export class Board extends Component {
     public init(game: MyGame): void {
         this.game = game;
         this.boardData = game.gameData.boardData;
-        for (const child of this.node.children) {
+
+        this.initCellBgs();
+        this.initCells();
+    }
+
+    initCellBgs() {
+        let parent: Node = this.cellBgTemplate.parent;
+
+        for (const child of parent.children) {
             child.active = false;
         }
 
-        while (this.node.children.length < this.width * this.height) {
+        while (parent.children.length < this.width * this.height) {
+            let node = instantiate(this.cellBgTemplate);
+            node.setParent(parent);
+        }
+
+        let children: Node[] = parent.children;
+
+        let index: number = 0;
+        for (let i = 0; i < this.width; i++) {
+            for (let j = 0; j < this.height; j++) {
+                let child: Node = children[index++];
+                child.active = true;
+                child.setPosition(this.getPosition(i, j));
+            }
+        }
+    }
+
+    initCells() {
+        let parent: Node = this.cellTemplate.parent;
+
+        for (const child of parent.children) {
+            child.active = false;
+        }
+
+        while (parent.children.length < this.width * this.height) {
             let node = instantiate(this.cellTemplate);
-            node.setParent(this.node);
+            node.setParent(parent);
         }
 
         this.cells = new Array(this.width);
@@ -31,7 +65,7 @@ export class Board extends Component {
             this.cells[x] = new Array(this.height);
         }
 
-        let children: Node[] = this.node.children;
+        let children: Node[] = parent.children;
 
         let index: number = 0;
         for (let i = 0; i < this.width; i++) {
