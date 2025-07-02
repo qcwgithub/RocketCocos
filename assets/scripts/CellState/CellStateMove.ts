@@ -21,11 +21,9 @@ export class CellStateMove extends CellState {
     public move(fromPositionY: number, toPositionY: number, onFinish: (cell: Cell) => void): void {
         this.moving = true;
 
-        let position: Vec3 = this.cell.node.position;
-        position.y = fromPositionY;
-        this.cell.node.setPosition(position);
-
+        this.cell.node.y = fromPositionY;
         this.targetPositionY = toPositionY;
+
         this.onMoveFinish = onFinish;
 
         let cellData: CellData = this.cell.game.gameData.boardData.at(this.cell.x, this.cell.y);
@@ -34,13 +32,13 @@ export class CellStateMove extends CellState {
 
     public override myUpdate(dt: number): void {
         if (this.moving) {
-            let position: Vec3 = this.cell.node.position;
-            position.y -= MySettings.moveSpeed * dt;
-            if (position.y <= this.targetPositionY) {
-                position.y = this.targetPositionY;
+            let y: number = this.cell.node.y;
+            y -= MySettings.moveSpeed * dt;
+            if (y <= this.targetPositionY) {
+                y = this.targetPositionY;
             }
-            this.cell.node.setPosition(position);
-            if (position.y <= this.targetPositionY) {
+            this.cell.node.y = y;
+            if (y <= this.targetPositionY) {
                 this.finishMove();
             }
         }

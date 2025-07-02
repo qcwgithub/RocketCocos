@@ -39,7 +39,7 @@ export class MoveGroup {
                 }
             }
 
-            let topY: number = board.getPosition(0, board.height - 1).y + MySettings.cellSize;
+            let topY: number = board.getPositionY(board.height - 1) + MySettings.cellSize;
 
             for (let j = 0; j < boardData.height; j++) {
                 if (!emptyY.has(j)) {
@@ -62,14 +62,14 @@ export class MoveGroup {
                     emptyY.add(j2);
 
                     let cell: Cell = board.at(i, j);
-                    cell.move(cell.node.position.y, board.getPosition(i, j).y, onCellMoveFinish);
+                    cell.move(cell.node.position.y, board.getPositionY(j), onCellMoveFinish);
                 }
                 else {
                     let cellData: CellData = boardData.at(i, j);
                     cellData.shape = this.game.gameData.randomShape();
 
                     let cell: Cell = board.at(i, j);
-                    cell.move(topY, board.getPosition(i, j).y, onCellMoveFinish);
+                    cell.move(topY, board.getPositionY(j), onCellMoveFinish);
                     topY += MySettings.cellSize;
                 }
             }

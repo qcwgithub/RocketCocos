@@ -29,9 +29,8 @@ export class CellStateFire extends CellState {
             this.fireTimer += dt;
             let t: number = sc.clamp01(this.fireTimer / MySettings.fireDuration);
 
-            let lerpResult = new Vec3();
-            Vec3.lerp(lerpResult, Vec3.ONE, Vec3.ZERO, t);
-            this.cell.node.setScale(lerpResult);
+            Vec3.lerp(sc.tempVec3, Vec3.ONE, Vec3.ZERO, t);
+            this.cell.node.setScale(sc.tempVec3);
             if (t >= 1) {
                 this.finishFire();
             }

@@ -24,10 +24,7 @@ export class DirExt {
         }
     }
 
-    public static fromOffset(offset: Vec2): Dir {
-        let x: number = offset.x;
-        let y: number = offset.y;
-
+    public static fromOffset(x: number, y: number): Dir {
         assert(x != 0 || y != 0);
         assert(x == 0 || y == 0);
 
@@ -36,6 +33,34 @@ export class DirExt {
         }
         else {
             return y > 0 ? Dir.T : Dir.B;
+        }
+    }
+
+    public static toOffsetX(e: Dir): number {
+        switch (e) {
+            case Dir.L:
+                return -1;
+            case Dir.R:
+                return 1;
+            case Dir.T:
+                return 0;
+            case Dir.B:
+            default:
+                return 0;
+        }
+    }
+
+    public static toOffsetY(e: Dir): number {
+        switch (e) {
+            case Dir.L:
+                return 0;
+            case Dir.R:
+                return 0;
+            case Dir.T:
+                return 1;
+            case Dir.B:
+            default:
+                return -1;
         }
     }
 

@@ -129,10 +129,11 @@ export class MyGame extends Component {
 
         // 2
 
-        let pos2: Vec2 = prevPos.add(DirExt.toOffset(dir));
-        if (this.board.boardData.inRange(pos2.x, pos2.y)) {
-            let cell2: Cell = this.board.at(pos2.x, pos2.y);
-            let data2: CellData = this.gameData.boardData.at(pos2.x, pos2.y);
+        let x2 = prevPos.x + DirExt.toOffsetX(dir);
+        let y2 = prevPos.y + DirExt.toOffsetY(dir);
+        if (this.board.boardData.inRange(x2, y2)) {
+            let cell2: Cell = this.board.at(x2, y2);
+            let data2: CellData = this.gameData.boardData.at(x2, y2);
 
             const [canLinkTo2, needRotate2, rotateDir2] = ShapeExt.canLinkTo(data2.shape, DirExt.reverse(dir));
 

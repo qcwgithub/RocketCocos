@@ -90,13 +90,12 @@ export class Alg {
         let linkedDirs: Dir[] = ShapeExt.getSettings(center.shape).linkedDirs;
         for (let i = 0; i < linkedDirs.length; i++) {
             let dir: Dir = linkedDirs[i];
-            let offset: Vec2 = DirExt.toOffset(dir);
-            let x = center_x + offset.x;
+            let x = center_x + DirExt.toOffsetX(dir);
             if (x < 0 || x >= board.width) {
                 continue;
             }
 
-            let y = center_y + offset.y;
+            let y = center_y + DirExt.toOffsetY(dir);
             if (y < 0 || y >= board.height) {
                 continue;
             }

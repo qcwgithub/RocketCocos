@@ -42,15 +42,14 @@ export class CellStatePreview extends CellState {
     refresh1(): number {
         let t: number = sc.clamp01(this.previewTimer / this.duration_half);
 
-        let lerpResult = new Vec3();
         if (this.zoomIn) {
-            Vec3.lerp(lerpResult, Vec3.ONE, new Vec3(1.5, 1.5, 1), t);
+            Vec3.lerp(sc.tempVec3, Vec3.ONE, MySettings.bigVec3, t);
         }
         else {
-            Vec3.lerp(lerpResult, new Vec3(1.5, 1.5, 1), Vec3.ONE, t);
+            Vec3.lerp(sc.tempVec3, MySettings.bigVec3, Vec3.ONE, t);
         }
 
-        this.cell.node.setScale(lerpResult);
+        this.cell.node.setScale(sc.tempVec3);
         return t;
     }
 
