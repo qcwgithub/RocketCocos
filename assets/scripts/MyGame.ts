@@ -15,14 +15,16 @@ const { ccclass, property } = _decorator;
 
 @ccclass('MyGame')
 export class MyGame extends Component {
-    public gameData: GameData;
+    @property({ type: Board })
     public board: Board;
+
+    public gameData: GameData;
     public rockets: Rocket[] = [];
     public myInput: MyInput = new MyInput();
     public previewGroup: PreviewGroup = new PreviewGroup();
     public fireGroup: FireGroup = new FireGroup();
     public moveGroup: MoveGroup = new MoveGroup();
-    public Init(gameData: GameData): void {
+    public init(gameData: GameData): void {
         this.gameData = gameData;
         this.board.init(this);
 

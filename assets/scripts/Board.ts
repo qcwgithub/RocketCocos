@@ -6,6 +6,7 @@ const { ccclass, property } = _decorator;
 
 @ccclass('Board')
 export class Board extends Component {
+    @property({ type: Node })
     public cellTemplate: Node;
     // List<CCell> children = new List<CCell>();
     cells: Cell[][];

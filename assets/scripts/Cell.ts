@@ -15,6 +15,7 @@ const { ccclass, property } = _decorator;
 export class Cell extends Component {
     @property({ type: Sprite })
     public sprite: Sprite;
+
     public game: MyGame;
     public x: number;
     public y: number;

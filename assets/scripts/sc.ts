@@ -1,7 +1,11 @@
 import { Quat, Vec3 } from "cc";
 import { ConfigManager } from "./ConfigManager";
+import { MyGame } from "./MyGame";
+import { Bootstrap } from "./Bootstrap";
 
 export class sc {
+    public static bootstrap: Bootstrap;
+    public static game: MyGame;
     public static configManager: ConfigManager;
 
     public static tempVec3: Vec3 = new Vec3();
