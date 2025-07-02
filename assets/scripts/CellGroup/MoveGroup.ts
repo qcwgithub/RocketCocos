@@ -9,7 +9,7 @@ import { MySettings } from "../MySettings";
 
 export class MoveGroup {
     game: MyGame;
-    public Init(game: MyGame): void {
+    public init(game: MyGame): void {
         this.game = game;
     }
 

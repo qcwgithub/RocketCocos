@@ -6,7 +6,7 @@ import { sc } from "../sc";
 
 export class PreviewGroup {
     game: MyGame;
-    public Init(game: MyGame): void {
+    public init(game: MyGame): void {
         this.game = game;
         this.previewing = false;
     }
@@ -26,11 +26,11 @@ export class PreviewGroup {
         for (let i = 0; i < this.poses.length; i++) {
             const [x, y] = sc.decodePos(this.poses[i]);
             let cell: Cell = this.game.board.at(x, y);
-            cell.preview(0, this.OnCellPreviewFinish.bind(this));
+            cell.preview(0, this.onCellPreviewFinish.bind(this));
         }
     }
 
-    OnCellPreviewFinish(_cell: Cell): void {
+    onCellPreviewFinish(_cell: Cell): void {
         assert(this.previewing);
         for (let i = 0; i < this.poses.length; i++) {
             const [x, y] = sc.decodePos(this.poses[i]);
@@ -44,7 +44,7 @@ export class PreviewGroup {
         this.onFinish(this.poses);
     }
 
-    public Cancel(): void {
+    public cancel(): void {
         // Debug.LogWarning("PreviewGroup.Cancel");
         assert(this.previewing);
         this.previewing = false;
@@ -58,7 +58,7 @@ export class PreviewGroup {
         }
     }
 
-    StillValid(previewGroupDatas: PreviewGroupData[]): [boolean, PreviewGroupData?] {
+    stillValid(previewGroupDatas: PreviewGroupData[]): [boolean, PreviewGroupData?] {
         if (previewGroupDatas.length == 0) {
             return [false];
         }
@@ -115,16 +115,16 @@ export class PreviewGroup {
         return [true, curr];
     }
 
-    public UpdatePreview(previewGroupDatas: PreviewGroupData[]): void {
+    public updatePreview(previewGroupDatas: PreviewGroupData[]): void {
         assert(this.previewing);
         if (!this.previewing) {
             return;
         }
 
-        const [stillValid, curr_previewGroupData] = this.StillValid(previewGroupDatas);
+        const [stillValid, curr_previewGroupData] = this.stillValid(previewGroupDatas);
 
         if (!stillValid) {
-            this.Cancel();
+            this.cancel();
             return;
         }
 
@@ -149,7 +149,7 @@ export class PreviewGroup {
                 const [x, y] = sc.decodePos(pos);
             let cell: Cell = this.game.board.at(x, y);
             if (!cell.previewing) {
-                cell.preview(initTimer, this.OnCellPreviewFinish.bind(this));
+                cell.preview(initTimer, this.onCellPreviewFinish.bind(this));
             }
         }
     }

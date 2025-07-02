@@ -5,7 +5,7 @@ import { sc } from "../sc";
 
 export class FireGroup {
     game: MyGame;
-    public Init(game: MyGame): void {
+    public init(game: MyGame): void {
         this.game = game;
         this.firing = false;
     }

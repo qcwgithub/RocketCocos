@@ -31,9 +31,9 @@ export class MyGame extends Component {
         this.rockets.length = 0;
 
         this.myInput.init(this);
-        this.previewGroup.Init(this);
-        this.fireGroup.Init(this);
-        this.moveGroup.Init(this);
+        this.previewGroup.init(this);
+        this.fireGroup.init(this);
+        this.moveGroup.init(this);
     }
 
     public get time(): number {
@@ -76,7 +76,7 @@ export class MyGame extends Component {
         }
 
         if (this.previewGroup.previewing) {
-            this.previewGroup.UpdatePreview(this.gameData.boardData.previewGroupDatas);
+            this.previewGroup.updatePreview(this.gameData.boardData.previewGroupDatas);
         }
 
         if (this.previewGroup.previewing) {
