@@ -2,6 +2,7 @@ import { _decorator, assert, Component, instantiate, Node, Vec3 } from 'cc';
 import { Cell } from './Cell';
 import { BoardData } from './BoardData';
 import { MyGame } from './MyGame';
+import { MySettings } from './MySettings';
 const { ccclass, property } = _decorator;
 
 @ccclass('Board')
@@ -76,8 +77,8 @@ export class Board extends Component {
 
     public getPosition(i: number, j: number): Vec3 {
         return new Vec3(
-            -this.width * 0.5 + 0.5 + i,
-            -this.height * 0.5 + 0.5 + j,
+            (-this.width * 0.5 + 0.5 + i) * MySettings.cellSize,
+            (-this.height * 0.5 + 0.5 + j) * MySettings.cellSize,
             0
         );
     }

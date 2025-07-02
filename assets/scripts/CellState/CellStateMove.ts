@@ -3,6 +3,7 @@ import { Cell } from "../Cell";
 import { Shape } from "../Shape";
 import { CellState } from "./CellState";
 import { CellData } from "../CellData";
+import { MySettings } from "../MySettings";
 
 export class CellStateMove extends CellState {
     public override  askRotate(): boolean {
@@ -34,7 +35,7 @@ export class CellStateMove extends CellState {
     public override myUpdate(dt: number): void {
         if (this.moving) {
             let position: Vec3 = this.cell.node.position;
-            position.y -= 4 * dt;
+            position.y -= MySettings.moveSpeed * dt;
             if (position.y <= this.targetPositionY) {
                 position.y = this.targetPositionY;
             }

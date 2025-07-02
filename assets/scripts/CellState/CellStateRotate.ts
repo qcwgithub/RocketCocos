@@ -23,7 +23,7 @@ export class CellStateRotate extends CellState {
     public rotateDir: RotateDir;
     rotateTimer: number;
     startRotation: Quat;
-    targetRotation: Quat;
+    targetRotation: Quat = new Quat();
     onRotateFinish: (cell: Cell, rotateDir: RotateDir) => void;
     overrideShape: Shape;
     public rotate(rotateDir: RotateDir, onFinish: (cell: Cell, rotateDir: RotateDir) => void): void {

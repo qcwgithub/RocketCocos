@@ -1,17 +1,18 @@
-import {  Vec2 } from "cc";
+import { Vec2 } from "cc";
 import { Cell } from "../Cell";
 import { BoardData } from "../BoardData";
 import { CellData } from "../CellData";
 import { Board } from "../Board";
 import { MyGame } from "../MyGame";
 import { sc } from "../sc";
+import { MySettings } from "../MySettings";
 
 export class MoveGroup {
     game: MyGame;
     public Init(game: MyGame): void {
         this.game = game;
     }
-    
+
     public move(poses: number[], onCellMoveFinish: (cell: Cell) => void): void {
         // Debug.Log("OnFireFinish");
 
@@ -38,7 +39,7 @@ export class MoveGroup {
                 }
             }
 
-            let topY: number = 3;
+            let topY: number = board.getPosition(0, board.height - 1).y + MySettings.cellSize;
 
             for (let j = 0; j < boardData.height; j++) {
                 if (!emptyY.has(j)) {
@@ -69,7 +70,7 @@ export class MoveGroup {
 
                     let cell: Cell = board.at(i, j);
                     cell.move(topY, board.getPosition(i, j).y, onCellMoveFinish);
-                    topY += 1.3;
+                    topY += MySettings.cellSize;
                 }
             }
         }
