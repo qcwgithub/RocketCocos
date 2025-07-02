@@ -29,21 +29,21 @@ export class Cell extends Component {
         this.x = x;
         this.y = y;
 
-        this.stateIdle.Init(this);
-        this.stateRotate.Init(this);
-        this.statePreview.Init(this);
-        this.stateFire.Init(this);
-        this.stateMove.Init(this);
+        this.stateIdle.init(this);
+        this.stateRotate.init(this);
+        this.statePreview.init(this);
+        this.stateFire.init(this);
+        this.stateMove.init(this);
 
         this.state = this.stateIdle;
 
-        this.Refresh();
+        this.refresh();
     }
 
     _name_x: number = -1;
     _name_y: number;
     _name_shape: Shape;
-    RefreshName(x: number, y: number, shape: Shape): void {
+    refreshName(x: number, y: number, shape: Shape): void {
         if (this._name_x != x || this._name_y != y || this._name_shape != shape) {
             this._name_x = x;
             this._name_y = y;
@@ -53,9 +53,9 @@ export class Cell extends Component {
     }
 
     _sprite_shape: Shape = Shape.Count;
-    RefreshSprite(shape: Shape): void {
+    refreshSprite(shape: Shape): void {
         if (this._sprite_shape != shape) {
-            resources.load("Sprites/V2/" + shape, SpriteFrame, (err, spriteFrame) => {
+            resources.load("sprites/V2/" + Shape[shape], SpriteFrame, (err, spriteFrame) => {
                 this.sprite.spriteFrame = spriteFrame;
             });
         }
@@ -64,7 +64,7 @@ export class Cell extends Component {
     _color_inited: boolean = false;
     _color_L: boolean = false;
     _color_R: boolean = false;
-    RefreshColor(linkedL: boolean, linkedR: boolean): void {
+    refreshColor(linkedL: boolean, linkedR: boolean): void {
         if (!this._color_inited || this._color_L != linkedL || this._color_R != linkedR) {
             this._color_inited = true;
             this._color_L = linkedL;
@@ -85,18 +85,18 @@ export class Cell extends Component {
         }
     }
 
-    public Refresh(): void {
-        let cellData: CellData = this.game.gameData.boardData.At(this.x, this.y);
+    public refresh(): void {
+        let cellData: CellData = this.game.gameData.boardData.at(this.x, this.y);
 
-        this.RefreshName(this.x, this.y, cellData.shape);
+        this.refreshName(this.x, this.y, cellData.shape);
 
-        const [o, o_shape] = this.state.OverrideSpriteShape();
-        this.RefreshSprite(o ? o_shape : cellData.shape);
-        this.RefreshColor(cellData.linkedL, cellData.linkedR);
+        const [o, o_shape] = this.state.shouldOverrideSpriteShape();
+        this.refreshSprite(o ? o_shape : cellData.shape);
+        this.refreshColor(cellData.linkedL, cellData.linkedR);
     }
 
-    public MyUpdate(dt: number): void {
-        this.state.MyUpdate(dt);
+    public myUpdate(dt: number): void {
+        this.state.myUpdate(dt);
     }
     public get rotating(): boolean {
         return this.state == this.stateRotate && this.stateRotate.rotating;
@@ -109,26 +109,26 @@ export class Cell extends Component {
         return this.state == this.statePreview && this.statePreview.previewing;
     }
 
-    public Rotate(rotateDir: RotateDir, onFinish: (cell: Cell, rotateDir: RotateDir) => void): void {
+    public rotate(rotateDir: RotateDir, onFinish: (cell: Cell, rotateDir: RotateDir) => void): void {
         this.state = this.stateRotate;
-        this.stateRotate.Rotate(rotateDir, onFinish);
+        this.stateRotate.rotate(rotateDir, onFinish);
     }
 
-    public Fire(onFinish: (cell: Cell) => void): void {
+    public fire(onFinish: (cell: Cell) => void): void {
         this.state = this.stateFire;
-        this.stateFire.Fire(onFinish);
+        this.stateFire.fire(onFinish);
     }
-    public Preview(duration: number, initTimer: number, onFinish: (cell: Cell) => void): void {
+    public preview(duration: number, initTimer: number, onFinish: (cell: Cell) => void): void {
         this.state = this.statePreview;
-        this.statePreview.Preview(duration, initTimer, onFinish);
+        this.statePreview.preview(duration, initTimer, onFinish);
     }
 
-    public Move(fromPositionY: number, toPositionY: number, onFinish: (cell: Cell) => void): void {
+    public move(fromPositionY: number, toPositionY: number, onFinish: (cell: Cell) => void): void {
         this.state = this.stateMove;
-        this.stateMove.Move(fromPositionY, toPositionY, onFinish);
+        this.stateMove.move(fromPositionY, toPositionY, onFinish);
     }
 
-    public Idle(): void {
+    public idle(): void {
         this.state = this.stateIdle;
     }
 }

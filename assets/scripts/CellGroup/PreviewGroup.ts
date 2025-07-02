@@ -17,7 +17,7 @@ export class PreviewGroup {
     startTime: number;
     public poses: number[] = [];
     onFinish: (poses: number[]) => void;
-    public Start(previewGroupData: PreviewGroupData, onFinish: (poses: number[]) => void): void {
+    public start(previewGroupData: PreviewGroupData, onFinish: (poses: number[]) => void): void {
         assert(!this.previewing);
         this.previewing = true;
         this.poses.length = 0;
@@ -27,16 +27,16 @@ export class PreviewGroup {
         this.startTime = this.game.time;
         for (let i = 0; i < this.poses.length; i++) {
             const [x, y] = sc.decodePos(this.poses[i]);
-            let cell: Cell = this.game.board.At(x, y);
-            cell.Preview(PreviewGroup.DURATION, 0, this.OnCellPreviewFinish);
+            let cell: Cell = this.game.board.at(x, y);
+            cell.preview(PreviewGroup.DURATION, 0, this.onCellPreviewFinish.bind(this));
         }
     }
 
-    OnCellPreviewFinish(_cell: Cell): void {
+    onCellPreviewFinish(_cell: Cell): void {
         assert(this.previewing);
         for (let i = 0; i < this.poses.length; i++) {
             const [x, y] = sc.decodePos(this.poses[i]);
-            let cell: Cell = this.game.board.At(x, y);
+            let cell: Cell = this.game.board.at(x, y);
             if (cell.previewing) {
                 return;
             }
@@ -53,9 +53,9 @@ export class PreviewGroup {
 
         for (let i = 0; i < this.poses.length; i++) {
             const [x, y] = sc.decodePos(this.poses[i]);
-            let cell: Cell = this.game.board.At(x, y);
+            let cell: Cell = this.game.board.at(x, y);
             if (cell.previewing) {
-                cell.statePreview.CancelPreview();
+                cell.statePreview.cancelPreview();
             }
         }
     }
@@ -134,9 +134,9 @@ export class PreviewGroup {
         for (const pos of this.poses) {
             if (curr_previewGroupData.poses.indexOf(pos) < 0) {
                 const [x, y] = sc.decodePos(pos);
-                let cell: Cell = this.game.board.At(x, y);
+                let cell: Cell = this.game.board.at(x, y);
                 if (cell.previewing) {
-                    cell.statePreview.CancelPreview();
+                    cell.statePreview.cancelPreview();
                 }
             }
         }
@@ -149,9 +149,9 @@ export class PreviewGroup {
         // +preview
         for (const pos of this.poses) {
                 const [x, y] = sc.decodePos(pos);
-            let cell: Cell = this.game.board.At(x, y);
+            let cell: Cell = this.game.board.at(x, y);
             if (!cell.previewing) {
-                cell.Preview(PreviewGroup.DURATION, initTimer, this.OnCellPreviewFinish);
+                cell.preview(PreviewGroup.DURATION, initTimer, this.onCellPreviewFinish.bind(this));
             }
         }
     }

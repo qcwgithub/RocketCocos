@@ -5,11 +5,11 @@ import { CellState } from "./CellState";
 import { CellData } from "../CellData";
 
 export class CellStateMove extends CellState {
-    public override  AskRotate(): boolean {
+    public override  askRotate(): boolean {
         return false;
     }
 
-    public override OverrideSpriteShape(): [boolean, Shape?] {
+    public override shouldOverrideSpriteShape(): [boolean, Shape?] {
         return [false];
     }
 
@@ -17,7 +17,7 @@ export class CellStateMove extends CellState {
     public targetPositionY: number;
     public onMoveFinish: (cell: Cell) => void;
 
-    public Move(fromPositionY: number, toPositionY: number, onFinish: (cell: Cell) => void): void {
+    public move(fromPositionY: number, toPositionY: number, onFinish: (cell: Cell) => void): void {
         this.moving = true;
 
         let position: Vec3 = this.cell.node.position;
@@ -27,11 +27,11 @@ export class CellStateMove extends CellState {
         this.targetPositionY = toPositionY;
         this.onMoveFinish = onFinish;
 
-        let cellData: CellData = this.cell.game.gameData.boardData.At(this.cell.x, this.cell.y);
+        let cellData: CellData = this.cell.game.gameData.boardData.at(this.cell.x, this.cell.y);
         cellData.forbidLink = true;
     }
 
-    public override MyUpdate(dt: number): void {
+    public override myUpdate(dt: number): void {
         if (this.moving) {
             let position: Vec3 = this.cell.node.position;
             position.y -= 4 * dt;
@@ -40,16 +40,16 @@ export class CellStateMove extends CellState {
             }
             this.cell.node.setPosition(position);
             if (position.y <= this.targetPositionY) {
-                this.FinishMove();
+                this.finishMove();
             }
         }
     }
 
-    public FinishMove(): void {
+    public finishMove(): void {
         this.moving = false;
-        let cellData: CellData = this.cell.game.gameData.boardData.At(this.cell.x, this.cell.y);
+        let cellData: CellData = this.cell.game.gameData.boardData.at(this.cell.x, this.cell.y);
         cellData.forbidLink = false;
-        this.cell.Idle();
+        this.cell.idle();
         this.onMoveFinish(this.cell);
     }
 }

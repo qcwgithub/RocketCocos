@@ -8,7 +8,7 @@ export enum RotateDir {
 }
 
 export class RotateDirExt {
-    public static ToRotateAngle(e: RotateDir): number {
+    public static toRotateAngle(e: RotateDir): number {
         switch (e) {
             case RotateDir.CW:
                 return -90;

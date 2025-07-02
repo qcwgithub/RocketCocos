@@ -12,7 +12,7 @@ export class FireGroup {
     public firing: boolean;
     public poses: number[] = [];
     public onFinish: (poses: number[]) => void;
-    public Start(poses: number[], onFinish: (poses: number[]) => void): void {
+    public start(poses: number[], onFinish: (poses: number[]) => void): void {
         assert(!this.firing);
 
         if (!this.firing) {
@@ -23,18 +23,18 @@ export class FireGroup {
 
             for (const pos of this.poses) {
                 const [x, y] = sc.decodePos(pos);
-                let cell: Cell = this.game.board.At(x, y);
-                cell.Fire(this.OnCellFireFinish);
+                let cell: Cell = this.game.board.at(x, y);
+                cell.fire(this.onCellFireFinish.bind(this));
             }
         }
     }
 
-    OnCellFireFinish(_cell: Cell): void {
+    onCellFireFinish(_cell: Cell): void {
         assert(this.firing);
         if (this.firing) {
             for (const pos of this.poses) {
                 const [x, y] = sc.decodePos(pos);
-                let cell: Cell = this.game.board.At(x, y);
+                let cell: Cell = this.game.board.at(x, y);
                 if (cell.firing) {
                     return;
                 }

@@ -6,7 +6,7 @@ export class ConfigManager {
 
     public maxLevel: number;
 
-    public Load(): void {
+    public load(): void {
         this.levelConfigs = [];
 
         var levelConfig = new LevelConfig();
@@ -18,7 +18,7 @@ export class ConfigManager {
         this.maxLevel = this.levelConfigs[this.levelConfigs.length - 1].level;
     }
 
-    public GetLevelConfig(level: number): LevelConfig {
+    public getLevelConfig(level: number): LevelConfig {
         let index: number = level - 1;
         if (index >= 0 && index < this.levelConfigs.length) {
             let levelConfig: LevelConfig = this.levelConfigs[index];

@@ -8,7 +8,7 @@ export class BoardData {
     public cells: CellData[][];
     public previewGroupDatas: PreviewGroupData[];
 
-    public Init(width: number, height: number): void {
+    public init(width: number, height: number): void {
         this.width = width;
         this.height = height;
 
@@ -23,15 +23,15 @@ export class BoardData {
         this.previewGroupDatas = [];
     }
 
-    public At(x: number, y: number): CellData {
+    public at(x: number, y: number): CellData {
         return this.cells[x][y];
     }
 
-    public InRange(x: number, y: number): boolean {
+    public inRange(x: number, y: number): boolean {
         return x >= 0 && x < this.width && y >= 0 && y < this.height;
     }
 
-    public Swap(fromX: number, fromY: number, toX: number, toY: number): void {
+    public swap(fromX: number, fromY: number, toX: number, toY: number): void {
         let from: CellData = this.cells[fromX][fromY];
         assert(from != null);
 

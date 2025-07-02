@@ -8,12 +8,12 @@ export class Rocket extends Component {
     public sprite: Sprite;
     game: MyGame;
     y: number;
-    public Init(game: MyGame, y: number): void {
+    public init(game: MyGame, y: number): void {
         this.game = game;
         this.y = y;
     }
 
-    Refresh(): void {
+    refresh(): void {
         resources.load("Sprites/Rocket/rocket0" + this.game.gameData.rocketDatas[this.y].level, SpriteFrame, (err, spriteFrame) => {
             this.sprite.spriteFrame = spriteFrame;
         });

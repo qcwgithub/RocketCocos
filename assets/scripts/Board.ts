@@ -10,11 +10,11 @@ export class Board extends Component {
     // List<CCell> children = new List<CCell>();
     cells: Cell[][];
 
-    public At(x: number, y: number): Cell {
+    public at(x: number, y: number): Cell {
         return this.cells[x][y];
     }
 
-    public Swap(fromX: number, fromY: number, toX: number, toY: number): void {
+    public swap(fromX: number, fromY: number, toX: number, toY: number): void {
         let from: Cell = this.cells[fromX][fromY];
         assert(from != null);
 
@@ -40,7 +40,7 @@ export class Board extends Component {
 
     public game: MyGame;
     public boardData: BoardData;
-    public Init(game: MyGame): void {
+    public init(game: MyGame): void {
         this.game = game;
         this.boardData = game.gameData.boardData;
         for (const child of this.node.children) {
@@ -64,7 +64,7 @@ export class Board extends Component {
                 // cell.gameObject.name = $"({i},{j})";
                 cell.Init(this.game, i, j);
 
-                cell.node.setPosition(this.GetPosition(i, j));
+                cell.node.setPosition(this.getPosition(i, j));
             }
         }
         // this.RefreshColors();
@@ -81,7 +81,7 @@ export class Board extends Component {
     //     }
     // }
 
-    public GetPosition(i: number, j: number): Vec3 {
+    public getPosition(i: number, j: number): Vec3 {
         return new Vec3(
             -this.width * 0.5 + 0.5 + i,
             -this.height * 0.5 + 0.5 + j,
@@ -89,10 +89,10 @@ export class Board extends Component {
         );
     }
 
-    public Refresh(): void {
+    public refresh(): void {
         for (let i = 0; i < this.width; i++) {
             for (let j = 0; j < this.height; j++) {
-                this.At(i, j).Refresh();
+                this.at(i, j).refresh();
             }
         }
     }

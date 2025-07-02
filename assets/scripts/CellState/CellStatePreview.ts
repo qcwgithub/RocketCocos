@@ -5,14 +5,14 @@ import { CellState } from "./CellState";
 import { sc } from "../sc";
 
 export class CellStatePreview extends CellState {
-    public override AskRotate(): boolean {
+    public override askRotate(): boolean {
         if (this.previewing) {
-            this.CancelPreview();
+            this.cancelPreview();
         }
         return true;
     }
 
-    public override OverrideSpriteShape(): [boolean, Shape?] {
+    public override shouldOverrideSpriteShape(): [boolean, Shape?] {
         return [false];
     }
 
@@ -21,7 +21,7 @@ export class CellStatePreview extends CellState {
     previewTimer: number;
     zoomIn: boolean;
     onPreviewFinish: (cell: Cell) => void;
-    public Preview(duration: number, initTimer: number, onFinish: (cell: Cell) => void): void {
+    public preview(duration: number, initTimer: number, onFinish: (cell: Cell) => void): void {
         // Debug.LogWarning($"CellStatePreview.Preview ({this.cell.x}, {this.cell.y})");
         assert(!this.previewing, `${this.cell.x} ${this.cell.y}`);
         this.previewing = true;
@@ -33,12 +33,12 @@ export class CellStatePreview extends CellState {
         else {
             this.previewTimer = initTimer - duration * 0.5;
             this.zoomIn = false;
-            this.Refresh1();
+            this.refresh1();
         }
         this.onPreviewFinish = onFinish;
     }
 
-    Refresh1(): number {
+    refresh1(): number {
         let t: number = sc.clamp01(this.previewTimer / this.duration_half);
 
         let lerpResult = new Vec3();
@@ -53,11 +53,11 @@ export class CellStatePreview extends CellState {
         return t;
     }
 
-    public override MyUpdate(dt: number): void {
+    public override myUpdate(dt: number): void {
         if (this.previewing) {
             this.previewTimer += dt;
 
-            let t: number = this.Refresh1();
+            let t: number = this.refresh1();
 
             if (this.zoomIn) {
                 if (t >= 1) {
@@ -67,25 +67,25 @@ export class CellStatePreview extends CellState {
             }
             else {
                 if (t >= 1) {
-                    this.FinishPreview();
+                    this.finishPreview();
                 }
             }
         }
     }
 
-    public FinishPreview(): void {
+    public finishPreview(): void {
         assert(this.previewing);
         this.previewing = false;
-        this.cell.Idle();
+        this.cell.idle();
         this.onPreviewFinish(this.cell);
     }
 
-    public CancelPreview(): void {
+    public cancelPreview(): void {
         // Debug.LogWarning($"CellStatePreview.CancelPreview ({this.cell.x}, {this.cell.y})");
         assert(this.previewing);
         this.previewing = false;
         this.cell.node.setScale(Vec3.ONE);
-        this.cell.Idle();
+        this.cell.idle();
     }
 }
 

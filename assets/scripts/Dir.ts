@@ -10,7 +10,7 @@ export enum Dir {
 }
 
 export class DirExt {
-    public static Reverse(e: Dir): Dir {
+    public static reverse(e: Dir): Dir {
         switch (e) {
             case Dir.L:
                 return Dir.R;
@@ -24,7 +24,7 @@ export class DirExt {
         }
     }
 
-    public static FromOffset(offset: Vec2): Dir {
+    public static fromOffset(offset: Vec2): Dir {
         let x: number = offset.x;
         let y: number = offset.y;
 
@@ -39,7 +39,7 @@ export class DirExt {
         }
     }
 
-    public static ToOffset(e: Dir): Vec2 {
+    public static toOffset(e: Dir): Vec2 {
         switch (e) {
             case Dir.L:
                 return new Vec2(-1, 0);

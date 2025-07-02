@@ -50,7 +50,7 @@ export class ShapeSettings {
 
 export class ShapeExt {
     static s_without1: Shape[];
-    public static Without1(): Shape[] {
+    public static without1(): Shape[] {
         if (ShapeExt.s_without1 == null) {
             ShapeExt.s_without1 = [
                 Shape.LR,
@@ -70,47 +70,47 @@ export class ShapeExt {
     }
 
     static s_settings: ShapeSettings[];
-    public static GetSettings(e: Shape): ShapeSettings {
+    public static getSettings(e: Shape): ShapeSettings {
         if (ShapeExt.s_settings == null) {
             ShapeExt.s_settings = [];
             for (let i = 0; i < Shape.Count; i++) {
-                ShapeExt.s_settings.push(ShapeExt.CreateSettings(i));
+                ShapeExt.s_settings.push(ShapeExt.createSettings(i));
             }
         }
         return ShapeExt.s_settings[e];
     }
 
-    static CreateSettings(e: Shape): ShapeSettings {
+    static createSettings(e: Shape): ShapeSettings {
         let settings = new ShapeSettings();
         settings.linkedDirs = [];
 
-        if (settings.linkedL = ShapeExt.Linked_L(e)) {
+        if (settings.linkedL = ShapeExt.linked_L(e)) {
             settings.linkedDirs.push(Dir.L);
         }
-        if (settings.linkedR = ShapeExt.Linked_R(e)) {
+        if (settings.linkedR = ShapeExt.linked_R(e)) {
             settings.linkedDirs.push(Dir.R);
         }
-        if (settings.linkedT = ShapeExt.Linked_T(e)) {
+        if (settings.linkedT = ShapeExt.linked_T(e)) {
             settings.linkedDirs.push(Dir.T);
         }
-        if (settings.linkedB = ShapeExt.Linked_B(e)) {
+        if (settings.linkedB = ShapeExt.linked_B(e)) {
             settings.linkedDirs.push(Dir.B);
         }
-        settings.rotateCW = ShapeExt.RotateCW(e);
-        settings.rotateCCW = ShapeExt.RotateCCW(e);
-        settings.rotateCW2 = ShapeExt.RotateCW(settings.rotateCW);
-        settings.rotateCCW2 = ShapeExt.RotateCCW(settings.rotateCCW);
+        settings.rotateCW = ShapeExt.rotateCW(e);
+        settings.rotateCCW = ShapeExt.rotateCCW(e);
+        settings.rotateCW2 = ShapeExt.rotateCW(settings.rotateCW);
+        settings.rotateCCW2 = ShapeExt.rotateCCW(settings.rotateCCW);
         return settings;
     }
 
-    public static CanLinkTo(e: Shape, toDir: Dir): [boolean, boolean?, RotateDir?] {
-        if (ShapeExt.GetSettings(e).linkedDirs.indexOf(toDir) >= 0) {
+    public static canLinkTo(e: Shape, toDir: Dir): [boolean, boolean?, RotateDir?] {
+        if (ShapeExt.getSettings(e).linkedDirs.indexOf(toDir) >= 0) {
             return [true, false];
         }
 
         for (let rd: RotateDir = 0; rd < RotateDir.Count; rd++) {
-            let e2: Shape = ShapeExt.GetSettings(e).GetRotateResult(rd);
-            if (ShapeExt.GetSettings(e2).linkedDirs.indexOf(toDir) >= 0) {
+            let e2: Shape = ShapeExt.getSettings(e).GetRotateResult(rd);
+            if (ShapeExt.getSettings(e2).linkedDirs.indexOf(toDir) >= 0) {
                 return [true, true, rd];
             }
         }
@@ -118,17 +118,17 @@ export class ShapeExt {
         return [false];
     }
 
-    public static CanLinkTo2(e: Shape, toDir: Dir, toDir2: Dir): [boolean, boolean?, RotateDir?] {
+    public static canLinkTo2(e: Shape, toDir: Dir, toDir2: Dir): [boolean, boolean?, RotateDir?] {
 
-        if (ShapeExt.GetSettings(e).linkedDirs.indexOf(toDir) >= 0 &&
-            ShapeExt.GetSettings(e).linkedDirs.indexOf(toDir2) >= 0) {
+        if (ShapeExt.getSettings(e).linkedDirs.indexOf(toDir) >= 0 &&
+            ShapeExt.getSettings(e).linkedDirs.indexOf(toDir2) >= 0) {
             return [true, false];
         }
 
         for (let rd: RotateDir = 0; rd < RotateDir.Count; rd++) {
-            let e2: Shape = ShapeExt.GetSettings(e).GetRotateResult(rd);
-            if (ShapeExt.GetSettings(e2).linkedDirs.indexOf(toDir) >= 0 &&
-                ShapeExt.GetSettings(e2).linkedDirs.indexOf(toDir2) >= 0) {
+            let e2: Shape = ShapeExt.getSettings(e).GetRotateResult(rd);
+            if (ShapeExt.getSettings(e2).linkedDirs.indexOf(toDir) >= 0 &&
+                ShapeExt.getSettings(e2).linkedDirs.indexOf(toDir2) >= 0) {
                 return [true, true, rd];
             }
         }
@@ -136,7 +136,7 @@ export class ShapeExt {
         return [false];
     }
 
-    static Linked_L(e: Shape): boolean {
+    static linked_L(e: Shape): boolean {
         switch (e) {
             case Shape.L:
                 return true;
@@ -172,7 +172,7 @@ export class ShapeExt {
         }
     }
 
-    static Linked_R(e: Shape): boolean {
+    static linked_R(e: Shape): boolean {
         switch (e) {
             case Shape.L:
                 return false;
@@ -208,7 +208,7 @@ export class ShapeExt {
         }
     }
 
-    static Linked_T(e: Shape): boolean {
+    static linked_T(e: Shape): boolean {
         switch (e) {
             case Shape.L:
                 return false;
@@ -244,7 +244,7 @@ export class ShapeExt {
         }
     }
 
-    static Linked_B(e: Shape): boolean {
+    static linked_B(e: Shape): boolean {
         switch (e) {
             case Shape.L:
                 return false;
@@ -280,7 +280,7 @@ export class ShapeExt {
         }
     }
 
-    static RotateCW(e: Shape): Shape {
+    static rotateCW(e: Shape): Shape {
         switch (e) {
             case Shape.L:
                 return Shape.T;
@@ -316,7 +316,7 @@ export class ShapeExt {
         }
     }
 
-    static RotateCCW(e: Shape): Shape {
+    static rotateCCW(e: Shape): Shape {
         switch (e) {
             case Shape.L:
                 return Shape.B;

@@ -10,6 +10,7 @@ import { Dir, DirExt } from './Dir';
 import { CellData } from './CellData';
 import { ShapeExt } from './Shape';
 import { Board } from './Board';
+import { MyInput } from './MyInput';
 const { ccclass, property } = _decorator;
 
 @ccclass('MyGame')
@@ -17,17 +18,17 @@ export class MyGame extends Component {
     public gameData: GameData;
     public board: Board;
     public rockets: Rocket[] = [];
-    public MyInput myInput = new MyInput();
+    public myInput: MyInput = new MyInput();
     public previewGroup: PreviewGroup = new PreviewGroup();
     public fireGroup: FireGroup = new FireGroup();
     public moveGroup: MoveGroup = new MoveGroup();
     public Init(gameData: GameData): void {
         this.gameData = gameData;
-        this.board.Init(this);
+        this.board.init(this);
 
         this.rockets.length = 0;
 
-        this.myInput.Init(this);
+        this.myInput.init(this);
         this.previewGroup.Init(this);
         this.fireGroup.Init(this);
         this.moveGroup.Init(this);
@@ -38,35 +39,35 @@ export class MyGame extends Component {
     }
 
     update(dt: number): void {
-        this.MyUpdate(dt);
+        this.myUpdate(dt);
     }
 
-    public MyUpdate(dt: number): void {
-        this.myInput.MyUpdate(dt);
+    public myUpdate(dt: number): void {
+        this.myInput.myUpdate(dt);
 
         for (let i = 0; i < this.board.width; i++) {
             for (let j = 0; j < this.board.height; j++) {
-                let cell: Cell = this.board.At(i, j);
-                cell.MyUpdate(dt);
+                let cell: Cell = this.board.at(i, j);
+                cell.myUpdate(dt);
             }
         }
 
         //
-        this.HandleDirty();
+        this.handleDirty();
     }
 
     dirty: boolean = true;
-    public SetDirty(): void {
+    public setDirty(): void {
         this.dirty = true;
     }
-    HandleDirty(): void {
+    handleDirty(): void {
         if (!this.dirty) {
             return;
         }
         this.dirty = false;
 
-        this.gameData.RefreshLink();
-        this.board.Refresh();
+        this.gameData.refreshLink();
+        this.board.refresh();
 
         if (this.fireGroup.firing) {
             return;
@@ -84,81 +85,83 @@ export class MyGame extends Component {
             return;
         }
 
-        this.previewGroup.Start(this.gameData.boardData.previewGroupDatas[0], this.OnPreviewFinish);
+        this.previewGroup.start(this.gameData.boardData.previewGroupDatas[0], this.onPreviewFinish.bind(this));
     }
 
-    OnCellRotateFinish(cell: Cell, rotateDir: RotateDir): void {
-        this.SetDirty();
-        this.HandleDirty();
+    onCellRotateFinish(cell: Cell, rotateDir: RotateDir): void {
+        this.setDirty();
+        this.handleDirty();
     }
 
-    public OnClick(x: number, y: number, rotateDir: RotateDir): void {
+    public onClick(x: number, y: number, rotateDir: RotateDir): void {
         console.log(`Click (${x}, ${y})`);
 
-        let cell: Cell = this.board.At(x, y);
-        if (!cell.state.AskRotate()) {
+        let cell: Cell = this.board.at(x, y);
+        if (!cell.state.askRotate()) {
             return;
         }
 
-        cell.Rotate(rotateDir, this.OnCellRotateFinish);
-        this.SetDirty();
-        this.HandleDirty();
+        cell.rotate(rotateDir, this.onCellRotateFinish.bind(this));
+        this.setDirty();
+        this.handleDirty();
     }
 
-    public OnSwipe(prevDir: Dir?, prevPos: Vec2, dir: Dir): void {
+    public onSwipe(hasPrevDir: boolean, prevDir: Dir, prevPos: Vec2, dir: Dir): void {
         console.log(`OnSwipe ${prevDir} ${prevPos} ${dir}`);
 
         let dirty: boolean = false;
 
         // 1
 
-        let cell1: Cell = this.board.At(prevPos.x, prevPos.y);
-        let data1: CellData = this.gameData.boardData.At(prevPos.x, prevPos.y);
+        let cell1: Cell = this.board.at(prevPos.x, prevPos.y);
+        let data1: CellData = this.gameData.boardData.at(prevPos.x, prevPos.y);
 
-        const [canLink1, needRotate1, rotateDir1] = prevDir == null
-            ? ShapeExt.CanLinkTo(data1.shape, dir)
-            : ShapeExt.CanLinkTo2(data1.shape, dir, DirExt.Reverse(prevDir));
-        if (canLink1 && needRotate1 && cell1.state.AskRotate()) {
-            cell1.Rotate(rotateDir1, this.OnCellRotateFinish);
+        const [canLink1, needRotate1, rotateDir1] = hasPrevDir
+            ? ShapeExt.canLinkTo2(data1.shape, dir, DirExt.reverse(prevDir))
+            : ShapeExt.canLinkTo(data1.shape, dir);
+
+        if (canLink1 && needRotate1 && cell1.state.askRotate()) {
+            cell1.rotate(rotateDir1, this.onCellRotateFinish.bind(this));
             dirty = true;
         }
 
         // 2
 
-        let pos2: Vec2 = prevPos.add(DirExt.ToOffset(dir));
-        if (this.board.boardData.InRange(pos2.x, pos2.y)) {
-            let cell2: Cell = this.board.At(pos2.x, pos2.y);
-            let data2: CellData = this.gameData.boardData.At(pos2.x, pos2.y);
+        let pos2: Vec2 = prevPos.add(DirExt.toOffset(dir));
+        if (this.board.boardData.inRange(pos2.x, pos2.y)) {
+            let cell2: Cell = this.board.at(pos2.x, pos2.y);
+            let data2: CellData = this.gameData.boardData.at(pos2.x, pos2.y);
 
-            const [canLinkTo2, needRotate2, rotateDir2] = ShapeExt.CanLinkTo(data2.shape, DirExt.Reverse(dir));
-            if (canLinkTo2 && needRotate2 && cell2.state.AskRotate()) {
-                cell2.Rotate(rotateDir2, this.OnCellRotateFinish);
+            const [canLinkTo2, needRotate2, rotateDir2] = ShapeExt.canLinkTo(data2.shape, DirExt.reverse(dir));
+
+            if (canLinkTo2 && needRotate2 && cell2.state.askRotate()) {
+                cell2.rotate(rotateDir2, this.onCellRotateFinish.bind(this));
                 dirty = true;
             }
         }
 
         if (dirty) {
-            this.SetDirty();
-            this.HandleDirty();
+            this.setDirty();
+            this.handleDirty();
         }
     }
 
-    OnPreviewFinish(poses: number[]): void {
+    onPreviewFinish(poses: number[]): void {
         assert(!this.fireGroup.firing);
         if (!this.fireGroup.firing) {
-            this.fireGroup.Start(poses, this.OnFireFinish);
+            this.fireGroup.start(poses, this.onFireFinish.bind(this));
         }
     }
 
-    OnFireFinish(poses: number[]): void {
-        this.moveGroup.Move(poses, this.OnCellMoveFinish);
-        this.SetDirty();
-        this.HandleDirty();
+    onFireFinish(poses: number[]): void {
+        this.moveGroup.move(poses, this.onCellMoveFinish);
+        this.setDirty();
+        this.handleDirty();
     }
 
-    OnCellMoveFinish(_cell: Cell): void {
-        this.SetDirty();
-        this.HandleDirty();
+    onCellMoveFinish(_cell: Cell): void {
+        this.setDirty();
+        this.handleDirty();
     }
 }
 

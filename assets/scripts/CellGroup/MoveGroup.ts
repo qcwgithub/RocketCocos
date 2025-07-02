@@ -11,11 +11,9 @@ export class MoveGroup {
     public Init(game: MyGame): void {
         this.game = game;
     }
-
-    onCellMoveFinish: (cell: Cell) => void;
-    public Move(poses: number[], onCellMoveFinish: (cell: Cell) => void): void {
+    
+    public move(poses: number[], onCellMoveFinish: (cell: Cell) => void): void {
         // Debug.Log("OnFireFinish");
-        this.onCellMoveFinish = onCellMoveFinish;
 
         // poses.Sort((a, b) => a.y - b.y); // y 小的在前
 
@@ -57,27 +55,23 @@ export class MoveGroup {
                 }
 
                 if (found) {
-                    boardData.Swap(i, j, i, j2);
-                    board.Swap(i, j, i, j2);
+                    boardData.swap(i, j, i, j2);
+                    board.swap(i, j, i, j2);
                     emptyY.delete(j);
                     emptyY.add(j2);
 
-                    let cell: Cell = board.At(i, j);
-                    cell.Move(cell.node.position.y, board.GetPosition(i, j).y, this.OnCellMoveFinish);
+                    let cell: Cell = board.at(i, j);
+                    cell.move(cell.node.position.y, board.getPosition(i, j).y, onCellMoveFinish);
                 }
                 else {
-                    let cellData: CellData = boardData.At(i, j);
-                    cellData.shape = this.game.gameData.RandomShape();
+                    let cellData: CellData = boardData.at(i, j);
+                    cellData.shape = this.game.gameData.randomShape();
 
-                    let cell: Cell = board.At(i, j);
-                    cell.Move(topY, board.GetPosition(i, j).y, this.OnCellMoveFinish);
+                    let cell: Cell = board.at(i, j);
+                    cell.move(topY, board.getPosition(i, j).y, onCellMoveFinish);
                     topY += 1.3;
                 }
             }
         }
-    }
-
-    OnCellMoveFinish(cell: Cell): void {
-        this.onCellMoveFinish(cell);
     }
 }
