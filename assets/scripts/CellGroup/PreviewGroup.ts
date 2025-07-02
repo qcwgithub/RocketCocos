@@ -11,8 +11,6 @@ export class PreviewGroup {
         this.previewing = false;
     }
 
-    static DURATION: number = 0.4;
-
     public previewing: boolean;
     startTime: number;
     public poses: number[] = [];
@@ -28,11 +26,11 @@ export class PreviewGroup {
         for (let i = 0; i < this.poses.length; i++) {
             const [x, y] = sc.decodePos(this.poses[i]);
             let cell: Cell = this.game.board.at(x, y);
-            cell.preview(PreviewGroup.DURATION, 0, this.onCellPreviewFinish.bind(this));
+            cell.preview(0, this.OnCellPreviewFinish.bind(this));
         }
     }
 
-    onCellPreviewFinish(_cell: Cell): void {
+    OnCellPreviewFinish(_cell: Cell): void {
         assert(this.previewing);
         for (let i = 0; i < this.poses.length; i++) {
             const [x, y] = sc.decodePos(this.poses[i]);
@@ -151,7 +149,7 @@ export class PreviewGroup {
                 const [x, y] = sc.decodePos(pos);
             let cell: Cell = this.game.board.at(x, y);
             if (!cell.previewing) {
-                cell.preview(PreviewGroup.DURATION, initTimer, this.onCellPreviewFinish.bind(this));
+                cell.preview(initTimer, this.OnCellPreviewFinish.bind(this));
             }
         }
     }

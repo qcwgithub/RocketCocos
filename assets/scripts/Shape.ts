@@ -1,4 +1,4 @@
-import { Vec2 } from "cc";
+import { assert, Vec2 } from "cc";
 import { Dir } from "./Dir";
 import { RotateDir } from "./RotateDir";
 
@@ -49,28 +49,23 @@ export class ShapeSettings {
 }
 
 export class ShapeExt {
-    static s_without1: Shape[];
-    public static without1(): Shape[] {
-        if (ShapeExt.s_without1 == null) {
-            ShapeExt.s_without1 = [
-                Shape.LR,
-                Shape.LT,
-                Shape.LB,
-                Shape.RT,
-                Shape.RB,
-                Shape.TB,
-                Shape.LRT,
-                Shape.LRB,
-                Shape.LTB,
-                Shape.RTB,
-                Shape.LRTB,
-            ];
-        }
-        return ShapeExt.s_without1;
-    }
+    public static readonly s_without1: Shape[] = [
+        Shape.LR,
+        Shape.LT,
+        Shape.LB,
+        Shape.RT,
+        Shape.RB,
+        Shape.TB,
+        Shape.LRT,
+        Shape.LRB,
+        Shape.LTB,
+        Shape.RTB,
+        Shape.LRTB,
+    ];
 
     static s_settings: ShapeSettings[];
     public static getSettings(e: Shape): ShapeSettings {
+        assert(e != null);
         if (ShapeExt.s_settings == null) {
             ShapeExt.s_settings = [];
             for (let i = 0; i < Shape.Count; i++) {

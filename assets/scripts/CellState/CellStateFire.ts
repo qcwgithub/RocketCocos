@@ -3,6 +3,7 @@ import { Cell } from "../Cell";
 import { Shape } from "../Shape";
 import { CellState } from "./CellState";
 import { sc } from "../sc";
+import { MySettings } from "../MySettings";
 
 export class CellStateFire extends CellState {
     public override askRotate(): boolean {
@@ -26,7 +27,7 @@ export class CellStateFire extends CellState {
     public override myUpdate(dt: number): void {
         if (this.firing) {
             this.fireTimer += dt;
-            let t: number = sc.clamp01(this.fireTimer / 0.2);
+            let t: number = sc.clamp01(this.fireTimer / MySettings.fireDuration);
 
             let lerpResult = new Vec3();
             Vec3.lerp(lerpResult, Vec3.ONE, Vec3.ZERO, t);

@@ -1,4 +1,4 @@
-import { randomRange } from "cc";
+import { assert, randomRangeInt } from "cc";
 import { BoardData } from "./BoardData";
 import { CellData } from "./CellData";
 import { LevelConfig } from "./LevelConfig";
@@ -11,7 +11,6 @@ export class GameData {
     public boardData: BoardData;
     public rocketDatas: RocketData[] = [];
     public init(): void {
-
         let levelConfig: LevelConfig = sc.configManager.getLevelConfig(1);
         this.boardData = new BoardData();
         this.boardData.init(levelConfig.width, levelConfig.height);
@@ -40,8 +39,11 @@ export class GameData {
     }
 
     public randomShape(): Shape {
-        return ShapeExt.without1()[randomRange(0, ShapeExt.without1().length)];
-        // return Shape.LRTB;
+        let index: number = randomRangeInt(0, ShapeExt.s_without1.length);
+        // console.log("random shape~index: " + index);
+        let shape: Shape = ShapeExt.s_without1[index];
+        // console.log("random shape~shape: " + Shape[shape]);
+        return shape;
     }
 
     public refreshLink(): void {

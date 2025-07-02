@@ -156,7 +156,7 @@ export class MyGame extends Component {
     }
 
     onFireFinish(poses: number[]): void {
-        this.moveGroup.move(poses, this.onCellMoveFinish);
+        this.moveGroup.move(poses, this.onCellMoveFinish.bind(this));
         this.setDirty();
         this.handleDirty();
     }

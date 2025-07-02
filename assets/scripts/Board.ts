@@ -8,8 +8,43 @@ const { ccclass, property } = _decorator;
 export class Board extends Component {
     @property({ type: Node })
     public cellTemplate: Node;
-    // List<CCell> children = new List<CCell>();
+
     cells: Cell[][];
+
+    public game: MyGame;
+    public boardData: BoardData;
+    public init(game: MyGame): void {
+        this.game = game;
+        this.boardData = game.gameData.boardData;
+        for (const child of this.node.children) {
+            child.active = false;
+        }
+
+        while (this.node.children.length < this.width * this.height) {
+            let node = instantiate(this.cellTemplate);
+            node.setParent(this.node);
+        }
+
+        this.cells = new Array(this.width);
+        for (let x = 0; x < this.width; x++) {
+            this.cells[x] = new Array(this.height);
+        }
+
+        let children: Node[] = this.node.children;
+
+        let index: number = 0;
+        for (let i = 0; i < this.width; i++) {
+            for (let j = 0; j < this.height; j++) {
+                let cell: Cell = children[index++].getComponent(Cell);
+                this.cells[i][j] = cell;
+                cell.node.active = true;
+                // cell.gameObject.name = $"({i},{j})";
+                cell.init(this.game, i, j);
+
+                cell.node.setPosition(this.getPosition(i, j));
+            }
+        }
+    }
 
     public at(x: number, y: number): Cell {
         return this.cells[x][y];
@@ -38,49 +73,6 @@ export class Board extends Component {
     public get height(): number {
         return this.game.gameData.boardData.height;
     }
-
-    public game: MyGame;
-    public boardData: BoardData;
-    public init(game: MyGame): void {
-        this.game = game;
-        this.boardData = game.gameData.boardData;
-        for (const child of this.node.children) {
-            child.active = false;
-        }
-
-        while (this.node.children.length < this.width * this.height) {
-            let node = instantiate(this.cellTemplate);
-            node.setParent(this.node);
-        }
-
-        this.cells = new Cell[this.width, this.height];
-
-        let children: Node[] = this.node.children;
-
-        let index: number = 0;
-        for (let i = 0; i < this.width; i++) {
-            for (let j = 0; j < this.height; j++) {
-                let cell: Cell = this.cells[i][j] = children[index++].getComponent(Cell);
-                cell.node.active = true;
-                // cell.gameObject.name = $"({i},{j})";
-                cell.Init(this.game, i, j);
-
-                cell.node.setPosition(this.getPosition(i, j));
-            }
-        }
-        // this.RefreshColors();
-    }
-
-    // public void RefreshColors()
-    // {
-    //     for (int i = 0; i < this.width; i++)
-    //     {
-    //         for (int j = 0; j < this.height; j++)
-    //         {
-    //             this.At(i, j).ApplyColor();
-    //         }
-    //     }
-    // }
 
     public getPosition(i: number, j: number): Vec3 {
         return new Vec3(

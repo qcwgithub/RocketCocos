@@ -5,6 +5,7 @@ import { RotateDir, RotateDirExt } from "../RotateDir";
 import { Shape, ShapeExt } from "../Shape";
 import { CellState } from "./CellState";
 import { sc } from "../sc";
+import { MySettings } from "../MySettings";
 
 export class CellStateRotate extends CellState {
     public override askRotate(): boolean {
@@ -52,7 +53,7 @@ export class CellStateRotate extends CellState {
     public override myUpdate(dt: number): void {
         if (this.rotating) {
             this.rotateTimer += dt;
-            let t: number = sc.clamp01(this.rotateTimer / 0.2);
+            let t: number = sc.clamp01(this.rotateTimer / MySettings.rotateDuration);
             Quat.lerp(sc.tempQuat, this.startRotation, this.targetRotation, t)
             this.cell.node.setRotation(sc.tempQuat);
             if (t >= 1) {

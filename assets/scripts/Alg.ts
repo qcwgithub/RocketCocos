@@ -7,22 +7,22 @@ import { Dir, DirExt } from "./Dir";
 import { sc } from "./sc";
 
 export class Alg {
-    public static refreshLink(board: BoardData): void {
+    public static refreshLink(boardData: BoardData): void {
         // reset
-        for (let i = 0; i < board.width; i++) {
-            for (let j = 0; j < board.height; j++) {
-                let cell: CellData = board.at(i, j);
+        for (let i = 0; i < boardData.width; i++) {
+            for (let j = 0; j < boardData.height; j++) {
+                let cell: CellData = boardData.at(i, j);
                 cell.linkedL = false;
                 cell.linkedR = false;
                 cell.linkedLRHandled = false;
 
             }
         }
-        board.previewGroupDatas.length = 0;
+        boardData.previewGroupDatas.length = 0;
 
         // init L
-        for (let j = 0; j < board.height; j++) {
-            let cell: CellData = board.at(0, j);
+        for (let j = 0; j < boardData.height; j++) {
+            let cell: CellData = boardData.at(0, j);
             if (cell.forbidLink) {
                 continue;
             }
@@ -30,16 +30,16 @@ export class Alg {
                 cell.linkedL = true;
             }
         }
-        for (let j = 0; j < board.height; j++) {
-            let cell: CellData = board.at(0, j);
+        for (let j = 0; j < boardData.height; j++) {
+            let cell: CellData = boardData.at(0, j);
             if (cell.linkedL) {
-                Alg.propagate(board, 0, j, "L");
+                Alg.propagate(boardData, 0, j, "L");
             }
         }
 
         // init R
-        for (let j = 0; j < board.height; j++) {
-            let cell: CellData = board.at(board.width - 1, j);
+        for (let j = 0; j < boardData.height; j++) {
+            let cell: CellData = boardData.at(boardData.width - 1, j);
             if (cell.forbidLink) {
                 continue;
             }
@@ -47,16 +47,16 @@ export class Alg {
                 cell.linkedR = true;
             }
         }
-        for (let j = 0; j < board.height; j++) {
-            let cell: CellData = board.at(board.width - 1, j);
+        for (let j = 0; j < boardData.height; j++) {
+            let cell: CellData = boardData.at(boardData.width - 1, j);
             if (cell.linkedR) {
-                Alg.propagate(board, board.width - 1, j, "R");
+                Alg.propagate(boardData, boardData.width - 1, j, "R");
             }
         }
 
-        for (let j = board.height - 1; j >= 0; j--) {
-            for (let i = 0; i < board.width; i++) {
-                let cellData: CellData = board.at(i, j);
+        for (let j = boardData.height - 1; j >= 0; j--) {
+            for (let i = 0; i < boardData.width; i++) {
+                let cellData: CellData = boardData.at(i, j);
                 if (!cellData.linkedLR || cellData.linkedLRHandled) {
                     continue;
                 }
@@ -64,9 +64,9 @@ export class Alg {
 
                 var group = new PreviewGroupData();
                 group.poses.push(sc.encodePos(i, j));
-                board.previewGroupDatas.push(group);
+                boardData.previewGroupDatas.push(group);
 
-                Alg.propagate(board, i, j, "LR");
+                Alg.propagate(boardData, i, j, "LR");
             }
         }
 

@@ -3,6 +3,7 @@ import { Cell } from "../Cell";
 import { Shape } from "../Shape";
 import { CellState } from "./CellState";
 import { sc } from "../sc";
+import { MySettings } from "../MySettings";
 
 export class CellStatePreview extends CellState {
     public override askRotate(): boolean {
@@ -21,17 +22,17 @@ export class CellStatePreview extends CellState {
     previewTimer: number;
     zoomIn: boolean;
     onPreviewFinish: (cell: Cell) => void;
-    public preview(duration: number, initTimer: number, onFinish: (cell: Cell) => void): void {
+    public preview(initTimer: number, onFinish: (cell: Cell) => void): void {
         // Debug.LogWarning($"CellStatePreview.Preview ({this.cell.x}, {this.cell.y})");
         assert(!this.previewing, `${this.cell.x} ${this.cell.y}`);
         this.previewing = true;
-        this.duration_half = duration * 0.5;
-        if (initTimer < duration * 0.5) {
+        this.duration_half = MySettings.previewDuration * 0.5;
+        if (initTimer < this.duration_half) {
             this.previewTimer = initTimer;
             this.zoomIn = true;
         }
         else {
-            this.previewTimer = initTimer - duration * 0.5;
+            this.previewTimer = initTimer - this.duration_half;
             this.zoomIn = false;
             this.refresh1();
         }

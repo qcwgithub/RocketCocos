@@ -9,6 +9,7 @@ import { CellStatePreview } from './CellState/CellStatePreview';
 import { CellStateIdle } from './CellState/CellStateIdle';
 import { CellStateRotate } from './CellState/CellStateRotate';
 import { CellState } from './CellState/CellState';
+import { sc } from './sc';
 const { ccclass, property } = _decorator;
 
 @ccclass('Cell')
@@ -25,7 +26,7 @@ export class Cell extends Component {
     public stateFire: CellStateFire = new CellStateFire();
     public stateMove: CellStateMove = new CellStateMove();
     public state: CellState;
-    public Init(game: MyGame, x: number, y: number): void {
+    public init(game: MyGame, x: number, y: number): void {
         this.game = game;
         this.x = x;
         this.y = y;
@@ -38,7 +39,13 @@ export class Cell extends Component {
 
         this.state = this.stateIdle;
 
+        this.node.on(Node.EventType.TOUCH_END, this.onClick, this);
+
         this.refresh();
+    }
+
+    onClick(): void {
+        this.game.onClick(this.x, this.y, RotateDir.CCW);
     }
 
     _name_x: number = -1;
@@ -56,9 +63,8 @@ export class Cell extends Component {
     _sprite_shape: Shape = Shape.Count;
     refreshSprite(shape: Shape): void {
         if (this._sprite_shape != shape) {
-            resources.load("sprites/V2/" + Shape[shape], SpriteFrame, (err, spriteFrame) => {
-                this.sprite.spriteFrame = spriteFrame;
-            });
+            this._sprite_shape = shape;
+            this.sprite.spriteFrame = sc.myAssets.GetSpriteFrame(Shape[shape]);
         }
     }
 
@@ -119,9 +125,9 @@ export class Cell extends Component {
         this.state = this.stateFire;
         this.stateFire.fire(onFinish);
     }
-    public preview(duration: number, initTimer: number, onFinish: (cell: Cell) => void): void {
+    public preview(initTimer: number, onFinish: (cell: Cell) => void): void {
         this.state = this.statePreview;
-        this.statePreview.preview(duration, initTimer, onFinish);
+        this.statePreview.preview(initTimer, onFinish);
     }
 
     public move(fromPositionY: number, toPositionY: number, onFinish: (cell: Cell) => void): void {

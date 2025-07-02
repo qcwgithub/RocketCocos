@@ -14,7 +14,7 @@ export class BoardData {
 
         this.cells = new Array(width);
         for (let x = 0; x < width; x++) {
-            this.cells[x] = new Array[height];
+            this.cells[x] = new Array(height);
             for (let y = 0; y < height; y++) {
                 this.cells[x][y] = new CellData();
             }
