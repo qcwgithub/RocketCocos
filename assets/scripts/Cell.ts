@@ -1,4 +1,4 @@
-import { _decorator, Color, Component, Node, resources, Sprite, SpriteFrame } from 'cc';
+import { _decorator, Color, Component, Node, resources, Size, Sprite, SpriteFrame, UITransform } from 'cc';
 import { Shape } from './Shape';
 import { CellData } from './CellData';
 import { RotateDir } from './RotateDir';
@@ -10,6 +10,7 @@ import { CellStateIdle } from './CellState/CellStateIdle';
 import { CellStateRotate } from './CellState/CellStateRotate';
 import { CellState } from './CellState/CellState';
 import { sc } from './sc';
+import { MySettings } from './MySettings';
 const { ccclass, property } = _decorator;
 
 @ccclass('Cell')
@@ -30,6 +31,8 @@ export class Cell extends Component {
         this.game = game;
         this.x = x;
         this.y = y;
+
+        // this.node.getComponent(UITransform).contentSize = new Size(MySettings.cellSize, MySettings.cellSize);
 
         this.stateIdle.init(this);
         this.stateRotate.init(this);
