@@ -29,11 +29,15 @@ export class sc {
         return [x, y];
     }
 
-    public static timeMs(): number {
-        return Date.now();
+    // public static timeMs(): number {
+    //     return Date.now();
+    // }
+
+    public static timeInt(): number {
+        return Math.floor(Date.now() / 1000);
     }
 
-    public static timeS(): number {
+    public static time(): number {
         return Date.now() / 1000;
     }
 }

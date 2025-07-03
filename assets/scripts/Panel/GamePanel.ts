@@ -1,4 +1,4 @@
-import { _decorator, Component, Label, Node } from 'cc';
+import { _decorator, Component, Label, macro, Node } from 'cc';
 import { MyGame } from '../MyGame';
 import { sc } from '../sc';
 import { GameData } from '../GameData';
@@ -12,12 +12,15 @@ export class GamePanel extends Component {
     @property({ type: Label })
     rocketCountLabel: Label;
 
+    @property({ type: Label })
+    leftTimeLabel: Label;
+
     public startGame(): void {
         this.cleanup();
 
         let level: number = sc.profile.level;
 
-        let startTimeS = sc.timeS();
+        let startTimeS = sc.time();
         var gameData = new GameData();
         gameData.init(level, startTimeS);
 
@@ -28,6 +31,8 @@ export class GamePanel extends Component {
         this.game.eventTarget.on(MyGame.Events.collectRockets, this.onCollectRockets, this);
 
         this.node.active = true;
+
+        this.schedule(this.refreshTime, 1, macro.REPEAT_FOREVER);
     }
 
     public cleanup(): void {
@@ -35,6 +40,8 @@ export class GamePanel extends Component {
 
         this.game.eventTarget.off(MyGame.Events.collectRockets, this.onCollectRockets, this);
         this.game.cleanup();
+
+        this.unscheduleAllCallbacks();
     }
 
     onCollectRockets(): void {
@@ -57,9 +64,10 @@ export class GamePanel extends Component {
         this.rocketCountLabel.string = "collected " + gameData.collectedRockets + "/" + gameData.levelConfig.rocket;
     }
 
-    refreshTime():void{
+    refreshTime(): void {
         let gameData: GameData = this.game.gameData;
+        let now: number = sc.timeInt();
+        let left: number = gameData.levelConfig.time - (now - gameData.startTime);
+        this.leftTimeLabel.string = left.toString();
     }
 }
-
-
