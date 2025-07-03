@@ -49,14 +49,11 @@ export class MyGame extends Component {
         this.moveGroup.startGame(this);
     }
 
-    update(dt: number): void {
+    public myUpdate(dt: number): void {
         if (this.gameData == null) {
             return;
         }
-        this.myUpdate(dt);
-    }
 
-    public myUpdate(dt: number): void {
         this.myInput.myUpdate(dt);
 
         for (let i = 0; i < this.board.width; i++) {

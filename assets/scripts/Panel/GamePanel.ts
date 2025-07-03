@@ -41,6 +41,10 @@ export class GamePanel extends Component {
         this.schedule(this.refreshRemainTime, 1, macro.REPEAT_FOREVER);
     }
 
+    update(dt: number): void {
+        this.game.myUpdate(dt);
+    }
+
     public cleanup(): void {
         this.node.active = false;
 
