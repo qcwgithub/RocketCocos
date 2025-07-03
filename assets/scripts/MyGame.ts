@@ -29,16 +29,24 @@ export class MyGame extends Component {
     public previewGroup: PreviewGroup = new PreviewGroup();
     public fireGroup: FireGroup = new FireGroup();
     public moveGroup: MoveGroup = new MoveGroup();
+
+    public cleanup(): void {
+        this.board.cleanup();
+        this.gameData = null;
+        this.rockets.length = 0;
+        this.fireGroup.cleanup();
+        this.previewGroup.cleanup();
+        this.moveGroup.cleanup();
+    }
+
     public startGame(gameData: GameData): void {
         this.gameData = gameData;
-        this.board.init(this);
-
-        this.rockets.length = 0;
+        this.board.startGame(this);
 
         this.myInput.init(this);
-        this.previewGroup.init(this);
-        this.fireGroup.init(this);
-        this.moveGroup.init(this);
+        this.previewGroup.startGame(this);
+        this.fireGroup.startGame(this);
+        this.moveGroup.startGame(this);
     }
 
     public get time(): number {
@@ -46,7 +54,7 @@ export class MyGame extends Component {
     }
 
     update(dt: number): void {
-        if (this.gameData == null){
+        if (this.gameData == null) {
             return;
         }
         this.myUpdate(dt);
@@ -168,8 +176,8 @@ export class MyGame extends Component {
         let pre: number = this.gameData.collectedRockets;
         for (const pos of poses) {
             const [x, y] = sc.decodePos(pos);
-            if (x == this.gameData.boardData.width - 1&&
-                ShapeExt.getSettings(this.gameData.boardData.at(x,y).shape).linkedDirs.indexOf(Dir.R) >= 0) {
+            if (x == this.gameData.boardData.width - 1 &&
+                ShapeExt.getSettings(this.gameData.boardData.at(x, y).shape).linkedDirs.indexOf(Dir.R) >= 0) {
                 this.gameData.collectedRockets++;
             }
         }

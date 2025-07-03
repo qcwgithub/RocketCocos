@@ -5,19 +5,27 @@ import { sc } from "../sc";
 
 export class FireGroup {
     game: MyGame;
-    public init(game: MyGame): void {
+    public firing: boolean;
+    public poses: number[];
+    public onFinish: (poses: number[]) => void;
+
+    public cleanup(): void {
+        this.game = null;
+        this.firing = false;
+        this.poses = null;
+        this.onFinish = null;
+    }
+    
+    public startGame(game: MyGame): void {
         this.game = game;
         this.firing = false;
     }
-    public firing: boolean;
-    public poses: number[] = [];
-    public onFinish: (poses: number[]) => void;
+
     public start(poses: number[], onFinish: (poses: number[]) => void): void {
         assert(!this.firing);
 
         if (!this.firing) {
             this.firing = true;
-            this.poses.length = 0;
             this.poses = poses.slice();
             this.onFinish = onFinish;
 

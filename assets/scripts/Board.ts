@@ -16,7 +16,15 @@ export class Board extends Component {
 
     public game: MyGame;
     public boardData: BoardData;
-    public init(game: MyGame): void {
+
+    public cleanup(): void {
+        this.game = null;
+        this.boardData = null;
+        this.cleanupCellBgs();
+        this.cleanupCells();
+    }
+
+    public startGame(game: MyGame): void {
         this.game = game;
         this.boardData = game.gameData.boardData;
 
@@ -24,7 +32,15 @@ export class Board extends Component {
         this.initCells();
     }
 
-    initCellBgs() {
+    cleanupCellBgs(): void {
+        let parent: Node = this.cellBgTemplate.parent;
+
+        for (const child of parent.children) {
+            child.active = false;
+        }
+    }
+
+    initCellBgs(): void {
         let parent: Node = this.cellBgTemplate.parent;
 
         for (const child of parent.children) {
@@ -46,6 +62,16 @@ export class Board extends Component {
                 child.setPosition(this.getPosition(i, j));
             }
         }
+    }
+
+    cleanupCells(): void {
+        let parent: Node = this.cellTemplate.parent;
+
+        for (const child of parent.children) {
+            child.active = false;
+        }
+
+        this.cells = null;
     }
 
     initCells() {

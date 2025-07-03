@@ -25,14 +25,8 @@ export class MainPanel extends Panel {
     }
 
     public onClickStart() {
-        let level: number = sc.profile.level;
-
-        var gameData = new GameData();
-        gameData.init(level);
-
-        sc.game.startGame(gameData);
-        sc.panelManager.gamePanel.startGame();
-
         this.hide();
+
+        sc.panelManager.gamePanel.startGame();
     }
 }

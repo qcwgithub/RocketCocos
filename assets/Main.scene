@@ -120,9 +120,6 @@
     "panelManager": {
       "__id__": 4
     },
-    "game": {
-      "__id__": 14
-    },
     "myAssets": {
       "__id__": 79
     },
@@ -1355,6 +1352,9 @@
     },
     "_enabled": true,
     "__prefab": null,
+    "game": {
+      "__id__": 14
+    },
     "rocketCountLabel": {
       "__id__": 35
     },
@@ -2264,7 +2264,7 @@
       "__id__": 53
     },
     "component": "",
-    "_componentId": "19f42BuIEtLkLL6tUK0H2Br",
+    "_componentId": "95d89ll+OFFnpXC6l9lhIE+",
     "handler": "onClickStart",
     "customEventData": ""
   },
@@ -2371,6 +2371,9 @@
     },
     "_enabled": true,
     "__prefab": null,
+    "levelLabel": {
+      "__id__": 57
+    },
     "_id": "3dyZW7x/VPsrjD/9TpGbcP"
   },
   {
@@ -2753,7 +2756,7 @@
       "__id__": 66
     },
     "component": "",
-    "_componentId": "19f42BuIEtLkLL6tUK0H2Br",
+    "_componentId": "4f739kR2EFAzpcC+4CYkP+X",
     "handler": "onClickStart",
     "customEventData": ""
   },
@@ -2860,6 +2863,9 @@
     },
     "_enabled": true,
     "__prefab": null,
+    "levelLabel": {
+      "__id__": 70
+    },
     "_id": "e7Jit6tqVKRK+zTMFTK6uV"
   },
   {

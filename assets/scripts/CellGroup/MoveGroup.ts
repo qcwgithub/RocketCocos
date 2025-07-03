@@ -9,7 +9,12 @@ import { MySettings } from "../MySettings";
 
 export class MoveGroup {
     game: MyGame;
-    public init(game: MyGame): void {
+
+    public cleanup(): void {
+        this.game = null;
+    }
+
+    public startGame(game: MyGame): void {
         this.game = game;
     }
 

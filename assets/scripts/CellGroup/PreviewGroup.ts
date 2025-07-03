@@ -6,19 +6,27 @@ import { sc } from "../sc";
 
 export class PreviewGroup {
     game: MyGame;
-    public init(game: MyGame): void {
+    public previewing: boolean;
+    startTime: number;
+    public poses: number[];
+    onFinish: (poses: number[]) => void;
+
+    public cleanup(): void {
+        this.game = null;
+        this.previewing = false;
+        this.startTime = 0;
+        this.poses = null;
+        this.onFinish = null;
+    }
+
+    public startGame(game: MyGame): void {
         this.game = game;
         this.previewing = false;
     }
 
-    public previewing: boolean;
-    startTime: number;
-    public poses: number[] = [];
-    onFinish: (poses: number[]) => void;
     public start(previewGroupData: PreviewGroupData, onFinish: (poses: number[]) => void): void {
         assert(!this.previewing);
         this.previewing = true;
-        this.poses.length = 0;
         this.poses = previewGroupData.poses.slice();
         this.onFinish = onFinish;
 
@@ -146,7 +154,7 @@ export class PreviewGroup {
         let initTimer: number = now - this.startTime;
         // +preview
         for (const pos of this.poses) {
-                const [x, y] = sc.decodePos(pos);
+            const [x, y] = sc.decodePos(pos);
             let cell: Cell = this.game.board.at(x, y);
             if (!cell.previewing) {
                 cell.preview(initTimer, this.onCellPreviewFinish.bind(this));
