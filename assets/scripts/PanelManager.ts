@@ -1,8 +1,8 @@
 import { _decorator, Component, Node } from 'cc';
-import { GamePanel } from './GamePanel';
-import { MainPanel } from './MainPanel';
-import { SuccessPanel } from './SuccessPanel';
-import { FailPanel } from './FailPanel';
+import { MainPanel } from './Panel/MainPanel';
+import { GamePanel } from './Panel/GamePanel';
+import { SuccessPanel } from './Panel/SuccessPanel';
+import { FailPanel } from './Panel/FailPanel';
 const { ccclass, property } = _decorator;
 
 @ccclass('PanelManager')

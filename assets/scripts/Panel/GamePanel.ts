@@ -1,7 +1,6 @@
 import { _decorator, Component, Label, Node } from 'cc';
-import { GameData } from './GameData';
-import { sc } from './sc';
-import { MyGame } from './MyGame';
+import { MyGame } from '../MyGame';
+import { sc } from '../sc';
 const { ccclass, property } = _decorator;
 
 @ccclass('GamePanel')
