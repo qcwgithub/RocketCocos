@@ -30,7 +30,7 @@ export class PreviewGroup {
         this.poses = previewGroupData.poses.slice();
         this.onFinish = onFinish;
 
-        this.startTime = this.game.time;
+        this.startTime = sc.timeS();
         for (let i = 0; i < this.poses.length; i++) {
             const [x, y] = sc.decodePos(this.poses[i]);
             let cell: Cell = this.game.board.at(x, y);
@@ -150,7 +150,7 @@ export class PreviewGroup {
         this.poses.length;
         this.poses = curr_previewGroupData.poses.slice();
 
-        let now: number = this.game.time;
+        let now: number = sc.timeS();
         let initTimer: number = now - this.startTime;
         // +preview
         for (const pos of this.poses) {

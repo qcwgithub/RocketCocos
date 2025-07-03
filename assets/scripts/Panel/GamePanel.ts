@@ -17,8 +17,9 @@ export class GamePanel extends Component {
 
         let level: number = sc.profile.level;
 
+        let startTimeS = sc.timeS();
         var gameData = new GameData();
-        gameData.init(level);
+        gameData.init(level, startTimeS);
 
         this.game.startGame(gameData);
 
@@ -54,6 +55,10 @@ export class GamePanel extends Component {
         let gameData: GameData = this.game.gameData;
 
         this.rocketCountLabel.string = "collected " + gameData.collectedRockets + "/" + gameData.levelConfig.rocket;
+    }
+
+    refreshTime():void{
+        let gameData: GameData = this.game.gameData;
     }
 }
 

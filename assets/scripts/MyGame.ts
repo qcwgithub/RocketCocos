@@ -49,10 +49,6 @@ export class MyGame extends Component {
         this.moveGroup.startGame(this);
     }
 
-    public get time(): number {
-        return Date.now() / 1000;
-    }
-
     update(dt: number): void {
         if (this.gameData == null) {
             return;

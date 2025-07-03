@@ -28,6 +28,14 @@ export class sc {
         let x = (v - y) / 100;
         return [x, y];
     }
+
+    public static timeMs(): number {
+        return Date.now();
+    }
+
+    public static timeS(): number {
+        return Date.now() / 1000;
+    }
 }
 
 

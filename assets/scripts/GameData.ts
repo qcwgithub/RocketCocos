@@ -10,12 +10,14 @@ import { Alg } from "./Alg";
 export class GameData {
     public level: number;
     public levelConfig: LevelConfig;
+    public startTimeS: number;
     public boardData: BoardData;
     public rocketDatas: RocketData[] = [];
     public collectedRockets: number;
-    public init(level: number): void {
+    public init(level: number, startTimeS: number): void {
         this.level = level;
         this.levelConfig = sc.configManager.getLevelConfig(level);
+        this.startTimeS = startTimeS;
         this.boardData = new BoardData();
         this.boardData.init(this.levelConfig.width, this.levelConfig.height);
 
