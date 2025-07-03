@@ -2,6 +2,7 @@ import { _decorator, Component, Label, macro, Node } from 'cc';
 import { MyGame } from '../MyGame';
 import { sc } from '../sc';
 import { GameData } from '../GameData';
+import { MySettings } from '../MySettings';
 const { ccclass, property } = _decorator;
 
 @ccclass('GamePanel')
@@ -13,16 +14,20 @@ export class GamePanel extends Component {
     rocketCountLabel: Label;
 
     @property({ type: Label })
-    leftTimeLabel: Label;
+    remainTimeLabel: Label;
 
+    public remainTime: number;
+    prevTime: number;
     public startGame(): void {
         this.cleanup();
 
         let level: number = sc.profile.level;
 
-        let startTimeS = sc.time();
         var gameData = new GameData();
-        gameData.init(level, startTimeS);
+        gameData.init(level);
+
+        this.remainTime = gameData.levelConfig.time;
+        this.prevTime = sc.timeInt();
 
         this.game.startGame(gameData);
 
@@ -32,7 +37,8 @@ export class GamePanel extends Component {
 
         this.node.active = true;
 
-        this.schedule(this.refreshTime, 1, macro.REPEAT_FOREVER);
+        this.refreshRemainTime();
+        this.schedule(this.refreshRemainTime, 1, macro.REPEAT_FOREVER);
     }
 
     public cleanup(): void {
@@ -41,18 +47,23 @@ export class GamePanel extends Component {
         this.game.eventTarget.off(MyGame.Events.collectRockets, this.onCollectRockets, this);
         this.game.cleanup();
 
-        this.unscheduleAllCallbacks();
+        this.unschedule(this.refreshRemainTime);
     }
 
     onCollectRockets(): void {
         this.refreshRocketCount();
 
         let gameData: GameData = this.game.gameData;
+        if (gameData.result != 0) {
+            return;
+        }
 
         if (gameData.collectedRockets >= gameData.levelConfig.rocket) {
             if (sc.profile.level < sc.configManager.maxLevel) {
                 sc.profile.level++;
             }
+
+            gameData.result = 1;
 
             sc.panelManager.successPanel.show();
         }
@@ -60,14 +71,44 @@ export class GamePanel extends Component {
 
     refreshRocketCount(): void {
         let gameData: GameData = this.game.gameData;
-
         this.rocketCountLabel.string = "collected " + gameData.collectedRockets + "/" + gameData.levelConfig.rocket;
     }
 
-    refreshTime(): void {
+    refreshRemainTime(): void {
         let gameData: GameData = this.game.gameData;
+        if (gameData.result != 0) {
+            return;
+        }
+
         let now: number = sc.timeInt();
-        let left: number = gameData.levelConfig.time - (now - gameData.startTime);
-        this.leftTimeLabel.string = left.toString();
+        let elapsed: number = now - this.prevTime;
+        if (elapsed == 0) {
+            return;
+        }
+
+        this.remainTime -= elapsed;
+        this.prevTime = now;
+        if (this.remainTime < 0) {
+            this.remainTime = 0;
+        }
+        this.remainTimeLabel.string = this.remainTime.toString();
+
+        if (this.remainTime == 0) {
+            gameData.result = -1;
+            sc.panelManager.failPanel.show();
+        }
+    }
+
+    public extendTime(): void {
+        let gameData: GameData = this.game.gameData;
+
+        this.remainTime = MySettings.extendTime;
+
+        let now: number = sc.timeInt();
+        this.prevTime = now;
+        gameData.result = 0;
+
+        this.refreshRocketCount();
+        this.refreshRemainTime();
     }
 }

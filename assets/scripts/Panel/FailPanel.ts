@@ -28,6 +28,9 @@ export class FailPanel extends Panel {
 
         sc.panelManager.gamePanel.startGame();
     }
+
+    public onClickWatchAd(): void {
+        this.hide();
+        sc.panelManager.gamePanel.extendTime();
+    }
 }
-
-

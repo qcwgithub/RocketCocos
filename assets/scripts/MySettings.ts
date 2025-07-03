@@ -7,4 +7,5 @@ export class MySettings {
     public static readonly cellSize: number = 100;
     public static readonly moveSpeed: number = 400;
     public static readonly bigVec3: Vec3 = new Vec3(1.5, 1.5, 1);
+    public static readonly extendTime: number = 60;
 }
