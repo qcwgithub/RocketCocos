@@ -12,6 +12,7 @@ export class GameData {
     public levelConfig: LevelConfig;
     public boardData: BoardData;
     public rocketDatas: RocketData[] = [];
+    public collectedRockets: number;
     public init(level: number): void {
         this.level = level;
         this.levelConfig = sc.configManager.getLevelConfig(level);
@@ -32,6 +33,8 @@ export class GameData {
             rocketData.level = this.randomRocketLevel();
             this.rocketDatas.push(rocketData);
         }
+
+        this.collectedRockets = 0;
 
         // Alg.RefreshLink(boardData);
         this.refreshLink();

@@ -22,8 +22,7 @@ export class MainPanel extends Component {
         gameData.init(level);
 
         sc.game.startGame(gameData);
-
-        sc.gamePanel.show(gameData);
+        sc.gamePanel.startGame();
 
         this.node.active = false;
     }

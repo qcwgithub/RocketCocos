@@ -1,4 +1,4 @@
-import { _decorator, assert, Component, Node, Vec2 } from 'cc';
+import { _decorator, assert, Component, EventTarget, Vec2 } from 'cc';
 import { GameData } from './GameData';
 import { Rocket } from './Rocket';
 import { PreviewGroup } from './CellGroup/PreviewGroup';
@@ -11,6 +11,7 @@ import { CellData } from './CellData';
 import { ShapeExt } from './Shape';
 import { Board } from './Board';
 import { MyInput } from './MyInput';
+import { sc } from './sc';
 const { ccclass, property } = _decorator;
 
 @ccclass('MyGame')
@@ -19,6 +20,10 @@ export class MyGame extends Component {
     public board: Board;
 
     public gameData: GameData;
+    public static Events = {
+        collectRockets: "collectRockets"
+    };
+    public eventTarget: EventTarget = new EventTarget();
     public rockets: Rocket[] = [];
     public myInput: MyInput = new MyInput();
     public previewGroup: PreviewGroup = new PreviewGroup();
@@ -157,6 +162,18 @@ export class MyGame extends Component {
     }
 
     onFireFinish(poses: number[]): void {
+        let pre: number = this.gameData.collectedRockets;
+        for (const pos of poses) {
+            const [x, y] = sc.decodePos(pos);
+            if (x == this.gameData.boardData.width - 1&&
+                ShapeExt.getSettings(this.gameData.boardData.at(x,y).shape).linkedDirs.indexOf(Dir.R) >= 0) {
+                this.gameData.collectedRockets++;
+            }
+        }
+        if (this.gameData.collectedRockets > pre) {
+            this.eventTarget.emit(MyGame.Events.collectRockets);
+        }
+
         this.moveGroup.move(poses, this.onCellMoveFinish.bind(this));
         this.setDirty();
         this.handleDirty();
