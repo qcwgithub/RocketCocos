@@ -8,13 +8,27 @@ const { ccclass, property } = _decorator;
 export class GamePanel extends Component {
     @property({ type: Label })
     rocketCountLabel: Label;
+
     public startGame(): void {
-        this.rocketCountLabel.string = "collected " + sc.game.gameData.collectedRockets;
+        this.refreshRocketCount();
         sc.game.eventTarget.on(MyGame.Events.collectRockets, this.onCollectRockets, this);
     }
 
     onCollectRockets(): void {
-        this.rocketCountLabel.string = "collected " + sc.game.gameData.collectedRockets;
+        this.refreshRocketCount();
+
+        if (sc.game.gameData.collectedRockets >= sc.game.gameData.levelConfig.rocket) {
+            if (sc.profile.level < sc.configManager.maxLevel) {
+                sc.profile.level++;
+            }
+
+           sc.panelManager.successPanel.show(); 
+        }
+    }
+
+    refreshRocketCount(): void {
+
+        this.rocketCountLabel.string = "collected " + sc.game.gameData.collectedRockets + "/" + sc.game.gameData.levelConfig.rocket;
     }
 }
 

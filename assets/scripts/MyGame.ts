@@ -46,6 +46,9 @@ export class MyGame extends Component {
     }
 
     update(dt: number): void {
+        if (this.gameData == null){
+            return;
+        }
         this.myUpdate(dt);
     }
 

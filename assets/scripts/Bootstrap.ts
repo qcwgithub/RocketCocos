@@ -5,12 +5,13 @@ import { sc } from './sc';
 import { ConfigManager } from './ConfigManager';
 import { MyAssets } from './MyAssets';
 import { Profile } from './Profile';
+import { PanelManager } from './PanelManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('Bootstrap')
 export class Bootstrap extends Component {
-    @property({ type: GamePanel })
-    gamePanel: GamePanel;
+    @property({ type: PanelManager })
+    public panelManager: PanelManager;
     @property({ type: MyGame })
     game: MyGame;
     @property({ type: MyAssets })
@@ -18,7 +19,7 @@ export class Bootstrap extends Component {
 
     onLoad() {
         sc.bootstrap = this;
-        sc.gamePanel = this.gamePanel;
+        sc.panelManager = this.panelManager;
         sc.game = this.game;
         sc.myAssets = this.myAssets;
 
@@ -27,6 +28,8 @@ export class Bootstrap extends Component {
 
         sc.configManager = new ConfigManager();
         sc.configManager.load();
+
+        sc.panelManager.mainPanel.show();
     }
 }
 

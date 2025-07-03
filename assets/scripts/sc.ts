@@ -5,10 +5,11 @@ import { Bootstrap } from "./Bootstrap";
 import { MyAssets } from "./MyAssets";
 import { Profile } from "./Profile";
 import { GamePanel } from "./GamePanel";
+import { PanelManager } from "./PanelManager";
 
 export class sc {
     public static bootstrap: Bootstrap;
-    public static gamePanel: GamePanel;
+    public static panelManager: PanelManager;
     public static game: MyGame;
     public static myAssets: MyAssets;
     public static configManager: ConfigManager;
