@@ -21,6 +21,9 @@ export class MyGame extends Component {
     board: Board;
 
     @property({ type: Node })
+    matchTemplate: Node;
+
+    @property({ type: Node })
     rocketTemplate: Node;
 
     public gameData: GameData;
@@ -39,6 +42,7 @@ export class MyGame extends Component {
         this.board.cleanup();
         this.gameData = null;
 
+        this.clearupMatches();
         this.cleanupRockets();
 
         this.fireGroup.cleanup();
@@ -50,6 +54,7 @@ export class MyGame extends Component {
         this.gameData = gameData;
         this.board.startGame(this);
 
+        this.initMatches();
         this.initRockets();
 
         this.myInput.init(this);
@@ -58,43 +63,41 @@ export class MyGame extends Component {
         this.moveGroup.startGame(this);
     }
 
+    clearupMatches(): void {
+        sc.hideChildren(this.matchTemplate);
+    }
+
+    initMatchNode(index: number, child: Node): void {
+        let x: number = this.board.getPositionX(0) - MySettings.cellSize * 0.5;
+        let y: number = this.board.getPositionY(index);
+
+        sc.tempVec3.x = x;
+        sc.tempVec3.y = y;
+        sc.tempVec3.z = 0;
+        child.setPosition(sc.tempVec3);
+    }
+
+    initMatches(): void {
+        let L: number = this.gameData.boardData.height;
+        sc.instantiateChildren(this.matchTemplate, L, this.initMatchNode.bind(this));
+    }
+
     cleanupRockets(): void {
-        let parent: Node = this.rocketTemplate.parent;
-        let children: Node[] = parent.children;
-        for (const child of children) {
-            child.active = false;
-        }
+        sc.hideChildren(this.rocketTemplate);
         this.rockets.length = 0;
     }
 
+    initRocketNode(index: number, child: Node): void {
+        let rocket: Rocket = child.getComponent(Rocket);
+        rocket.init(this, index);
+        this.rockets[index] = rocket;
+    }
+
     initRockets(): void {
-        let parent: Node = this.rocketTemplate.parent;
-
         let L: number = this.gameData.boardData.height;
-
-        let childCount = parent.children.length;
-        for (let i = 0; i < L - childCount; i++) {
-            let child: Node = instantiate(this.rocketTemplate);
-            child.setParent(parent);
-        }
-
         this.rockets.length = L;
 
-        let children: Node[] = parent.children;
-        let x: number = this.board.getPositionX(this.gameData.boardData.width - 1) + MySettings.cellSize * 0.5;
-        for (let i = 0; i < L; i++) {
-            let child: Node = children[i];
-            let rocket: Rocket = child.getComponent(Rocket);
-            rocket.node.active = true;
-
-            let y: number = this.board.getPositionY(i);
-
-            rocket.node.setPosition(new Vec3(x, y, 0));
-
-            rocket.init(this, i);
-
-            this.rockets[i] = rocket;
-        }
+        sc.instantiateChildren(this.rocketTemplate, L, this.initRocketNode.bind(this));
     }
 
     public myUpdate(dt: number): void {

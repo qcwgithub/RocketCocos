@@ -1,4 +1,4 @@
-import { Quat, Vec3 } from "cc";
+import { instantiate, Node, Quat, Vec3 } from "cc";
 import { ConfigManager } from "./ConfigManager";
 import { MyGame } from "./MyGame";
 import { Bootstrap } from "./Bootstrap";
@@ -39,6 +39,31 @@ export class sc {
 
     public static time(): number {
         return Date.now() / 1000;
+    }
+
+    public static hideChildren(template: Node): void {
+        let parent: Node = template.parent;
+        let children: Node[] = parent.children;
+        for (const child of children) {
+            child.active = false;
+        }
+    }
+
+    public static instantiateChildren(template: Node, L: number, callback: (index: number, child: Node) => void): void {
+        let parent: Node = template.parent;
+
+        let childCount = parent.children.length;
+        for (let i = 0; i < L - childCount; i++) {
+            let child: Node = instantiate(template);
+            child.setParent(parent);
+        }
+
+        let children: Node[] = parent.children;
+        for (let i = 0; i < L; i++) {
+            let child: Node = children[i];
+            child.active = true;
+            callback(i, child);
+        }
     }
 }
 
