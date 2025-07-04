@@ -851,7 +851,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "GridParent",
+    "_name": "CellBgParent",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -958,8 +958,8 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 100
+      "width": 90,
+      "height": 90
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1141,8 +1141,8 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 96,
-      "height": 96
+      "width": 90,
+      "height": 90
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
