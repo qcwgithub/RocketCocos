@@ -38,6 +38,11 @@ export class MyGame extends Component {
     public fireGroup: FireGroup = new FireGroup();
     public moveGroup: MoveGroup = new MoveGroup();
 
+    onCellRotateFinish_bind: (cell: Cell, rotateDir: RotateDir) => void;
+    onPreviewFinish_bind: (poses: number[]) => void;
+    onFireFinish_bind: (poses: number[]) => void;
+    onCellMoveFinish_bind: (cell: Cell) => void;
+
     public cleanup(): void {
         this.board.cleanup();
         this.gameData = null;
@@ -48,6 +53,11 @@ export class MyGame extends Component {
         this.fireGroup.cleanup();
         this.previewGroup.cleanup();
         this.moveGroup.cleanup();
+
+        this.onCellRotateFinish_bind = null;
+        this.onPreviewFinish_bind = null;
+        this.onFireFinish_bind = null;
+        this.onCellMoveFinish_bind = null;
     }
 
     public startGame(gameData: GameData): void {
@@ -61,6 +71,11 @@ export class MyGame extends Component {
         this.previewGroup.startGame(this);
         this.fireGroup.startGame(this);
         this.moveGroup.startGame(this);
+
+        this.onCellRotateFinish_bind = this.onCellRotateFinish.bind(this);
+        this.onPreviewFinish_bind = this.onPreviewFinish.bind(this);
+        this.onFireFinish_bind = this.onFireFinish.bind(this);
+        this.onCellMoveFinish_bind = this.onCellMoveFinish.bind(this);
     }
 
     clearupMatches(): void {
@@ -151,7 +166,7 @@ export class MyGame extends Component {
             return;
         }
 
-        this.previewGroup.start(this.gameData.boardData.previewGroupDatas[0], this.onPreviewFinish.bind(this));
+        this.previewGroup.start(this.gameData.boardData.previewGroupDatas[0], this.onPreviewFinish_bind);
     }
 
     onCellRotateFinish(cell: Cell, rotateDir: RotateDir): void {
@@ -202,7 +217,7 @@ export class MyGame extends Component {
             const [canLinkTo2, needRotate2, rotateDir2] = ShapeExt.canLinkTo(data2.shape, DirExt.reverse(dir));
 
             if (canLinkTo2 && needRotate2 && cell2.state.askRotate()) {
-                cell2.rotate(rotateDir2, this.onCellRotateFinish.bind(this));
+                cell2.rotate(rotateDir2, this.onCellRotateFinish_bind);
                 dirty = true;
             }
         }
@@ -216,7 +231,7 @@ export class MyGame extends Component {
     onPreviewFinish(poses: number[]): void {
         assert(!this.fireGroup.firing);
         if (!this.fireGroup.firing) {
-            this.fireGroup.start(poses, this.onFireFinish.bind(this));
+            this.fireGroup.start(poses, this.onFireFinish_bind);
         }
     }
 
@@ -235,7 +250,7 @@ export class MyGame extends Component {
             this.eventTarget.emit(MyGame.Events.collectRockets);
         }
 
-        this.moveGroup.move(poses, this.onCellMoveFinish.bind(this));
+        this.moveGroup.move(poses, this.onCellMoveFinish_bind);
         this.setDirty();
         this.handleDirty();
     }
