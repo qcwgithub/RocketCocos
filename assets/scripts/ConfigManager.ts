@@ -43,9 +43,9 @@ export class ConfigManager {
 
         levelConfig = new LevelConfig();
         levelConfig.level = 5;
-        levelConfig.width = 3;
+        levelConfig.width = 6;
         levelConfig.height = 9;
-        levelConfig.rocket = 5;
+        levelConfig.rocket = 20;
         levelConfig.time = 60;
         this.levelConfigs.push(levelConfig);
 

@@ -1,4 +1,4 @@
-import { _decorator, assert, Component, EventTarget, Vec2 } from 'cc';
+import { _decorator, assert, Component, EventTarget, Vec2, Node, instantiate, Vec3 } from 'cc';
 import { GameData } from './GameData';
 import { Rocket } from './Rocket';
 import { PreviewGroup } from './CellGroup/PreviewGroup';
@@ -12,19 +12,24 @@ import { ShapeExt } from './Shape';
 import { Board } from './Board';
 import { MyInput } from './MyInput';
 import { sc } from './sc';
+import { MySettings } from './MySettings';
 const { ccclass, property } = _decorator;
 
 @ccclass('MyGame')
 export class MyGame extends Component {
     @property({ type: Board })
-    public board: Board;
+    board: Board;
+
+    @property({ type: Node })
+    rocketTemplate: Node;
 
     public gameData: GameData;
+    rockets: Rocket[] = [];
+
     public static Events = {
         collectRockets: "collectRockets"
     };
     public eventTarget: EventTarget = new EventTarget();
-    public rockets: Rocket[] = [];
     public myInput: MyInput = new MyInput();
     public previewGroup: PreviewGroup = new PreviewGroup();
     public fireGroup: FireGroup = new FireGroup();
@@ -33,7 +38,9 @@ export class MyGame extends Component {
     public cleanup(): void {
         this.board.cleanup();
         this.gameData = null;
-        this.rockets.length = 0;
+
+        this.cleanupRockets();
+
         this.fireGroup.cleanup();
         this.previewGroup.cleanup();
         this.moveGroup.cleanup();
@@ -43,10 +50,51 @@ export class MyGame extends Component {
         this.gameData = gameData;
         this.board.startGame(this);
 
+        this.initRockets();
+
         this.myInput.init(this);
         this.previewGroup.startGame(this);
         this.fireGroup.startGame(this);
         this.moveGroup.startGame(this);
+    }
+
+    cleanupRockets(): void {
+        let parent: Node = this.rocketTemplate.parent;
+        let children: Node[] = parent.children;
+        for (const child of children) {
+            child.active = false;
+        }
+        this.rockets.length = 0;
+    }
+
+    initRockets(): void {
+        let parent: Node = this.rocketTemplate.parent;
+
+        let L: number = this.gameData.boardData.height;
+
+        let childCount = parent.children.length;
+        for (let i = 0; i < L - childCount; i++) {
+            let child: Node = instantiate(this.rocketTemplate);
+            child.setParent(parent);
+        }
+
+        this.rockets.length = L;
+
+        let children: Node[] = parent.children;
+        let x: number = this.board.getPositionX(this.gameData.boardData.width - 1) + MySettings.cellSize * 0.5;
+        for (let i = 0; i < L; i++) {
+            let child: Node = children[i];
+            let rocket: Rocket = child.getComponent(Rocket);
+            rocket.node.active = true;
+
+            let y: number = this.board.getPositionY(i);
+
+            rocket.node.setPosition(new Vec3(x, y, 0));
+
+            rocket.init(this, i);
+
+            this.rockets[i] = rocket;
+        }
     }
 
     public myUpdate(dt: number): void {
@@ -55,6 +103,10 @@ export class MyGame extends Component {
         }
 
         this.myInput.myUpdate(dt);
+
+        for (const rocket of this.rockets) {
+            rocket.myUpdate(dt);
+        }
 
         for (let i = 0; i < this.board.width; i++) {
             for (let j = 0; j < this.board.height; j++) {
@@ -172,6 +224,8 @@ export class MyGame extends Component {
             if (x == this.gameData.boardData.width - 1 &&
                 ShapeExt.getSettings(this.gameData.boardData.at(x, y).shape).linkedDirs.indexOf(Dir.R) >= 0) {
                 this.gameData.collectedRockets++;
+
+                this.rockets[y].fly();
             }
         }
         if (this.gameData.collectedRockets > pre) {
@@ -188,5 +242,3 @@ export class MyGame extends Component {
         this.handleDirty();
     }
 }
-
-

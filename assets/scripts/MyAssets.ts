@@ -35,6 +35,9 @@ export class MyAssets extends Component {
     @property({ type: SpriteFrame })
     LRTB: SpriteFrame;
 
+    @property({ type: SpriteFrame })
+    rocket: SpriteFrame;
+
     spriteFrameMap: Map<string, SpriteFrame> = null;
     public GetSpriteFrame(name: string): SpriteFrame {
         if (this.spriteFrameMap == null) {
@@ -54,6 +57,8 @@ export class MyAssets extends Component {
             this.spriteFrameMap[Shape[Shape.LTB]] = this.LTB;
             this.spriteFrameMap[Shape[Shape.RTB]] = this.RTB;
             this.spriteFrameMap[Shape[Shape.LRTB]] = this.LRTB;
+
+            this.spriteFrameMap["rocket"] = this.rocket;
         }
 
         return this.spriteFrameMap[name];

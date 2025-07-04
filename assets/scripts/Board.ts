@@ -135,13 +135,17 @@ export class Board extends Component {
         return this.game.gameData.boardData.height;
     }
 
+    public getPositionX(i: number): number {
+        return (-this.width * 0.5 + 0.5 + i) * MySettings.cellSize;
+    }
+
     public getPositionY(j: number): number {
         return (-this.height * 0.5 + 0.5 + j) * MySettings.cellSize;
     }
 
     public getPosition(i: number, j: number): Vec3 {
         return new Vec3(
-            (-this.width * 0.5 + 0.5 + i) * MySettings.cellSize,
+            this.getPositionX(i),
             this.getPositionY(j),
             0
         );
