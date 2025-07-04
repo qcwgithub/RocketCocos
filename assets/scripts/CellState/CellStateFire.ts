@@ -4,8 +4,13 @@ import { Shape } from "../Shape";
 import { CellState } from "./CellState";
 import { sc } from "../sc";
 import { MySettings } from "../MySettings";
+import { CellStateType } from "./CellStateType";
 
 export class CellStateFire extends CellState {
+    public override get type(): CellStateType {
+        return CellStateType.Fire;
+    }
+
     public override askRotate(): boolean {
         return false;
     }

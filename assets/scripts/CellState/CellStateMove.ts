@@ -4,8 +4,13 @@ import { Shape } from "../Shape";
 import { CellState } from "./CellState";
 import { CellData } from "../CellData";
 import { MySettings } from "../MySettings";
+import { CellStateType } from "./CellStateType";
 
 export class CellStateMove extends CellState {
+    public override get type(): CellStateType {
+        return CellStateType.Move;
+    }
+
     public override  askRotate(): boolean {
         return false;
     }

@@ -6,8 +6,13 @@ import { Shape, ShapeExt } from "../Shape";
 import { CellState } from "./CellState";
 import { sc } from "../sc";
 import { MySettings } from "../MySettings";
+import { CellStateType } from "./CellStateType";
 
 export class CellStateRotate extends CellState {
+    public override get type(): CellStateType {
+        return CellStateType.Rotate;
+    }
+
     public override askRotate(): boolean {
         return true;
     }

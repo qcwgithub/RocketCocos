@@ -1,4 +1,4 @@
-import { _decorator, Color, Component, Node, resources, Size, Sprite, SpriteFrame, UITransform } from 'cc';
+import { _decorator, assert, Color, Component, Node, resources, Size, Sprite, SpriteFrame, UITransform } from 'cc';
 import { Shape } from './Shape';
 import { CellData } from './CellData';
 import { RotateDir } from './RotateDir';
@@ -11,6 +11,7 @@ import { CellStateRotate } from './CellState/CellStateRotate';
 import { CellState } from './CellState/CellState';
 import { sc } from './sc';
 import { MySettings } from './MySettings';
+import { CellStateType } from './CellState/CellStateType';
 const { ccclass, property } = _decorator;
 
 @ccclass('Cell')
@@ -21,12 +22,20 @@ export class Cell extends Component {
     public game: MyGame;
     public x: number;
     public y: number;
+
     public stateIdle: CellStateIdle = new CellStateIdle();
     public stateRotate: CellStateRotate = new CellStateRotate();
     public statePreview: CellStatePreview = new CellStatePreview();
     public stateFire: CellStateFire = new CellStateFire();
     public stateMove: CellStateMove = new CellStateMove();
     public state: CellState;
+
+    public cleanup(): void {
+        this.game = null;
+        this.x = 0;
+        this.y = 0;
+    }
+
     public init(game: MyGame, x: number, y: number): void {
         this.game = game;
         this.x = x;
@@ -108,32 +117,37 @@ export class Cell extends Component {
     public myUpdate(dt: number): void {
         this.state.myUpdate(dt);
     }
-    public get rotating(): boolean {
-        return this.state == this.stateRotate && this.stateRotate.rotating;
-    }
 
-    public get firing(): boolean {
-        return this.state == this.stateFire && this.stateFire.firing;
-    }
-    public get previewing(): boolean {
-        return this.state == this.statePreview && this.statePreview.previewing;
+    assertIsIdle(): void {
+        assert(this.state == this.stateIdle, "this.state is not Idle, it is " + CellStateType[this.state.type]);
     }
 
     public rotate(rotateDir: RotateDir, onFinish: (cell: Cell, rotateDir: RotateDir) => void): void {
+        assert(this.state.type == CellStateType.Idle || this.state.type == CellStateType.Rotate, 
+            "this.state is not Idle nor Rotate, it is " + CellStateType[this.state.type]);
+
         this.state = this.stateRotate;
         this.stateRotate.rotate(rotateDir, onFinish);
     }
 
     public fire(onFinish: (cell: Cell) => void): void {
+        this.assertIsIdle();
+
         this.state = this.stateFire;
         this.stateFire.fire(onFinish);
     }
+
     public preview(initTimer: number, onFinish: (cell: Cell) => void): void {
+        this.assertIsIdle();
+
         this.state = this.statePreview;
         this.statePreview.preview(initTimer, onFinish);
     }
 
     public move(fromPositionY: number, toPositionY: number, onFinish: (cell: Cell) => void): void {
+        assert(this.state.type == CellStateType.Idle || this.state.type == CellStateType.Move, 
+            "this.state is not Idle nor Move, it is " + CellStateType[this.state.type]);
+
         this.state = this.stateMove;
         this.stateMove.move(fromPositionY, toPositionY, onFinish);
     }

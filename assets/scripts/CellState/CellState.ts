@@ -1,7 +1,9 @@
 import { Cell } from "../Cell";
 import { Shape } from "../Shape";
+import { CellStateType } from "./CellStateType";
 
 export abstract class CellState {
+    public abstract get type(): CellStateType;
     public cell: Cell;
     public init(cell: Cell): void {
         this.cell = cell;

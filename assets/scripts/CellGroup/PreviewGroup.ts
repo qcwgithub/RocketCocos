@@ -3,6 +3,7 @@ import { Cell } from "../Cell";
 import { PreviewGroupData } from "../PreviewGroupData";
 import { MyGame } from "../MyGame";
 import { sc } from "../sc";
+import { CellStateType } from "../CellState/CellStateType";
 
 export class PreviewGroup {
     game: MyGame;
@@ -48,7 +49,7 @@ export class PreviewGroup {
         for (let i = 0; i < this.poses.length; i++) {
             const [x, y] = sc.decodePos(this.poses[i]);
             let cell: Cell = this.game.board.at(x, y);
-            if (cell.previewing) {
+            if (cell.state.type == CellStateType.Preview) {
                 return;
             }
         }
@@ -65,7 +66,7 @@ export class PreviewGroup {
         for (let i = 0; i < this.poses.length; i++) {
             const [x, y] = sc.decodePos(this.poses[i]);
             let cell: Cell = this.game.board.at(x, y);
-            if (cell.previewing) {
+            if (cell.state.type == CellStateType.Preview) {
                 cell.statePreview.cancelPreview();
             }
         }
@@ -146,7 +147,7 @@ export class PreviewGroup {
             if (curr_previewGroupData.poses.indexOf(pos) < 0) {
                 const [x, y] = sc.decodePos(pos);
                 let cell: Cell = this.game.board.at(x, y);
-                if (cell.previewing) {
+                if (cell.state.type == CellStateType.Preview) {
                     cell.statePreview.cancelPreview();
                 }
             }
@@ -161,7 +162,7 @@ export class PreviewGroup {
         for (const pos of this.poses) {
             const [x, y] = sc.decodePos(pos);
             let cell: Cell = this.game.board.at(x, y);
-            if (!cell.previewing) {
+            if (cell.state.type != CellStateType.Preview) {
                 cell.preview(initTimer, this.onCellPreviewFinish_bind);
             }
         }

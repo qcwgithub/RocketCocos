@@ -4,8 +4,13 @@ import { Shape } from "../Shape";
 import { CellState } from "./CellState";
 import { sc } from "../sc";
 import { MySettings } from "../MySettings";
+import { CellStateType } from "./CellStateType";
 
 export class CellStatePreview extends CellState {
+    public override get type(): CellStateType {
+        return CellStateType.Preview;
+    }
+
     public override askRotate(): boolean {
         if (this.previewing) {
             this.cancelPreview();

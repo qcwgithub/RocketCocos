@@ -2,6 +2,7 @@ import { assert, Vec2 } from "cc";
 import { Cell } from "../Cell";
 import { MyGame } from "../MyGame";
 import { sc } from "../sc";
+import { CellStateType } from "../CellState/CellStateType";
 
 export class FireGroup {
     game: MyGame;
@@ -43,7 +44,7 @@ export class FireGroup {
             for (const pos of this.poses) {
                 const [x, y] = sc.decodePos(pos);
                 let cell: Cell = this.game.board.at(x, y);
-                if (cell.firing) {
+                if (cell.state.type == CellStateType.Fire) {
                     return;
                 }
             }

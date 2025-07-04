@@ -18,10 +18,10 @@ export class Board extends Component {
     public boardData: BoardData;
 
     public cleanup(): void {
-        this.game = null;
-        this.boardData = null;
         this.cleanupCellBgs();
         this.cleanupCells();
+        this.game = null;
+        this.boardData = null;
     }
 
     public startGame(game: MyGame): void {
@@ -69,6 +69,14 @@ export class Board extends Component {
 
         for (const child of parent.children) {
             child.active = false;
+        }
+
+        if (this.game != null) {
+            for (let i = 0; i < this.width; i++) {
+                for (let j = 0; j < this.height; j++) {
+                    this.cells[i][j].cleanup();
+                }
+            }
         }
 
         this.cells = null;
