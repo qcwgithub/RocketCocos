@@ -20,42 +20,26 @@ export class CellStateFire extends CellState {
     }
 
     public firing: boolean;
-    fireTimer: number;
-    onFireFinish: (cell: Cell) => void;
 
     public override cleanup(): void {
         this.firing = false;
-        this.fireTimer = 0;
-        this.onFireFinish = null;
 
         super.cleanup();
     }
 
-    public fire(onFinish: (cell: Cell) => void): void {
+    public fire(): void {
         assert(!this.firing);
         this.firing = true;
-        this.fireTimer = 0;
-        this.onFireFinish = onFinish;
+
+        this.cell.sprite.color = MySettings.cellColor.fire;
     }
 
     public override myUpdate(dt: number): void {
-        if (this.firing) {
-            this.fireTimer += dt;
-            let t: number = sc.clamp01(this.fireTimer / MySettings.fireDuration);
-
-            Vec3.lerp(sc.tempVec3, Vec3.ONE, Vec3.ZERO, t);
-            this.cell.node.setScale(sc.tempVec3);
-            if (t >= 1) {
-                this.finishFire();
-            }
-        }
     }
 
     public finishFire(): void {
         assert(this.firing);
         this.firing = false;
-        this.cell.node.setScale(Vec3.ONE);
         this.cell.idle();
-        this.onFireFinish(this.cell);
     }
 }

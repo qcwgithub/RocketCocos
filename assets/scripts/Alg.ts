@@ -14,7 +14,7 @@ export class Alg {
                 let cell: CellData = boardData.at(i, j);
                 cell.linkedL = false;
                 cell.linkedR = false;
-                cell.linkedLRHandled = false;
+                cell.previewHandled = false;
 
             }
         }
@@ -57,10 +57,10 @@ export class Alg {
         for (let j = boardData.height - 1; j >= 0; j--) {
             for (let i = 0; i < boardData.width; i++) {
                 let cellData: CellData = boardData.at(i, j);
-                if (!cellData.linkedLR || cellData.linkedLRHandled) {
+                if (!cellData.linkedLR || cellData.previewHandled) {
                     continue;
                 }
-                cellData.linkedLRHandled = true;
+                cellData.previewHandled = true;
 
                 var group = new PreviewGroupData();
                 group.poses.push(sc.encodePos(i, j));
@@ -130,12 +130,12 @@ export class Alg {
                 }
             }
             else if (what == "LR") {
-                if (!cell.linkedLR || cell.linkedLRHandled) {
+                if (!cell.linkedLR || cell.previewHandled) {
                     continue;
                 }
 
                 if (ShapeExt.getSettings(cell.shape).linkedDirs.indexOf(reverseDir) >= 0) {
-                    cell.linkedLRHandled = true;
+                    cell.previewHandled = true;
 
                     board.currentPreviewGroupData.poses.push(sc.encodePos(x, y));
                     Alg.propagate(board, x, y, what);

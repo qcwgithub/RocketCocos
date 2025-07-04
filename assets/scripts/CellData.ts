@@ -8,5 +8,6 @@ export class CellData {
     public get linkedLR(): boolean {
         return this.linkedL && this.linkedR;
     }
-    public linkedLRHandled: boolean;
+    public previewHandled: boolean;
+    // public fireHandled: boolean;
 }

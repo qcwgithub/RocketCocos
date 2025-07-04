@@ -39,12 +39,14 @@ class color_s {
     public L: boolean;
     public R: boolean;
     public previewing: boolean;
+    public firing: boolean;
 
     public cleanup(): void {
         this.inited = false;
         this.L = false;
         this.R = false;
         this.previewing = false;
+        this.firing = false;
     };
 }
 
@@ -129,15 +131,20 @@ export class Cell extends Component {
     }
 
     _color_s: color_s = new color_s();
-    refreshColor(L: boolean, R: boolean, previewing: boolean): void {
+    refreshColor(L: boolean, R: boolean, previewing: boolean, firing: boolean): void {
         let s = this._color_s;
-        if (!s.inited || s.L != L || s.R != R || s.previewing != previewing) {
+        if (!s.inited || s.L != L || s.R != R || s.previewing != previewing || s.firing != firing) {
             s.inited = true;
             s.L = L;
             s.R = R;
             s.previewing = previewing;
+            s.firing = firing;
 
             if (previewing) {
+                return;
+            }
+
+            if (firing){
                 return;
             }
 
@@ -163,7 +170,7 @@ export class Cell extends Component {
 
         const [o, o_shape] = this.state.shouldOverrideSpriteShape();
         this.refreshSprite(o ? o_shape : cellData.shape);
-        this.refreshColor(cellData.linkedL, cellData.linkedR, this.previewing);
+        this.refreshColor(cellData.linkedL, cellData.linkedR, this.previewing, this.state.type == CellStateType.Fire);
     }
 
     public myUpdate(dt: number): void {
@@ -184,11 +191,11 @@ export class Cell extends Component {
         this.stateRotate.rotate(rotateDir, onFinish);
     }
 
-    public fire(onFinish: (cell: Cell) => void): void {
+    public fire(): void {
         this.assertIsIdle();
 
         this.state = this.stateFire;
-        this.stateFire.fire(onFinish);
+        this.stateFire.fire();
     }
 
     public get previewing(): boolean {

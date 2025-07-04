@@ -46,8 +46,14 @@ export class GameData {
         return 1;
     }
 
+    static seqs: number[] = [
+        0, 3, 5, 6, 7, 2, 3, 4, 6, 547, 8, 234, 3, 53, 2, 32, 42, 2, 1, 3, 42, 5, 2, 5, 2, 3, 2, 32, 3, 2
+    ];
+    seq: number = 0;
     public randomShape(): Shape {
-        let index: number = randomRangeInt(0, ShapeExt.s_without1.length);
+        this.seq = (this.seq + 1) % GameData.seqs.length;
+        let index = GameData.seqs[this.seq] % ShapeExt.s_without1.length;
+        // let index: number = randomRangeInt(0, ShapeExt.s_without1.length);
         // console.log("random shape~index: " + index);
         let shape: Shape = ShapeExt.s_without1[index];
         // console.log("random shape~shape: " + Shape[shape]);

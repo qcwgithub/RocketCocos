@@ -26,6 +26,9 @@ export class MyGame extends Component {
     @property({ type: Node })
     rocketTemplate: Node;
 
+    @property({ type: Node })
+    fireTracerTemplate: Node;
+
     public gameData: GameData;
     rockets: Rocket[] = [];
 
@@ -121,6 +124,8 @@ export class MyGame extends Component {
         }
 
         this.myInput.myUpdate(dt);
+
+        this.fireGroup.myUpdate(dt);
 
         for (const rocket of this.rockets) {
             rocket.myUpdate(dt);
