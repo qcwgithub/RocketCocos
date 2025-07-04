@@ -7,6 +7,10 @@ export class CellStateIdle extends CellState {
         return CellStateType.Idle;
     }
 
+    public override cleanup(): void {
+        super.cleanup();
+    }
+
     public override askRotate(): boolean {
         return true;
     }

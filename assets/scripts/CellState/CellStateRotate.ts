@@ -31,6 +31,17 @@ export class CellStateRotate extends CellState {
     targetRotation: Quat = new Quat();
     onRotateFinish: (cell: Cell, rotateDir: RotateDir) => void;
     overrideShape: Shape;
+
+    public override cleanup(): void {
+        this.rotating = false;
+        this.rotateDir = RotateDir.Count;
+        this.rotateTimer = 0;
+        this.onRotateFinish = null;
+        this.overrideShape = null;
+
+        super.cleanup();
+    }
+
     public rotate(rotateDir: RotateDir, onFinish: (cell: Cell, rotateDir: RotateDir) => void): void {
         if (this.rotating) {
             Quat.fromEuler(sc.tempQuat, 0, 0, 0);
@@ -50,7 +61,7 @@ export class CellStateRotate extends CellState {
         let cellData: CellData = this.cell.game.gameData.boardData.at(this.cell.x, this.cell.y);
         this.overrideShape = cellData.shape;
 
-        cellData.forbidLink = true;
+        // cellData.forbidLink = true;
 
         cellData.shape = ShapeExt.getSettings(cellData.shape).GetRotateResult(rotateDir);
     }
@@ -71,8 +82,8 @@ export class CellStateRotate extends CellState {
         assert(this.rotating);
         this.rotating = false;
 
-        let cellData: CellData = this.cell.game.gameData.boardData.at(this.cell.x, this.cell.y);
-        cellData.forbidLink = false;
+        // let cellData: CellData = this.cell.game.gameData.boardData.at(this.cell.x, this.cell.y);
+        // cellData.forbidLink = false;
 
         Quat.fromEuler(sc.tempQuat, 0, 0, 0);
         this.cell.node.setRotation(sc.tempQuat);

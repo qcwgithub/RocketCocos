@@ -5,6 +5,11 @@ import { CellStateType } from "./CellStateType";
 export abstract class CellState {
     public abstract get type(): CellStateType;
     public cell: Cell;
+
+    public cleanup(): void {
+        this.cell = null;
+    }
+
     public init(cell: Cell): void {
         this.cell = cell;
     }

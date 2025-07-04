@@ -23,6 +23,14 @@ export class CellStateMove extends CellState {
     public targetPositionY: number;
     public onMoveFinish: (cell: Cell) => void;
 
+    public override cleanup(): void {
+        this.moving = false;
+        this.targetPositionY = 0;
+        this.onMoveFinish = null;
+
+        super.cleanup();
+    }
+
     public move(fromPositionY: number, toPositionY: number, onFinish: (cell: Cell) => void): void {
         this.moving = true;
 

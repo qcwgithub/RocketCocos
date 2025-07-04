@@ -1,4 +1,4 @@
-import { assert, Vec3 } from "cc";
+import { assert, Color, Vec3 } from "cc";
 import { Cell } from "../Cell";
 import { Shape } from "../Shape";
 import { CellState } from "./CellState";
@@ -23,38 +23,32 @@ export class CellStatePreview extends CellState {
     }
 
     public previewing: boolean;
-    duration_half: number;
     previewTimer: number;
-    zoomIn: boolean;
     onPreviewFinish: (cell: Cell) => void;
+
+    public override cleanup(): void {
+        this.previewing = false;
+        this.previewTimer = 0;
+        this.onPreviewFinish = null;
+
+        super.cleanup();
+    }
+
     public preview(initTimer: number, onFinish: (cell: Cell) => void): void {
-        // Debug.LogWarning($"CellStatePreview.Preview ({this.cell.x}, {this.cell.y})");
+        // console.log(`CellStatePreview.Preview (${this.cell.x}, ${this.cell.y}) initTimer ${initTimer}`);
         assert(!this.previewing, `${this.cell.x} ${this.cell.y}`);
         this.previewing = true;
-        this.duration_half = MySettings.previewDuration * 0.5;
-        if (initTimer < this.duration_half) {
-            this.previewTimer = initTimer;
-            this.zoomIn = true;
-        }
-        else {
-            this.previewTimer = initTimer - this.duration_half;
-            this.zoomIn = false;
-            this.refresh1();
-        }
+        this.previewTimer = initTimer;
+        this.refresh1();
         this.onPreviewFinish = onFinish;
     }
 
     refresh1(): number {
-        let t: number = sc.clamp01(this.previewTimer / this.duration_half);
-
-        if (this.zoomIn) {
-            Vec3.lerp(sc.tempVec3, Vec3.ONE, MySettings.bigVec3, t);
-        }
-        else {
-            Vec3.lerp(sc.tempVec3, MySettings.bigVec3, Vec3.ONE, t);
-        }
-
-        this.cell.node.setScale(sc.tempVec3);
+        let t: number = sc.clamp01(this.previewTimer / MySettings.previewDuration);
+        // console.log("t = " + t)
+        Color.lerp(sc.tempColor, MySettings.cellColor.previewStart, MySettings.cellColor.previewEnd, t);
+        this.cell.sprite.color = sc.tempColor;
+        // console.log(this.cell.sprite.color.toString())
         return t;
     }
 
@@ -62,18 +56,11 @@ export class CellStatePreview extends CellState {
         if (this.previewing) {
             this.previewTimer += dt;
 
-            let t: number = this.refresh1();
+            // console.log("this.previewTimer " + this.previewTimer)
 
-            if (this.zoomIn) {
-                if (t >= 1) {
-                    this.previewTimer = 0;
-                    this.zoomIn = false;
-                }
-            }
-            else {
-                if (t >= 1) {
-                    this.finishPreview();
-                }
+            let t: number = this.refresh1();
+            if (t >= 1) {
+                this.finishPreview();
             }
         }
     }
@@ -81,16 +68,16 @@ export class CellStatePreview extends CellState {
     public finishPreview(): void {
         assert(this.previewing);
         this.previewing = false;
-        this.cell.idle();
+        // this.cell.idle();
         this.onPreviewFinish(this.cell);
     }
 
     public cancelPreview(): void {
-        // Debug.LogWarning($"CellStatePreview.CancelPreview ({this.cell.x}, {this.cell.y})");
+        // console.log(`CellStatePreview.CancelPreview (${this.cell.x}, ${this.cell.y})`);
         assert(this.previewing);
         this.previewing = false;
         this.cell.node.setScale(Vec3.ONE);
-        this.cell.idle();
+        // this.cell.idle();
     }
 }
 

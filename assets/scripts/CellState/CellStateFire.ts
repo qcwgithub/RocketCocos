@@ -22,6 +22,15 @@ export class CellStateFire extends CellState {
     public firing: boolean;
     fireTimer: number;
     onFireFinish: (cell: Cell) => void;
+
+    public override cleanup(): void {
+        this.firing = false;
+        this.fireTimer = 0;
+        this.onFireFinish = null;
+
+        super.cleanup();
+    }
+
     public fire(onFinish: (cell: Cell) => void): void {
         assert(!this.firing);
         this.firing = true;

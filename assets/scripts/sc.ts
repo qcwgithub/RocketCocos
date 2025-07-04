@@ -1,4 +1,4 @@
-import { instantiate, Node, Quat, Vec3 } from "cc";
+import { Color, instantiate, Node, Quat, Vec3 } from "cc";
 import { ConfigManager } from "./ConfigManager";
 import { MyGame } from "./MyGame";
 import { Bootstrap } from "./Bootstrap";
@@ -14,7 +14,10 @@ export class sc {
     public static profile: Profile;
 
     public static tempVec3: Vec3 = new Vec3();
+    public static tempVec3_2: Vec3 = new Vec3();
+    public static tempVec3_3: Vec3 = new Vec3();
     public static tempQuat: Quat = new Quat();
+    public static tempColor: Color = new Color();
 
     public static clamp01(value: number): number {
         return Math.min(1, Math.max(0, value));

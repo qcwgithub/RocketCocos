@@ -49,7 +49,7 @@ export class PreviewGroup {
         for (let i = 0; i < this.poses.length; i++) {
             const [x, y] = sc.decodePos(this.poses[i]);
             let cell: Cell = this.game.board.at(x, y);
-            if (cell.state.type == CellStateType.Preview) {
+            if (cell.previewing) {
                 return;
             }
         }
@@ -66,7 +66,7 @@ export class PreviewGroup {
         for (let i = 0; i < this.poses.length; i++) {
             const [x, y] = sc.decodePos(this.poses[i]);
             let cell: Cell = this.game.board.at(x, y);
-            if (cell.state.type == CellStateType.Preview) {
+            if (cell.previewing) {
                 cell.statePreview.cancelPreview();
             }
         }
@@ -147,7 +147,7 @@ export class PreviewGroup {
             if (curr_previewGroupData.poses.indexOf(pos) < 0) {
                 const [x, y] = sc.decodePos(pos);
                 let cell: Cell = this.game.board.at(x, y);
-                if (cell.state.type == CellStateType.Preview) {
+                if (cell.previewing) {
                     cell.statePreview.cancelPreview();
                 }
             }
@@ -162,7 +162,7 @@ export class PreviewGroup {
         for (const pos of this.poses) {
             const [x, y] = sc.decodePos(pos);
             let cell: Cell = this.game.board.at(x, y);
-            if (cell.state.type != CellStateType.Preview) {
+            if (!cell.previewing) {
                 cell.preview(initTimer, this.onCellPreviewFinish_bind);
             }
         }
