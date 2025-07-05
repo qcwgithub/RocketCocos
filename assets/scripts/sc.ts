@@ -44,12 +44,15 @@ export class sc {
         return Date.now() / 1000;
     }
 
-    public static hideChildren(template: Node): void {
-        let parent: Node = template.parent;
+    public static showChildren(parent: Node, count: number): void {
         let children: Node[] = parent.children;
-        for (const child of children) {
-            child.active = false;
+        for (let i = 0; i < children.length; i++) {
+            children[i].active = i < count;
         }
+    }
+
+    public static hideChildren(parent: Node): void {
+        sc.showChildren(parent, 0);
     }
 
     public static instantiateChildren(template: Node, L: number, callback: (index: number, child: Node) => void): void {
@@ -65,7 +68,10 @@ export class sc {
         for (let i = 0; i < L; i++) {
             let child: Node = children[i];
             child.active = true;
-            callback(i, child);
+
+            if (callback != null) {
+                callback(i, child);
+            }
         }
     }
 }

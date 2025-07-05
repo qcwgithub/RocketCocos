@@ -27,7 +27,7 @@ export class MyGame extends Component {
     rocketTemplate: Node;
 
     @property({ type: Node })
-    fireTracerTemplate: Node;
+    public fireBallTemplate: Node;
 
     public gameData: GameData;
     rockets: Rocket[] = [];
@@ -82,7 +82,7 @@ export class MyGame extends Component {
     }
 
     clearupMatches(): void {
-        sc.hideChildren(this.matchTemplate);
+        sc.hideChildren(this.matchTemplate.parent);
     }
 
     initMatchNode(index: number, child: Node): void {
@@ -101,7 +101,7 @@ export class MyGame extends Component {
     }
 
     cleanupRockets(): void {
-        sc.hideChildren(this.rocketTemplate);
+        sc.hideChildren(this.rocketTemplate.parent);
         this.rockets.length = 0;
     }
 
