@@ -112,7 +112,7 @@ export class Alg {
                     continue;
                 }
 
-                if (ShapeExt.getSettings(cell.shape).linkedDirs.indexOf(reverseDir) >= 0) {
+                if (ShapeExt.getSettings(cell.shape).isLinkDir(reverseDir)) {
                     // UnityEngine.Debug.Log($"{center_x},{center_y}->{x} {y}");
                     cell.linkedL = true;
                     Alg.propagate(board, x, y, what);
@@ -123,7 +123,7 @@ export class Alg {
                     continue;
                 }
 
-                if (ShapeExt.getSettings(cell.shape).linkedDirs.indexOf(reverseDir) >= 0) {
+                if (ShapeExt.getSettings(cell.shape).isLinkDir(reverseDir)) {
                     // UnityEngine.Debug.Log($"{center_x},{center_y}->{x} {y}");
                     cell.linkedR = true;
                     Alg.propagate(board, x, y, what);
@@ -134,7 +134,7 @@ export class Alg {
                     continue;
                 }
 
-                if (ShapeExt.getSettings(cell.shape).linkedDirs.indexOf(reverseDir) >= 0) {
+                if (ShapeExt.getSettings(cell.shape).isLinkDir(reverseDir)) {
                     cell.previewHandled = true;
 
                     board.currentPreviewGroupData.poses.push(sc.encodePos(x, y));

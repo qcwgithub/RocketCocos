@@ -8,6 +8,7 @@ import { CellData } from "../CellData";
 import { MySettings } from "../MySettings";
 import { ShapeExt } from "../Shape";
 import { Dir, DirExt } from "../Dir";
+import { Board } from "../Board";
 
 export class FireGroup {
     game: MyGame;
@@ -42,17 +43,25 @@ export class FireGroup {
             this.currentPoses.length = 0;
             this.finalPoses.length = 0;
 
+            let board: Board = this.game.board;
+            let boardData: BoardData = this.game.gameData.boardData;
+
             for (const pos of poses) {
                 const [x, y] = sc.decodePos(pos);
-                if (x == 0) {
-                    this.currentPoses.push(pos);
-                    this.finalPoses.push(pos);
-
-                    // console.log(`start fire ${x} ${y}`);
-
-                    let cell: Cell = this.game.board.at(x, y);
-                    cell.fire();
+                if (x != 0) {
+                    continue;
                 }
+
+                let cellData: CellData = boardData.at(x, y);
+                if (!ShapeExt.getSettings(cellData.shape).isLinkDir(Dir.L)) {
+                    continue;
+                }
+
+                this.currentPoses.push(pos);
+                this.finalPoses.push(pos);
+
+                let cell: Cell = board.at(x, y);
+                cell.fire();
             }
 
             this.onFinish = onFinish;
@@ -61,12 +70,14 @@ export class FireGroup {
 
     forward(): void {
         this.tempPoses.length = 0;
+
+        let board: Board = this.game.board;
         let boardData: BoardData = this.game.gameData.boardData;
 
         for (const pos of this.currentPoses) {
             const [center_x, center_y] = sc.decodePos(pos);
 
-            let center: Cell = this.game.board.at(center_x, center_y);
+            let center: Cell = board.at(center_x, center_y);
             assert(center.state.type == CellStateType.Fire);
 
             let centerCellData: CellData = boardData.at(center_x, center_y);
@@ -84,7 +95,7 @@ export class FireGroup {
                     continue;
                 }
 
-                let cell: Cell = this.game.board.at(x, y);
+                let cell: Cell = board.at(x, y);
                 if (cell.state.type == CellStateType.Fire) {
                     continue;
                 }
@@ -96,7 +107,7 @@ export class FireGroup {
 
                 let reverseDir: Dir = DirExt.reverse(dir);
 
-                if (ShapeExt.getSettings(cellData.shape).linkedDirs.indexOf(reverseDir) >= 0) {
+                if (ShapeExt.getSettings(cellData.shape).isLinkDir(reverseDir)) {
                     // console.log(`add fire ${x} ${y}`);
                     this.tempPoses.push(sc.encodePos(x, y));
                     this.finalPoses.push(sc.encodePos(x, y));

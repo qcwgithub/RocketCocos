@@ -245,7 +245,7 @@ export class MyGame extends Component {
         for (const pos of poses) {
             const [x, y] = sc.decodePos(pos);
             if (x == this.gameData.boardData.width - 1 &&
-                ShapeExt.getSettings(this.gameData.boardData.at(x, y).shape).linkedDirs.indexOf(Dir.R) >= 0) {
+                ShapeExt.getSettings(this.gameData.boardData.at(x, y).shape).isLinkDir(Dir.R)) {
                 this.gameData.collectedRockets++;
 
                 this.rockets[y].fly();
