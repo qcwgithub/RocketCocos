@@ -1,4 +1,4 @@
-import { assert, Vec2 } from "cc";
+import { assert, instantiate, Node, Vec2 } from "cc";
 import { Cell } from "../Cell";
 import { MyGame } from "../MyGame";
 import { sc } from "../sc";
@@ -18,6 +18,31 @@ export class FireGroup {
     currentPoses: number[] = [];
     tempPoses: number[] = [];
     finalPoses: number[] = [];
+
+    freeFireBallNodes: Node[] = [];
+    allocFireBallNode(): Node {
+        let node: Node;
+        let L: number = this.freeFireBallNodes.length;
+        if (L > 0) {
+            node = this.freeFireBallNodes[L - 1];
+            this.freeFireBallNodes.length--;
+        }
+        else {
+            node = instantiate(this.game.fireBallTemplate);
+            node.setParent(this.game.fireBallTemplate.parent);
+        }
+
+        node.active = true;
+        return node;
+    }
+
+    putFireBallNode(node: Node): void {
+        node.active = false;
+
+        this.freeFireBallNodes.length++;
+        let L: number = this.freeFireBallNodes.length;
+        this.freeFireBallNodes[L - 1] = node;
+    }
 
     public cleanup(): void {
         this.game = null;
