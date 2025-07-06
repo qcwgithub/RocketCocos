@@ -3,6 +3,7 @@ import { Cell } from './Cell';
 import { BoardData } from './BoardData';
 import { MyGame } from './MyGame';
 import { MySettings } from './MySettings';
+import { Dir, DirExt } from './Dir';
 const { ccclass, property } = _decorator;
 
 @ccclass('Board')
@@ -141,6 +142,20 @@ export class Board extends Component {
     }
     public get height(): number {
         return this.game.gameData.boardData.height;
+    }
+
+    public getPositionSideX(x: number, dir: Dir): number {
+        let px = this.getPositionX(x);
+        let offX: number = DirExt.toOffsetX(dir);
+        px += offX * MySettings.cellSize * 0.5;
+        return px;
+    }
+
+    public getPositionSideY(y: number, dir: Dir): number {
+        let py = this.getPositionY(y);
+        let offY: number = DirExt.toOffsetY(dir);
+        py += offY * MySettings.cellSize * 0.5;
+        return py;
     }
 
     public getPositionX(i: number): number {

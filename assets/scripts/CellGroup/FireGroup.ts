@@ -9,14 +9,20 @@ import { MySettings } from "../MySettings";
 import { ShapeExt } from "../Shape";
 import { Dir, DirExt } from "../Dir";
 import { Board } from "../Board";
+import { FireBall } from "./FireBall";
 
 export class FireGroup {
     game: MyGame;
     public firing: boolean;
     fireTimer: number;
     public onFinish: (poses: number[]) => void;
+
     currentPoses: number[] = [];
     tempPoses: number[] = [];
+
+    balls: FireBall[] = [];
+    tempBalls: FireBall[] = [];
+
     finalPoses: number[] = [];
 
     freeFireBallNodes: Node[] = [];
@@ -49,8 +55,13 @@ export class FireGroup {
         this.firing = false;
         this.fireTimer = 0;
         this.onFinish = null;
+
         this.currentPoses.length = 0;
         this.tempPoses.length = 0;
+
+        this.balls.length = 0;
+        this.tempBalls.length = 0;
+
         this.finalPoses.length = 0;
     }
 
@@ -66,6 +77,11 @@ export class FireGroup {
             this.firing = true;
 
             this.currentPoses.length = 0;
+            this.tempPoses.length = 0;
+
+            this.balls.length = 0;
+            this.tempBalls.length = 0;
+
             this.finalPoses.length = 0;
 
             let board: Board = this.game.board;
@@ -82,6 +98,8 @@ export class FireGroup {
                     continue;
                 }
 
+                this.ballPassCell(x, y, Dir.L, null);
+
                 this.currentPoses.push(pos);
                 this.finalPoses.push(pos);
 
@@ -93,13 +111,57 @@ export class FireGroup {
         }
     }
 
+    ballPassCell(x: number, y: number, inDir: Dir, inBall: FireBall): void {
+        if (inBall == null) {
+            inBall = new FireBall();
+            inBall.start(this.game, this.allocFireBallNode(), x, y, inDir, 0);
+        }
+        inBall.append(x, y, Dir.Count);
+        this.balls.push(inBall);
+
+        let boardData: BoardData = this.game.gameData.boardData;
+
+        let cellData: CellData = boardData.at(x, y);
+
+        let inBallUsed: boolean = false;
+
+        let linkedDirs: Dir[] = ShapeExt.getSettings(cellData.shape).linkedDirs;
+        for (const dir of linkedDirs) {
+            if (dir == inDir) {
+                continue;
+            }
+
+            if (!inBallUsed) {
+                inBallUsed = true;
+                inBall.append(x, y, dir);
+            }
+            else {
+                let ball = new FireBall();
+                ball.start(this.game, this.allocFireBallNode(), x, y, Dir.Count, MySettings.fireDuration * 0.5);
+                ball.append(x, y, dir);
+
+                this.balls.push(ball);
+            }
+        }
+    }
+
     forward(): void {
         this.tempPoses.length = 0;
+        for (let i = 0; i < this.currentPoses.length; i++) {
+            this.tempPoses.push(this.currentPoses[i]);
+        }
+        this.currentPoses.length = 0;
+
+        this.tempBalls.length = 0;
+        for (let i = 0; i < this.balls.length; i++) {
+            this.tempBalls.push(this.balls[i]);
+        }
+        this.balls.length = 0;
 
         let board: Board = this.game.board;
         let boardData: BoardData = this.game.gameData.boardData;
 
-        for (const pos of this.currentPoses) {
+        for (const pos of this.tempPoses) {
             const [center_x, center_y] = sc.decodePos(pos);
 
             let center: Cell = board.at(center_x, center_y);
@@ -108,8 +170,7 @@ export class FireGroup {
             let centerCellData: CellData = boardData.at(center_x, center_y);
 
             let linkedDirs: Dir[] = ShapeExt.getSettings(centerCellData.shape).linkedDirs;
-            for (let i = 0; i < linkedDirs.length; i++) {
-                let dir: Dir = linkedDirs[i];
+            for (const dir of linkedDirs) {
                 let x = center_x + DirExt.toOffsetX(dir);
                 if (x < 0 || x >= boardData.width) {
                     continue;
@@ -132,24 +193,43 @@ export class FireGroup {
 
                 let reverseDir: Dir = DirExt.reverse(dir);
 
-                if (ShapeExt.getSettings(cellData.shape).isLinkDir(reverseDir)) {
-                    // console.log(`add fire ${x} ${y}`);
-                    this.tempPoses.push(sc.encodePos(x, y));
-                    this.finalPoses.push(sc.encodePos(x, y));
-                    cell.fire();
+                if (!ShapeExt.getSettings(cellData.shape).isLinkDir(reverseDir)) {
+                    continue;
                 }
+
+                let bk = -1;
+                for (let k = 0; k < this.tempBalls.length; k++) {
+                    if (this.tempBalls[k] != null &&
+                        this.tempBalls[k].lastTargetIs(center_x, center_y, dir)
+                    ) {
+                        bk = k;
+                        break;
+                    }
+                }
+
+                assert(bk != -1, "bk == -1");
+
+                this.ballPassCell(x, y, reverseDir, this.tempBalls[bk]);
+                this.tempBalls[bk] = null;
+
+                // console.log(`add fire ${x} ${y}`);
+                this.currentPoses.push(sc.encodePos(x, y));
+                this.finalPoses.push(sc.encodePos(x, y));
+                cell.fire();
             }
         }
 
-        if (this.tempPoses.length == 0) {
-            this.finishFire();
-        }
-        else {
-            this.currentPoses.length = 0;
-            for (const pos of this.tempPoses) {
-                this.currentPoses.push(pos);
+        for (let i = 0; i < this.tempBalls.length; i++) {
+            if (this.tempBalls[i] != null) {
+                this.putFireBallNode(this.tempBalls[i].node);
+                this.tempBalls[i].cleanup();
             }
-            this.tempPoses.length = 0;
+        }
+
+        this.tempPoses.length = 0;
+
+        if (this.currentPoses.length == 0) {
+            this.finishFire();
         }
     }
 

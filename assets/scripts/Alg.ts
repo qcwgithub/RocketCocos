@@ -88,8 +88,7 @@ export class Alg {
     static propagate(board: BoardData, center_x: number, center_y: number, what: string): void {
         let center: CellData = board.at(center_x, center_y);
         let linkedDirs: Dir[] = ShapeExt.getSettings(center.shape).linkedDirs;
-        for (let i = 0; i < linkedDirs.length; i++) {
-            let dir: Dir = linkedDirs[i];
+        for (const dir of linkedDirs) {
             let x = center_x + DirExt.toOffsetX(dir);
             if (x < 0 || x >= board.width) {
                 continue;
