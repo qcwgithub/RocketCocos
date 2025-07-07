@@ -15,6 +15,7 @@ export abstract class CellState {
     }
 
     public abstract askRotate(): boolean;
+    public abstract willMove(): void;
     public abstract shouldOverrideSpriteShape(): [boolean, Shape?];
     public abstract myUpdate(dt: number): void;
 }

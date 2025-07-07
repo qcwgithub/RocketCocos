@@ -15,6 +15,10 @@ export class CellStateFire extends CellState {
         return false;
     }
 
+    public override willMove(): void {
+
+    }
+
     public override shouldOverrideSpriteShape(): [boolean, Shape?] {
         return [false]
     }

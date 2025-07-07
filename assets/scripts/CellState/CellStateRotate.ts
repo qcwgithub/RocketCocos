@@ -17,6 +17,13 @@ export class CellStateRotate extends CellState {
         return true;
     }
 
+    public override willMove(): void {
+        if (this.rotating) {
+            console.log("finishRotate because willMove");
+            this.finishRotate();
+        }
+    }
+
     public override shouldOverrideSpriteShape(): [boolean, Shape?] {
         if (this.rotating) {
             return [true, this.overrideShape];

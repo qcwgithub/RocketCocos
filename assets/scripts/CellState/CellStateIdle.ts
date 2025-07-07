@@ -15,6 +15,10 @@ export class CellStateIdle extends CellState {
         return true;
     }
 
+    public override willMove(): void {
+
+    }
+
     public override shouldOverrideSpriteShape(): [boolean, Shape?] {
         return [false];
     }

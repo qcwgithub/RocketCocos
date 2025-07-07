@@ -222,6 +222,8 @@ export class Cell extends Component {
     }
 
     public move(fromPositionY: number, toPositionY: number, onFinish: (cell: Cell) => void): void {
+        this.state.willMove();
+
         assert(this.state.type == CellStateType.Idle || this.state.type == CellStateType.Move,
             `this.state is not Idle nor Move, it is ${CellStateType[this.state.type]}, ${this.x} ${this.y}`);
 
