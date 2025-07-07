@@ -5,6 +5,7 @@ import { Bootstrap } from "./Bootstrap";
 import { MyAssets } from "./MyAssets";
 import { Profile } from "./Profile";
 import { PanelManager } from "./PanelManager";
+import { AudioManager } from "./AudioManager";
 
 export class sc {
     public static bootstrap: Bootstrap;
@@ -12,6 +13,7 @@ export class sc {
     public static myAssets: MyAssets;
     public static configManager: ConfigManager;
     public static profile: Profile;
+    public static audioManager: AudioManager;
 
     public static tempVec3: Vec3 = new Vec3();
     public static tempVec3_2: Vec3 = new Vec3();

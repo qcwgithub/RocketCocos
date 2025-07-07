@@ -31,6 +31,7 @@ export class PreviewGroup {
     }
 
     public start(previewGroupData: PreviewGroupData, onFinish: (poses: number[]) => void): void {
+        sc.audioManager.playPreview();
         assert(!this.previewing);
         this.previewing = true;
         this.poses = previewGroupData.poses.slice();

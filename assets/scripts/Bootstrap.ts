@@ -5,6 +5,7 @@ import { ConfigManager } from './ConfigManager';
 import { MyAssets } from './MyAssets';
 import { Profile } from './Profile';
 import { PanelManager } from './PanelManager';
+import { AudioManager } from './AudioManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('Bootstrap')
@@ -13,11 +14,14 @@ export class Bootstrap extends Component {
     public panelManager: PanelManager;
     @property({ type: MyAssets })
     myAssets: MyAssets;
+    @property({ type: AudioManager })
+    audioManager: AudioManager;
 
     onLoad() {
         sc.bootstrap = this;
         sc.panelManager = this.panelManager;
         sc.myAssets = this.myAssets;
+        sc.audioManager = this.audioManager;
 
         sc.profile = new Profile("qiucw");
         sc.profile.load();

@@ -57,6 +57,8 @@ export class Rocket extends Component {
             this.node.setPosition(this.initPosition);
         }
 
+        sc.audioManager.playRocketLaunch();
+
         this.flying = true;
         this.flyTime = 0;
     }
