@@ -116,7 +116,10 @@ export class FireGroup {
             inBall = new FireBall();
             inBall.start(this.game, this.allocFireBallNode(), x, y, inDir, 0);
         }
+
+        // inBall 不是新 new 的也要加进去，因为之前已经从 balls 全部移至 tempBalls
         this.balls.push(inBall);
+
         inBall.append(x, y, Dir.Count);
 
         let boardData: BoardData = this.game.gameData.boardData;
@@ -133,15 +136,15 @@ export class FireGroup {
 
             if (!inBallUsed) {
                 inBallUsed = true;
-                console.log(`[${inBall.uid}] ${x} ${y} ${Dir[dir]}`);
+                // console.log(`[${inBall.uid}] ${x} ${y} ${Dir[dir]}`);
                 inBall.append(x, y, dir);
             }
             else {
                 let ball = new FireBall();
-                console.log(`[${ball.uid}] ${x} ${y} ${Dir[Dir.Count]}`);
+                // console.log(`[${ball.uid}] ${x} ${y} ${Dir[Dir.Count]}`);
                 ball.start(this.game, this.allocFireBallNode(), x, y, Dir.Count, MySettings.fireTimePerCel * 0.5);
 
-                console.log(`[${ball.uid}] ${x} ${y} ${Dir[dir]}`);
+                // console.log(`[${ball.uid}] ${x} ${y} ${Dir[dir]}`);
                 ball.append(x, y, dir);
 
                 this.balls.push(ball);
@@ -156,6 +159,8 @@ export class FireGroup {
         }
         this.currentPoses.length = 0;
 
+        // balls -> tempBalls
+        // 仍然有效的，再重新加回 balls
         this.tempBalls.length = 0;
         for (let i = 0; i < this.balls.length; i++) {
             this.tempBalls.push(this.balls[i]);
@@ -223,9 +228,10 @@ export class FireGroup {
             }
         }
 
+        // tempBalls 里剩下的是不再使用的
         for (let i = 0; i < this.tempBalls.length; i++) {
             if (this.tempBalls[i] != null) {
-                console.log(`delete [${this.tempBalls[i].uid}]`);
+                // console.log(`delete [${this.tempBalls[i].uid}]`);
                 this.putFireBallNode(this.tempBalls[i].node);
                 this.tempBalls[i].cleanup();
             }
