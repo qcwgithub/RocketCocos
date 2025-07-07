@@ -12,6 +12,7 @@ import { CellState } from './CellState/CellState';
 import { sc } from './sc';
 import { MySettings } from './MySettings';
 import { CellStateType } from './CellState/CellStateType';
+import { CellStatePreFire } from './CellState/CellStatePreFire';
 const { ccclass, property } = _decorator;
 
 class name_s {
@@ -62,6 +63,7 @@ export class Cell extends Component {
     public stateIdle: CellStateIdle = new CellStateIdle();
     public stateRotate: CellStateRotate = new CellStateRotate();
     public statePreview: CellStatePreview = new CellStatePreview();
+    public statePreFire: CellStatePreFire = new CellStatePreFire();
     public stateFire: CellStateFire = new CellStateFire();
     public stateMove: CellStateMove = new CellStateMove();
     public state: CellState;
@@ -74,6 +76,7 @@ export class Cell extends Component {
         this.stateIdle.cleanup();
         this.stateRotate.cleanup();
         this.statePreview.cleanup();
+        this.statePreFire.cleanup();
         this.stateFire.cleanup();
         this.stateMove.cleanup();
 
@@ -96,6 +99,7 @@ export class Cell extends Component {
         this.stateIdle.init(this);
         this.stateRotate.init(this);
         this.statePreview.init(this);
+        this.statePreFire.init(this);
         this.stateFire.init(this);
         this.stateMove.init(this);
 
@@ -144,7 +148,7 @@ export class Cell extends Component {
                 return;
             }
 
-            if (firing){
+            if (firing) {
                 return;
             }
 
@@ -191,8 +195,15 @@ export class Cell extends Component {
         this.stateRotate.rotate(rotateDir, onFinish);
     }
 
-    public fire(): void {
+    public preFire(): void {
         this.assertIsIdle();
+
+        this.state = this.statePreFire;
+        this.statePreFire.preFire();
+    }
+
+    public fire(): void {
+        assert(this.state == this.statePreFire, "this.state is not PreFire, it is " + CellStateType[this.state.type]);
 
         this.state = this.stateFire;
         this.stateFire.fire();

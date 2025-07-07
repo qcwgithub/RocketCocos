@@ -28,7 +28,7 @@ export class CellStateFire extends CellState {
     }
 
     public fire(): void {
-        assert(!this.firing);
+        assert(!this.firing, "CellStateFire.fire1() firing is already true");
         this.firing = true;
 
         this.cell.sprite.color = MySettings.cellColor.fire;

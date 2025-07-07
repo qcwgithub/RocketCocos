@@ -71,7 +71,8 @@ export class FireGroup {
     }
 
     public start(poses: number[], onFinish: (poses: number[]) => void): void {
-        assert(!this.firing);
+        console.log("FireGroup.start()");
+        assert(!this.firing, "FireGroup.start() firing is alread true");
 
         if (!this.firing) {
             this.firing = true;
@@ -86,6 +87,14 @@ export class FireGroup {
 
             let board: Board = this.game.board;
             let boardData: BoardData = this.game.gameData.boardData;
+
+            // 提前锁住
+            for (const pos of poses) {
+                const [x, y] = sc.decodePos(pos);
+
+                let cell: Cell = board.at(x, y);
+                cell.preFire();
+            }
 
             for (const pos of poses) {
                 const [x, y] = sc.decodePos(pos);
