@@ -195,6 +195,10 @@ export class Cell extends Component {
         this.stateRotate.rotate(rotateDir, onFinish);
     }
 
+    public canEnterPreFire(): boolean {
+        return this.state == this.stateIdle;
+    }
+
     public preFire(): void {
         this.assertIsIdle();
 
@@ -219,7 +223,7 @@ export class Cell extends Component {
 
     public move(fromPositionY: number, toPositionY: number, onFinish: (cell: Cell) => void): void {
         assert(this.state.type == CellStateType.Idle || this.state.type == CellStateType.Move,
-            "this.state is not Idle nor Move, it is " + CellStateType[this.state.type]);
+            `this.state is not Idle nor Move, it is ${CellStateType[this.state.type]}, ${this.x} ${this.y}`);
 
         this.state = this.stateMove;
         this.stateMove.move(fromPositionY, toPositionY, onFinish);

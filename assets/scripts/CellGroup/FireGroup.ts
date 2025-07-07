@@ -215,6 +215,14 @@ export class FireGroup {
                     continue;
                 }
 
+                if (cell.state.type != CellStateType.PreFire) {
+                    if (!cell.canEnterPreFire()) {
+                        // console.log(`(not error)!canEnterPreFire() ${x} ${y}`);
+                        continue;
+                    }
+                    cell.preFire();
+                }
+
                 let bk = -1;
                 for (let k = 0; k < this.tempBalls.length; k++) {
                     if (this.tempBalls[k] != null &&
