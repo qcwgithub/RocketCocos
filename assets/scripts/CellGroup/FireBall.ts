@@ -18,6 +18,8 @@ class FireBallTarget {
 }
 
 export class FireBall {
+    static s_uid: number = 1;
+    uid: number;
     game: MyGame;
     public node: Node;
     targets: FireBallTarget[] = [];
@@ -25,6 +27,10 @@ export class FireBall {
     timer: number;
     index: number;
     DURATION: number;
+
+    constructor() {
+        this.uid = FireBall.s_uid++;
+    }
 
     public cleanup(): void {
         this.game = null;
@@ -49,6 +55,10 @@ export class FireBall {
         this.timer = 0;
         this.index = 0;
         this.DURATION = MySettings.fireTimePerCel * 0.5;
+
+        if (delay == 0){
+            this.node.active = true;
+        }
 
         this.node.setPosition(this.getPosition(target));
     }
@@ -92,14 +102,16 @@ export class FireBall {
     }
 
     public myUpdate(dt: number): void {
-        if (this.delay > 0){
-            if (this.delay >= dt){
+        if (this.delay > 0) {
+            if (this.delay >= dt) {
                 this.delay -= dt;
                 return;
             }
 
-            dt += dt - this.delay;
+            dt -= this.delay;
             this.delay = 0;
+
+            this.node.active = true;
         }
         this.timer += dt;
         while (this.timer >= this.DURATION) {
@@ -110,11 +122,12 @@ export class FireBall {
         let L: number = this.targets.length;
         if (this.index < L - 1) {
             let t: number = this.timer / this.DURATION;
-
             let from: Vec3 = this.getPosition(this.targets[this.index]);
             let to: Vec3 = this.getPosition(this.targets[this.index + 1]);
-            Vec3.lerp(sc.tempVec3, from, to, t);
-            this.node.setPosition(sc.tempVec3);
+
+            let _ = new Vec3();
+            Vec3.lerp(_, from, to, t);
+            this.node.setPosition(_);
         }
         else if (this.index == L - 1) {
             this.node.setPosition(this.getPosition(this.targets[L - 1]));

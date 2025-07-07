@@ -37,6 +37,7 @@ export class DirExt {
     }
 
     public static toOffsetX(e: Dir): number {
+        assert(e >= 0 && e < Dir.Count);
         switch (e) {
             case Dir.L:
                 return -1;
@@ -51,6 +52,7 @@ export class DirExt {
     }
 
     public static toOffsetY(e: Dir): number {
+        assert(e >= 0 && e < Dir.Count);
         switch (e) {
             case Dir.L:
                 return 0;

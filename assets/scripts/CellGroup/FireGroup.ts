@@ -38,7 +38,7 @@ export class FireGroup {
             node.setParent(this.game.fireBallTemplate.parent);
         }
 
-        node.active = true;
+        // node.active = true;
         return node;
     }
 
@@ -116,8 +116,8 @@ export class FireGroup {
             inBall = new FireBall();
             inBall.start(this.game, this.allocFireBallNode(), x, y, inDir, 0);
         }
-        inBall.append(x, y, Dir.Count);
         this.balls.push(inBall);
+        inBall.append(x, y, Dir.Count);
 
         let boardData: BoardData = this.game.gameData.boardData;
 
@@ -133,11 +133,15 @@ export class FireGroup {
 
             if (!inBallUsed) {
                 inBallUsed = true;
+                console.log(`[${inBall.uid}] ${x} ${y} ${Dir[dir]}`);
                 inBall.append(x, y, dir);
             }
             else {
                 let ball = new FireBall();
-                ball.start(this.game, this.allocFireBallNode(), x, y, Dir.Count, MySettings.fireDuration * 0.5);
+                console.log(`[${ball.uid}] ${x} ${y} ${Dir[Dir.Count]}`);
+                ball.start(this.game, this.allocFireBallNode(), x, y, Dir.Count, MySettings.fireTimePerCel * 0.5);
+
+                console.log(`[${ball.uid}] ${x} ${y} ${Dir[dir]}`);
                 ball.append(x, y, dir);
 
                 this.balls.push(ball);
@@ -207,7 +211,7 @@ export class FireGroup {
                     }
                 }
 
-                assert(bk != -1, "bk == -1");
+                assert(bk != -1, `bk == -1 (${x} ${y} ${Dir[reverseDir]}) need (${center_x} ${center_y} ${Dir[dir]})`);
 
                 this.ballPassCell(x, y, reverseDir, this.tempBalls[bk]);
                 this.tempBalls[bk] = null;
@@ -221,6 +225,7 @@ export class FireGroup {
 
         for (let i = 0; i < this.tempBalls.length; i++) {
             if (this.tempBalls[i] != null) {
+                console.log(`delete [${this.tempBalls[i].uid}]`);
                 this.putFireBallNode(this.tempBalls[i].node);
                 this.tempBalls[i].cleanup();
             }
@@ -243,6 +248,10 @@ export class FireGroup {
                 if (!this.firing) {
                     break;
                 }
+            }
+
+            for (let i = 0; i < this.balls.length; i++) {
+                this.balls[i].myUpdate(dt);
             }
         }
     }
