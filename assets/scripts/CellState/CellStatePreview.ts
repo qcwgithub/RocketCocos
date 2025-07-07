@@ -39,16 +39,20 @@ export class CellStatePreview extends CellState {
     }
 
     public preview(initTimer: number, onFinish: (cell: Cell) => void): void {
+        this.cell.ping();
         // console.log(`CellStatePreview.Preview (${this.cell.x}, ${this.cell.y}) initTimer ${initTimer}`);
         assert(!this.previewing, `${this.cell.x} ${this.cell.y}`);
         this.previewing = true;
         this.previewTimer = initTimer;
         this.refresh1();
         this.onPreviewFinish = onFinish;
+
+        // this.cell.node.setScale(MySettings.previewScale);
     }
 
     refresh1(): number {
         let t: number = sc.clamp01(this.previewTimer / MySettings.previewDuration);
+        t *= t;
         // console.log("t = " + t)
         Color.lerp(sc.tempColor, MySettings.cellColor.previewStart, MySettings.cellColor.previewEnd, t);
         this.cell.sprite.color = sc.tempColor;
@@ -73,6 +77,7 @@ export class CellStatePreview extends CellState {
         assert(this.previewing);
         this.previewing = false;
         // this.cell.idle();
+        // this.cell.node.setScale(Vec3.ONE);
         this.onPreviewFinish(this.cell);
     }
 
@@ -80,7 +85,7 @@ export class CellStatePreview extends CellState {
         // console.log(`CellStatePreview.CancelPreview (${this.cell.x}, ${this.cell.y})`);
         assert(this.previewing);
         this.previewing = false;
-        this.cell.node.setScale(Vec3.ONE);
+        // this.cell.node.setScale(Vec3.ONE);
         // this.cell.idle();
     }
 }

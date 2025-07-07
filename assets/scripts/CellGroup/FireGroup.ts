@@ -76,6 +76,8 @@ export class FireGroup {
         console.log("FireGroup.start()");
         assert(!this.firing, "FireGroup.start() firing is alread true");
 
+        sc.audioManager.playFuseBurn();
+
         if (!this.firing) {
             this.firing = true;
 
@@ -288,6 +290,8 @@ export class FireGroup {
     }
 
     finishFire(): void {
+        sc.audioManager.stopFuseBurn();
+
         for (const pos of this.finalPoses) {
             const [x, y] = sc.decodePos(pos);
             let cell: Cell = this.game.board.at(x, y);

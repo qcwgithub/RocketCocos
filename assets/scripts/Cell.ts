@@ -1,4 +1,4 @@
-import { _decorator, assert, Color, Component, Node, resources, Size, Sprite, SpriteFrame, UITransform } from 'cc';
+import { _decorator, assert, Color, Component, Node, resources, Size, Sprite, SpriteFrame, UITransform, Vec3 } from 'cc';
 import { Shape } from './Shape';
 import { CellData } from './CellData';
 import { RotateDir } from './RotateDir';
@@ -68,6 +68,9 @@ export class Cell extends Component {
     public stateMove: CellStateMove = new CellStateMove();
     public state: CellState;
 
+    pinging: boolean;
+    pingTimer: number;
+
     public cleanup(): void {
         this.game = null;
         this.x = 0;
@@ -81,6 +84,8 @@ export class Cell extends Component {
         this.stateMove.cleanup();
 
         this.state = this.stateIdle;
+        this.pinging = false;
+        this.pingTimer = 0;
 
         this._name_s.cleanup();
         this._sprite_s.cleanup();
@@ -177,7 +182,34 @@ export class Cell extends Component {
         this.refreshColor(cellData.linkedL, cellData.linkedR, this.previewing, this.state.type == CellStateType.Fire);
     }
 
+    public ping(): void {
+        this.pinging = true;
+        this.pingTimer = 0;
+    }
+
+    updatePing(dt: number): void {
+        if (!this.pinging) {
+            return;
+        }
+
+        this.pingTimer += dt;
+
+        if (this.pingTimer < MySettings.pingHalfTime) {
+            Vec3.lerp(sc.tempVec3, Vec3.ONE, MySettings.pingScale, this.pingTimer / MySettings.pingHalfTime);
+            this.node.setScale(sc.tempVec3);
+        }
+        else if (this.pingTimer < MySettings.pingHalfTime * 2) {
+            Vec3.lerp(sc.tempVec3, MySettings.pingScale, Vec3.ONE, (this.pingTimer - MySettings.pingHalfTime) / MySettings.pingHalfTime);
+            this.node.setScale(sc.tempVec3);
+        }
+        else {
+            this.node.setScale(Vec3.ONE);
+            this.pinging = false;
+        }
+    }
+
     public myUpdate(dt: number): void {
+        this.updatePing(dt);
         this.state.myUpdate(dt);
 
         this.statePreview.myUpdate(dt);

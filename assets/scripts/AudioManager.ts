@@ -12,12 +12,30 @@ export class AudioManager extends Component {
     @property({ type: AudioClip })
     preview: AudioClip;
 
+    @property({ type: AudioClip })
+    pipeRotate: AudioClip;
+
+    @property({ type: AudioSource })
+    fuseBurn: AudioSource;
+
     public playRocketLaunch(): void {
-        this.audioSource.playOneShot(this.rocketLaunch);
+        this.audioSource.playOneShot(this.rocketLaunch, 0.2);
     }
 
     public playPreview(): void {
-        this.audioSource.playOneShot(this.preview);
+        // this.audioSource.playOneShot(this.preview, 0.5);
+    }
+
+    public playPipeRotate(): void {
+        // this.audioSource.playOneShot(this.pipeRotate, 0.3);
+    }
+
+    public playFuseBurn(): void {
+        this.fuseBurn.play();
+    }
+
+    public stopFuseBurn(): void {
+        this.fuseBurn.pause();
     }
 }
 

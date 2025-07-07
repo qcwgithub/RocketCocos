@@ -50,6 +50,8 @@ export class CellStateRotate extends CellState {
     }
 
     public rotate(rotateDir: RotateDir, onFinish: (cell: Cell, rotateDir: RotateDir) => void): void {
+        sc.audioManager.playPipeRotate();
+
         if (this.rotating) {
             Quat.fromEuler(sc.tempQuat, 0, 0, 0);
             this.cell.node.setRotation(sc.tempQuat);
