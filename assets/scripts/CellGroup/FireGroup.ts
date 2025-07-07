@@ -15,7 +15,8 @@ export class FireGroup {
     game: MyGame;
     public firing: boolean;
     fireTimer: number;
-    public onFinish: (poses: number[]) => void;
+    onFireRocket: (y: number) => void;
+    onFinish: (poses: number[]) => void;
 
     currentPoses: number[] = [];
     tempPoses: number[] = [];
@@ -54,6 +55,7 @@ export class FireGroup {
         this.game = null;
         this.firing = false;
         this.fireTimer = 0;
+        this.onFireRocket = null;
         this.onFinish = null;
 
         this.currentPoses.length = 0;
@@ -70,7 +72,7 @@ export class FireGroup {
         this.firing = false;
     }
 
-    public start(poses: number[], onFinish: (poses: number[]) => void): void {
+    public start(poses: number[], onFireRocket: (y: number) => void, onFinish: (poses: number[]) => void): void {
         console.log("FireGroup.start()");
         assert(!this.firing, "FireGroup.start() firing is alread true");
 
@@ -116,6 +118,7 @@ export class FireGroup {
                 cell.fire();
             }
 
+            this.onFireRocket = onFireRocket;
             this.onFinish = onFinish;
         }
     }
@@ -191,6 +194,11 @@ export class FireGroup {
             for (const dir of linkedDirs) {
                 let x = center_x + DirExt.toOffsetX(dir);
                 if (x < 0 || x >= boardData.width) {
+
+                    if (dir == Dir.R && center_x == boardData.width - 1) {
+                        this.onFireRocket(center_y);
+                    }
+
                     continue;
                 }
 

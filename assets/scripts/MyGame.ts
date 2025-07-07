@@ -43,6 +43,7 @@ export class MyGame extends Component {
 
     onCellRotateFinish_bind: (cell: Cell, rotateDir: RotateDir) => void;
     onPreviewFinish_bind: (poses: number[]) => void;
+    onFireRocket_bind: (y: number) => void;
     onFireFinish_bind: (poses: number[]) => void;
     onCellMoveFinish_bind: (cell: Cell) => void;
 
@@ -59,6 +60,7 @@ export class MyGame extends Component {
 
         this.onCellRotateFinish_bind = null;
         this.onPreviewFinish_bind = null;
+        this.onFireRocket_bind = null;
         this.onFireFinish_bind = null;
         this.onCellMoveFinish_bind = null;
     }
@@ -77,6 +79,7 @@ export class MyGame extends Component {
 
         this.onCellRotateFinish_bind = this.onCellRotateFinish.bind(this);
         this.onPreviewFinish_bind = this.onPreviewFinish.bind(this);
+        this.onFireRocket_bind = this.onFireRocket.bind(this);
         this.onFireFinish_bind = this.onFireFinish.bind(this);
         this.onCellMoveFinish_bind = this.onCellMoveFinish.bind(this);
     }
@@ -236,25 +239,17 @@ export class MyGame extends Component {
     onPreviewFinish(poses: number[]): void {
         assert(!this.fireGroup.firing);
         if (!this.fireGroup.firing) {
-            this.fireGroup.start(poses, this.onFireFinish_bind);
+            this.fireGroup.start(poses, this.onFireRocket_bind, this.onFireFinish_bind);
         }
     }
 
+    onFireRocket(y: number): void {
+        this.gameData.collectedRockets++;
+        this.rockets[y].fly();
+        this.eventTarget.emit(MyGame.Events.collectRockets);
+    }
+
     onFireFinish(poses: number[]): void {
-        let pre: number = this.gameData.collectedRockets;
-        for (const pos of poses) {
-            const [x, y] = sc.decodePos(pos);
-            if (x == this.gameData.boardData.width - 1 &&
-                ShapeExt.getSettings(this.gameData.boardData.at(x, y).shape).isLinkDir(Dir.R)) {
-                this.gameData.collectedRockets++;
-
-                this.rockets[y].fly();
-            }
-        }
-        if (this.gameData.collectedRockets > pre) {
-            this.eventTarget.emit(MyGame.Events.collectRockets);
-        }
-
         this.moveGroup.move(poses, this.onCellMoveFinish_bind);
         this.setDirty();
         this.handleDirty();
