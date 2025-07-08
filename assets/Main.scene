@@ -5962,6 +5962,126 @@
       "__uuid__": "c5f9287d-6c9e-4dd1-b3d0-5505b460aac1@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
+    "L2": {
+      "__uuid__": "cb3cb664-a5c2-4fd2-8472-487cef31b6cc@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "R2": {
+      "__uuid__": "f960f02b-c66a-42ce-ac6d-63043ecb7c42@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "T2": {
+      "__uuid__": "91ff7ab8-a259-4228-aaae-904d8238bbb9@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "B2": {
+      "__uuid__": "27f9d572-4a99-48f6-a4c0-d429602be05f@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "LR2": {
+      "__uuid__": "862e225c-a5b6-4038-8c51-8ed75b41835a@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "LT2": {
+      "__uuid__": "50a8778d-337e-4b7d-bcd1-3c7586ae10f7@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "LB2": {
+      "__uuid__": "c1d8a995-226c-4f55-8bd3-05cad7290442@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "RT2": {
+      "__uuid__": "107aa2e4-7fb6-4acd-9685-029f8fc97886@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "RB2": {
+      "__uuid__": "d176a0e8-76f5-4413-83a3-d12ec0d1410a@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "TB2": {
+      "__uuid__": "1f302e7c-e7b7-4ec9-98ee-0696e5d55026@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "LRT2": {
+      "__uuid__": "9972da9e-643c-42ae-a6ed-8f8105fbf6ee@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "LRB2": {
+      "__uuid__": "3c9737ba-2c65-4e70-9ced-9e7f53ffb7e7@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "LTB2": {
+      "__uuid__": "0d7d9b29-ecd8-4357-9d62-892e532cbc47@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "RTB2": {
+      "__uuid__": "34679beb-14a0-4e1e-a4f8-56aaa0e97311@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "LRTB2": {
+      "__uuid__": "89babc9f-c1b6-4109-a9ec-e913fe924a22@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "L3": {
+      "__uuid__": "802dca78-2818-460d-a539-724d9ed7a425@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "R3": {
+      "__uuid__": "932122b8-1237-43ed-a0d1-a35c10edfd08@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "T3": {
+      "__uuid__": "62910f33-c647-409e-9391-c112dc60909d@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "B3": {
+      "__uuid__": "bc4f8b64-6d09-4ba7-b763-0b64d869b5dc@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "LR3": {
+      "__uuid__": "55a34b27-b517-4c6b-952e-91e517757f3d@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "LT3": {
+      "__uuid__": "f9d9266c-cf0b-4875-af47-5110467777f3@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "LB3": {
+      "__uuid__": "2ada7c48-a266-4087-9ce1-263626fdad62@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "RT3": {
+      "__uuid__": "57caf4c1-a7e1-4a4d-9507-07896d06f372@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "RB3": {
+      "__uuid__": "e7357c11-22f6-41a6-815d-d6dbc4aca365@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "TB3": {
+      "__uuid__": "e1072a48-59d5-4eef-82a3-276d8ea33910@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "LRT3": {
+      "__uuid__": "9100385a-5a3a-475c-b454-c6a3d8430c4f@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "LRB3": {
+      "__uuid__": "89923921-496d-47c8-94d1-ff6bd6bc29d4@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "LTB3": {
+      "__uuid__": "8567693c-ff1d-4daf-8b00-491d5b6190fb@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "RTB3": {
+      "__uuid__": "5f95ecd6-71d1-4020-8000-129712e08512@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
+    "LRTB3": {
+      "__uuid__": "bf9b6369-ae97-4d5d-9cf2-51d47bf948bf@f9941",
+      "__expectedType__": "cc.SpriteFrame"
+    },
     "_id": "53OtXiBjhNLLKj6Ti4aiH5"
   },
   {

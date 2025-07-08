@@ -6,6 +6,7 @@ import { MyAssets } from './MyAssets';
 import { Profile } from './Profile';
 import { PanelManager } from './PanelManager';
 import { AudioManager } from './AudioManager';
+import { Pool } from './Pool';
 const { ccclass, property } = _decorator;
 
 @ccclass('Bootstrap')
@@ -22,6 +23,7 @@ export class Bootstrap extends Component {
         sc.panelManager = this.panelManager;
         sc.myAssets = this.myAssets;
         sc.audioManager = this.audioManager;
+        sc.pool = new Pool();
 
         sc.profile = new Profile("qiucw");
         sc.profile.load();
