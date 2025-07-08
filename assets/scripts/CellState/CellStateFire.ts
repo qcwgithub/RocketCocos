@@ -15,6 +15,10 @@ export class CellStateFire extends CellState {
         return false;
     }
 
+    public override willPreFire(): void {
+        
+    }
+
     public override willMove(): void {
 
     }

@@ -232,6 +232,7 @@ export class Cell extends Component {
     }
 
     public preFire(): void {
+        this.state.willPreFire();
         this.assertIsIdle();
 
         this.state = this.statePreFire;

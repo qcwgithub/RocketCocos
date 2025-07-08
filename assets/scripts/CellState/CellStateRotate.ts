@@ -17,6 +17,13 @@ export class CellStateRotate extends CellState {
         return true;
     }
 
+    public override willPreFire(): void {
+        if (this.rotating) {
+            console.log("finishRotate because willPreFire");
+            this.finishRotate();
+        }
+    }
+
     public override willMove(): void {
         if (this.rotating) {
             console.log("finishRotate because willMove");

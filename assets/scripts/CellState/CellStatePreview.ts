@@ -18,6 +18,10 @@ export class CellStatePreview extends CellState {
         return true;
     }
 
+    public override willPreFire(): void {
+        
+    }
+
     public override willMove(): void {
 
     }

@@ -15,6 +15,10 @@ export class CellStateIdle extends CellState {
         return true;
     }
 
+    public override willPreFire(): void {
+        
+    }
+
     public override willMove(): void {
 
     }
