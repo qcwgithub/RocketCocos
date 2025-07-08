@@ -1,4 +1,4 @@
-import { _decorator, assert, Component, instantiate, Node, Vec3 } from 'cc';
+import { _decorator, assert, Component, instantiate, Node, Size, UITransform, Vec3 } from 'cc';
 import { Cell } from './Cell';
 import { BoardData } from './BoardData';
 import { MyGame } from './MyGame';
@@ -28,6 +28,9 @@ export class Board extends Component {
     public startGame(game: MyGame): void {
         this.game = game;
         this.boardData = game.gameData.boardData;
+
+        let uiTransform = this.node.getComponent(UITransform);
+        uiTransform.setContentSize(new Size(this.boardData.width * MySettings.cellSize, this.boardData.height * MySettings.cellSize));
 
         this.initCellBgs();
         this.initCells();

@@ -46,7 +46,7 @@ export class ConfigManager {
         levelConfig.width = 6;
         levelConfig.height = 9;
         levelConfig.rocket = 20;
-        levelConfig.time = 60;
+        levelConfig.time = 6;
         this.levelConfigs.push(levelConfig);
 
         this.maxLevel = this.levelConfigs[this.levelConfigs.length - 1].level;
