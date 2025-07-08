@@ -56,11 +56,14 @@ export class FireBall {
         this.index = 0;
         this.DURATION = MySettings.fireTimePerCel * 0.5;
 
-        if (delay == 0){
+        if (delay == 0) {
             this.node.active = true;
         }
 
-        this.node.setPosition(this.getPosition(target));
+        let position = sc.pool.getVec3();
+        this.getPosition(target, position);
+        this.node.setPosition(position);
+        sc.pool.putVec3(position);
     }
 
     public lastTargetIs(x: number, y: number, dir: Dir): boolean {
@@ -76,10 +79,8 @@ export class FireBall {
         return false;
     }
 
-    getPosition(target: FireBallTarget): Vec3 {
+    getPosition(target: FireBallTarget, position: Vec3): void {
         let board: Board = this.game.board;
-
-        let position: Vec3 = new Vec3();
 
         if (target.dir == Dir.Count) {
             position.x = board.getPositionX(target.x);
@@ -91,8 +92,6 @@ export class FireBall {
         }
 
         position.z = 0;
-
-        return position;
     }
 
     public append(x: number, y: number, dir: Dir): void {
@@ -122,15 +121,27 @@ export class FireBall {
         let L: number = this.targets.length;
         if (this.index < L - 1) {
             let t: number = this.timer / this.DURATION;
-            let from: Vec3 = this.getPosition(this.targets[this.index]);
-            let to: Vec3 = this.getPosition(this.targets[this.index + 1]);
 
-            let _ = new Vec3();
-            Vec3.lerp(_, from, to, t);
-            this.node.setPosition(_);
+            let from: Vec3 = sc.pool.getVec3();
+            this.getPosition(this.targets[this.index], from);
+
+            let to: Vec3 = sc.pool.getVec3();
+            this.getPosition(this.targets[this.index + 1], to);
+
+            let position = sc.pool.getVec3();
+            Vec3.lerp(position, from, to, t);
+
+            this.node.setPosition(position);
+
+            sc.pool.putVec3(from);
+            sc.pool.putVec3(to);
+            sc.pool.putVec3(position);
         }
         else if (this.index == L - 1) {
-            this.node.setPosition(this.getPosition(this.targets[L - 1]));
+            let position = sc.pool.getVec3();
+            this.getPosition(this.targets[L - 1], position);
+            this.node.setPosition(position);
+            sc.pool.putVec3(position);
         }
     }
 }

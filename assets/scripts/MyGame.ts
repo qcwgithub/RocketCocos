@@ -92,10 +92,12 @@ export class MyGame extends Component {
         let x: number = this.board.getPositionX(0) - MySettings.cellSize * 0.5;
         let y: number = this.board.getPositionY(index);
 
-        sc.tempVec3.x = x;
-        sc.tempVec3.y = y;
-        sc.tempVec3.z = 0;
-        child.setPosition(sc.tempVec3);
+        let v3 = sc.pool.getVec3();
+        v3.x = x;
+        v3.y = y;
+        v3.z = 0;
+        child.setPosition(v3);
+        sc.pool.putVec3(v3);
     }
 
     initMatches(): void {

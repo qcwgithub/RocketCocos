@@ -195,12 +195,16 @@ export class Cell extends Component {
         this.pingTimer += dt;
 
         if (this.pingTimer < MySettings.pingHalfTime) {
-            Vec3.lerp(sc.tempVec3, Vec3.ONE, MySettings.pingScale, this.pingTimer / MySettings.pingHalfTime);
-            this.node.setScale(sc.tempVec3);
+            let v3 = sc.pool.getVec3();
+            Vec3.lerp(v3, Vec3.ONE, MySettings.pingScale, this.pingTimer / MySettings.pingHalfTime);
+            this.node.setScale(v3);
+            sc.pool.putVec3(v3);
         }
         else if (this.pingTimer < MySettings.pingHalfTime * 2) {
-            Vec3.lerp(sc.tempVec3, MySettings.pingScale, Vec3.ONE, (this.pingTimer - MySettings.pingHalfTime) / MySettings.pingHalfTime);
-            this.node.setScale(sc.tempVec3);
+            let v3 = sc.pool.getVec3();
+            Vec3.lerp(v3, MySettings.pingScale, Vec3.ONE, (this.pingTimer - MySettings.pingHalfTime) / MySettings.pingHalfTime);
+            this.node.setScale(v3);
+            sc.pool.putVec3(v3);
         }
         else {
             this.node.setScale(Vec3.ONE);

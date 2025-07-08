@@ -58,8 +58,11 @@ export class CellStatePreview extends CellState {
         let t: number = sc.clamp01(this.previewTimer / MySettings.previewDuration);
         t *= t;
         // console.log("t = " + t)
-        Color.lerp(sc.tempColor, MySettings.cellColor.previewStart, MySettings.cellColor.previewEnd, t);
-        this.cell.sprite.color = sc.tempColor;
+
+        let c = sc.pool.getColor();
+        Color.lerp(c, MySettings.cellColor.previewStart, MySettings.cellColor.previewEnd, t);
+        this.cell.sprite.color = c;
+        sc.pool.putColor(c);
         // console.log(this.cell.sprite.color.toString())
         return t;
     }

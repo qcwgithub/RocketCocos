@@ -39,10 +39,12 @@ export class Rocket extends Component {
             x += MySettings.flySpeed.x * dt;
             y += MySettings.flySpeed.y * dt;
 
-            sc.tempVec3.x = x;
-            sc.tempVec3.y = y;
-            sc.tempVec3.z = this.initPosition.z;
-            this.node.setPosition(sc.tempVec3);
+            let v3 = sc.pool.getVec3();
+            v3.x = x;
+            v3.y = y;
+            v3.z = this.initPosition.z;
+            this.node.setPosition(v3);
+            sc.pool.putVec3(v3);
 
             this.flyTime += dt;
             if (this.flyTime >= MySettings.flyTime) {

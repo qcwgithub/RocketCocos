@@ -66,17 +66,17 @@ export class DirExt {
         }
     }
 
-    public static toOffset(e: Dir): Vec2 {
-        switch (e) {
-            case Dir.L:
-                return new Vec2(-1, 0);
-            case Dir.R:
-                return new Vec2(1, 0);
-            case Dir.T:
-                return new Vec2(0, 1);
-            case Dir.B:
-            default:
-                return new Vec2(0, -1);
-        }
-    }
+    // public static toOffset(e: Dir): Vec2 {
+    //     switch (e) {
+    //         case Dir.L:
+    //             return new Vec2(-1, 0);
+    //         case Dir.R:
+    //             return new Vec2(1, 0);
+    //         case Dir.T:
+    //             return new Vec2(0, 1);
+    //         case Dir.B:
+    //         default:
+    //             return new Vec2(0, -1);
+    //     }
+    // }
 }

@@ -60,8 +60,10 @@ export class CellStateRotate extends CellState {
         sc.audioManager.playPipeRotate();
 
         if (this.rotating) {
-            Quat.fromEuler(sc.tempQuat, 0, 0, 0);
-            this.cell.node.setRotation(sc.tempQuat);
+            let q = sc.pool.getQuat();
+            Quat.fromEuler(q, 0, 0, 0);
+            this.cell.node.setRotation(q);
+            sc.pool.putQuat(q);
             this.cell.refresh();
         }
 
@@ -70,8 +72,12 @@ export class CellStateRotate extends CellState {
         this.rotateDir = rotateDir;
         this.rotateTimer = 0;
         this.startRotation = this.cell.node.rotation;
-        Quat.fromEuler(sc.tempQuat, 0, 0, RotateDirExt.toRotateAngle(rotateDir));
-        Quat.multiply(this.targetRotation, this.startRotation, sc.tempQuat);
+        
+        let q = sc.pool.getQuat();
+        Quat.fromEuler(q, 0, 0, RotateDirExt.toRotateAngle(rotateDir));
+        Quat.multiply(this.targetRotation, this.startRotation, q);
+        sc.pool.putQuat(q);
+
         this.onRotateFinish = onFinish;
 
         let cellData: CellData = this.cell.game.gameData.boardData.at(this.cell.x, this.cell.y);
@@ -86,8 +92,12 @@ export class CellStateRotate extends CellState {
         if (this.rotating) {
             this.rotateTimer += dt;
             let t: number = sc.clamp01(this.rotateTimer / MySettings.rotateDuration);
-            Quat.lerp(sc.tempQuat, this.startRotation, this.targetRotation, t)
-            this.cell.node.setRotation(sc.tempQuat);
+            
+            let q = sc.pool.getQuat();
+            Quat.lerp(q, this.startRotation, this.targetRotation, t)
+            this.cell.node.setRotation(q);
+            sc.pool.putQuat(q);
+
             if (t >= 1) {
                 this.finishRotate();
             }
@@ -101,8 +111,10 @@ export class CellStateRotate extends CellState {
         // let cellData: CellData = this.cell.game.gameData.boardData.at(this.cell.x, this.cell.y);
         // cellData.forbidLink = false;
 
-        Quat.fromEuler(sc.tempQuat, 0, 0, 0);
-        this.cell.node.setRotation(sc.tempQuat);
+        let q = sc.pool.getQuat();
+        Quat.fromEuler(q, 0, 0, 0);
+        this.cell.node.setRotation(q);
+        sc.pool.putQuat(q);
 
         this.cell.idle();
 
