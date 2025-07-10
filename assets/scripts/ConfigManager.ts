@@ -1,53 +1,45 @@
-import { assert } from "cc";
+import { _decorator, assert, Component, TextAsset } from 'cc';
+const { ccclass, property } = _decorator;
 import { LevelConfig } from "./LevelConfig";
+import { CsvLoader } from './CsvLoader';
 
-export class ConfigManager {
+@ccclass('ConfigManager')
+export class ConfigManager extends Component {
+    @property({ type: TextAsset })
+    levelCsv: TextAsset;
     public levelConfigs: LevelConfig[];
 
     public maxLevel: number;
 
     public load(): void {
+        let loader = new CsvLoader();
+        loader.load(this.levelCsv.text);
+
         this.levelConfigs = [];
+        let level = 0;
+        while (loader.readRow()) {
+            let config = new LevelConfig();
 
-        var levelConfig = new LevelConfig();
-        levelConfig.level = 1;
-        levelConfig.width = 3;
-        levelConfig.height = 3;
-        levelConfig.rocket = 3;
-        levelConfig.time = 60;
-        this.levelConfigs.push(levelConfig);
+            level++;
+            config.level = loader.readInt("level");
+            assert(level == config.level);
 
-        levelConfig = new LevelConfig();
-        levelConfig.level = 2;
-        levelConfig.width = 4;
-        levelConfig.height = 6;
-        levelConfig.rocket = 5;
-        levelConfig.time = 60;
-        this.levelConfigs.push(levelConfig);
+            config.width = loader.readInt("width");
+            config.height = loader.readInt("height");
+            config.rocket = loader.readInt("rocket");
+            config.time = loader.readInt("time");
 
-        levelConfig = new LevelConfig();
-        levelConfig.level = 3;
-        levelConfig.width = 6;
-        levelConfig.height = 9;
-        levelConfig.rocket = 10;
-        levelConfig.time = 60;
-        this.levelConfigs.push(levelConfig);
+            config.L_R_T_B = loader.readInt("L_R_T_B");
+            config.LR_TB = loader.readInt("LR_TB");
+            config.LB_RT_RB_TB = loader.readInt("LB_RT_RB_TB");
+            config.LRT_LRB_LTB_RTB = loader.readInt("LRT_LRB_LTB_RTB");
+            config.LRTB = loader.readInt("LRTB");
 
-        levelConfig = new LevelConfig();
-        levelConfig.level = 4;
-        levelConfig.width = 6;
-        levelConfig.height = 3;
-        levelConfig.rocket = 10;
-        levelConfig.time = 60;
-        this.levelConfigs.push(levelConfig);
+            let total = config.L_R_T_B + config.LR_TB + config.LB_RT_RB_TB + config.LRT_LRB_LTB_RTB + config.LRTB;
+            assert(total == 100, `level ${level} total is not 100, it is ${total}`);
 
-        levelConfig = new LevelConfig();
-        levelConfig.level = 5;
-        levelConfig.width = 6;
-        levelConfig.height = 9;
-        levelConfig.rocket = 20;
-        levelConfig.time = 6;
-        this.levelConfigs.push(levelConfig);
+            this.levelConfigs.push(config);
+        }
 
         this.maxLevel = this.levelConfigs[this.levelConfigs.length - 1].level;
     }

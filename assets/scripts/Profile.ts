@@ -1,3 +1,5 @@
+import { sc } from "./sc";
+
 export class Profile {
     public userId: string;
     public constructor(userId: string) {
@@ -17,6 +19,10 @@ export class Profile {
         this.K_level = this.userId + "_level";
         let str = localStorage.getItem(this.K_level);
         this._level = parseInt(str) || 1;
+
+        if (this._level > sc.configManager.maxLevel){
+            this.level = sc.configManager.maxLevel;
+        }
     }
     public get level(): number {
         return this._level;

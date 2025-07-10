@@ -6,7 +6,7 @@ export class MySettings {
     public static readonly pingScale: Vec3 = new Vec3(1, 1, 1);
     public static readonly pingHalfTime: number = 0.1;
     public static readonly fireTimePerCel: number = 0.13;
-    public static readonly cellSize: number = 90;
+    public static readonly cellSize: number = 95;
     public static readonly moveSpeed: number = 600;
     public static readonly bigVec3: Vec3 = new Vec3(1.5, 1.5, 1);
     public static readonly extendTime: number = 60;

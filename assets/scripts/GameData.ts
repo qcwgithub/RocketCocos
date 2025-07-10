@@ -46,18 +46,73 @@ export class GameData {
         return 1;
     }
 
-    static seqs: number[] = [
-        0, 3, 5, 6, 7, 2, 3, 4, 6, 547, 8, 234, 3, 53, 2, 32, 42, 2, 1, 3, 42, 5, 2, 5, 2, 3, 2, 32, 3, 2
-    ];
-    seq: number = 0;
     public randomShape(): Shape {
-        this.seq = (this.seq + 1) % GameData.seqs.length;
-        let index = GameData.seqs[this.seq] % ShapeExt.s_without1.length;
-        // let index: number = randomRangeInt(0, ShapeExt.s_without1.length);
-        // console.log("random shape~index: " + index);
-        let shape: Shape = ShapeExt.s_without1[index];
-        // console.log("random shape~shape: " + Shape[shape]);
-        return shape;
+        let r: number = randomRangeInt(0, 100); // [0,99]
+
+        let v = this.levelConfig.L_R_T_B;
+        if (r < v) {
+            let r2 = randomRangeInt(0, 4);
+            switch (r2) {
+                case 0:
+                    return Shape.L;
+                case 1:
+                    return Shape.R;
+                case 2:
+                    return Shape.T;
+                case 3:
+                default:
+                    return Shape.B;
+            }
+        }
+
+        v += this.levelConfig.LR_TB;
+        if (r < v) {
+            let r2 = randomRangeInt(0, 2);
+            switch (r2) {
+                case 0:
+                    return Shape.LR;
+                case 1:
+                default:
+                    return Shape.TB;
+            }
+        }
+
+        v += this.levelConfig.LB_RT_RB_TB;
+        if (r < v) {
+            let r2 = randomRangeInt(0, 4);
+            switch (r2) {
+                case 0:
+                    return Shape.LB;
+                case 1:
+                    return Shape.RT;
+                case 2:
+                    return Shape.RB;
+                case 3:
+                default:
+                    return Shape.TB;
+            }
+        }
+
+        v += this.levelConfig.LRT_LRB_LTB_RTB;
+        if (r < v) {
+            let r2 = randomRangeInt(0, 4);
+            switch (r2) {
+                case 0:
+                    return Shape.LRT;
+                case 1:
+                    return Shape.LRB;
+                case 2:
+                    return Shape.LTB;
+                case 3:
+                default:
+                    return Shape.RTB;
+            }
+        }
+
+        v += this.levelConfig.LRTB;
+        assert(r < v);
+
+        return Shape.LRTB;
     }
 
     public refreshLink(): void {

@@ -17,6 +17,8 @@ export class Bootstrap extends Component {
     myAssets: MyAssets;
     @property({ type: AudioManager })
     audioManager: AudioManager;
+    @property({ type: ConfigManager })
+    configManager: ConfigManager;
 
     onLoad() {
         sc.bootstrap = this;
@@ -25,11 +27,12 @@ export class Bootstrap extends Component {
         sc.audioManager = this.audioManager;
         sc.pool = new Pool();
 
+        sc.configManager = this.configManager;
+        sc.configManager.load();
+
         sc.profile = new Profile("qiucw");
         sc.profile.load();
 
-        sc.configManager = new ConfigManager();
-        sc.configManager.load();
 
         sc.panelManager.mainPanel.show();
     }
