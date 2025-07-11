@@ -41,6 +41,7 @@ export class GamePanel extends Component {
 
         this.node.active = true;
 
+        this._forceRefreshRemainTime = true;
         this.refreshRemainTime();
         this.schedule(this.refreshRemainTime, 1, macro.REPEAT_FOREVER);
     }
@@ -82,6 +83,7 @@ export class GamePanel extends Component {
         this.rocketCountLabel.string = gameData.collectedRockets + "/" + gameData.levelConfig.rocket;
     }
 
+    _forceRefreshRemainTime: boolean;
     refreshRemainTime(): void {
         let gameData: GameData = this.game.gameData;
         if (gameData.result != 0) {
@@ -91,8 +93,12 @@ export class GamePanel extends Component {
         let now: number = sc.timeInt();
         let elapsed: number = now - this.prevTime;
         if (elapsed == 0) {
-            return;
+            if (!this._forceRefreshRemainTime) {
+                return;
+            }
         }
+
+        this._forceRefreshRemainTime = false;
 
         this.remainTime -= elapsed;
         this.prevTime = now;

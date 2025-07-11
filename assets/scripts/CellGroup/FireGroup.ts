@@ -19,7 +19,6 @@ export class FireGroup {
     onFinish: (poses: number[]) => void;
 
     currentPoses: number[] = [];
-    tempPoses: number[] = [];
 
     balls: FireBall[] = [];
     tempBalls: FireBall[] = [];
@@ -52,6 +51,8 @@ export class FireGroup {
     }
 
     public cleanup(): void {
+        sc.audioManager.stopFuseBurn();
+
         this.game = null;
         this.firing = false;
         this.fireTimer = 0;
@@ -59,9 +60,14 @@ export class FireGroup {
         this.onFinish = null;
 
         this.currentPoses.length = 0;
-        this.tempPoses.length = 0;
 
+        for (let i = 0; i < this.balls.length; i++) {
+            this.putFireBallNode(this.balls[i].node);
+            this.balls[i].cleanup();
+        }
         this.balls.length = 0;
+
+        assert(this.tempBalls.length == 0);
         this.tempBalls.length = 0;
 
         this.finalPoses.length = 0;
@@ -82,7 +88,6 @@ export class FireGroup {
             this.firing = true;
 
             this.currentPoses.length = 0;
-            this.tempPoses.length = 0;
 
             this.balls.length = 0;
             this.tempBalls.length = 0;
@@ -125,9 +130,10 @@ export class FireGroup {
         }
     }
 
+    // 往 this.balls 添加
     ballPassCell(x: number, y: number, inDir: Dir, inBall: FireBall): void {
         if (inBall == null) {
-            inBall = new FireBall();
+            inBall = sc.pool.getFireBall();
             inBall.start(this.game, this.allocFireBallNode(), x, y, inDir, 0);
         }
 
@@ -154,7 +160,7 @@ export class FireGroup {
                 inBall.append(x, y, dir);
             }
             else {
-                let ball = new FireBall();
+                let ball = sc.pool.getFireBall();
                 // console.log(`[${ball.uid}] ${x} ${y} ${Dir[Dir.Count]}`);
                 ball.start(this.game, this.allocFireBallNode(), x, y, Dir.Count, MySettings.fireTimePerCel * 0.5);
 
@@ -167,10 +173,12 @@ export class FireGroup {
     }
 
     forward(): void {
-        this.tempPoses.length = 0;
+        let temp = sc.pool.getNumberArray();
+
         for (let i = 0; i < this.currentPoses.length; i++) {
-            this.tempPoses.push(this.currentPoses[i]);
+            temp.push(this.currentPoses[i]);
         }
+
         this.currentPoses.length = 0;
 
         // balls -> tempBalls
@@ -184,7 +192,7 @@ export class FireGroup {
         let board: Board = this.game.board;
         let boardData: BoardData = this.game.gameData.boardData;
 
-        for (const pos of this.tempPoses) {
+        for (const pos of temp) {
             const [center_x, center_y] = sc.decodePos(pos);
 
             let center: Cell = board.at(center_x, center_y);
@@ -261,10 +269,12 @@ export class FireGroup {
                 // console.log(`delete [${this.tempBalls[i].uid}]`);
                 this.putFireBallNode(this.tempBalls[i].node);
                 this.tempBalls[i].cleanup();
+                sc.pool.putFireBall(this.tempBalls[i]);
             }
         }
+        this.tempBalls.length = 0;
 
-        this.tempPoses.length = 0;
+        sc.pool.putNumberArray(temp);
 
         if (this.currentPoses.length == 0) {
             this.finishFire();
@@ -290,6 +300,9 @@ export class FireGroup {
     }
 
     finishFire(): void {
+        assert(this.currentPoses.length == 0, "FireGroup.finishFire() this.currentPoses.length != 0");
+        assert(this.balls.length == 0, "FireGroup.finishFire() this.balls.length != 0");
+
         sc.audioManager.stopFuseBurn();
 
         for (const pos of this.finalPoses) {

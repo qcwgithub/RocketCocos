@@ -19,6 +19,8 @@ class FireBallTarget {
 
 export class FireBall {
     static s_uid: number = 1;
+
+    public busy: boolean;
     uid: number;
     game: MyGame;
     public node: Node;
