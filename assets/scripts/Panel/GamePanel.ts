@@ -16,12 +16,16 @@ export class GamePanel extends Component {
     @property({ type: Label })
     remainTimeLabel: Label;
 
+    @property({ type: Label })
+    levelLabel: Label;
+
     public remainTime: number;
     prevTime: number;
     public startGame(): void {
         this.cleanup();
 
         let level: number = sc.profile.level;
+        this.levelLabel.string = `第 ${level} 关`;
 
         var gameData = new GameData();
         gameData.init(level);
@@ -75,7 +79,7 @@ export class GamePanel extends Component {
 
     refreshRocketCount(): void {
         let gameData: GameData = this.game.gameData;
-        this.rocketCountLabel.string = "collected " + gameData.collectedRockets + "/" + gameData.levelConfig.rocket;
+        this.rocketCountLabel.string = gameData.collectedRockets + "/" + gameData.levelConfig.rocket;
     }
 
     refreshRemainTime(): void {
