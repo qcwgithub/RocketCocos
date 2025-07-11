@@ -79,7 +79,7 @@ export class FireGroup {
     }
 
     public start(poses: number[], onFireRocket: (y: number) => void, onFinish: (poses: number[]) => void): void {
-        console.log("FireGroup.start()");
+        // console.log("FireGroup.start()");
         assert(!this.firing, "FireGroup.start() firing is alread true");
 
         sc.audioManager.playFuseBurn();

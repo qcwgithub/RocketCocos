@@ -3,10 +3,11 @@ import { MyGame } from '../MyGame';
 import { sc } from '../sc';
 import { GameData } from '../GameData';
 import { MySettings } from '../MySettings';
+import { Panel } from './Panel';
 const { ccclass, property } = _decorator;
 
 @ccclass('GamePanel')
-export class GamePanel extends Component {
+export class GamePanel extends Panel {
     @property({ type: MyGame })
     public game: MyGame;
 
@@ -39,7 +40,7 @@ export class GamePanel extends Component {
 
         this.game.eventTarget.on(MyGame.Events.collectRockets, this.onCollectRockets, this);
 
-        this.node.active = true;
+        this.show();
 
         this._forceRefreshRemainTime = true;
         this.refreshRemainTime();
@@ -51,8 +52,6 @@ export class GamePanel extends Component {
     }
 
     public cleanup(): void {
-        this.node.active = false;
-
         this.game.eventTarget.off(MyGame.Events.collectRockets, this.onCollectRockets, this);
         this.game.cleanup();
 
@@ -124,5 +123,15 @@ export class GamePanel extends Component {
 
         this.refreshRocketCount();
         this.refreshRemainTime();
+    }
+
+    public override hide(): void {
+        this.cleanup();
+        super.hide();
+    }
+
+    public onClickHome(): void {
+        this.hide();
+        sc.panelManager.mainPanel.show();
     }
 }

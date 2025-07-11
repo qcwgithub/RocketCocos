@@ -36,7 +36,8 @@ export class SettingsPanel extends Panel {
 
     public onClickResetProgress(): void {
         sc.profile.level = 1;
-        sc.panelManager.gamePanel.startGame();
+        // sc.panelManager.gamePanel.startGame();
+        sc.panelManager.mainPanel.refreshLevel();
     }
 }
 
