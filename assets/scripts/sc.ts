@@ -72,6 +72,20 @@ export class sc {
             }
         }
     }
+
+    static padZero(v: number): string {
+        if (v == 0) {
+            return "00";
+        }
+        else if (v < 10) {
+            return "0" + v;
+        }
+        else {
+            return v.toString();
+        }
+    }
+
+    public static formatTime(t: number): string {
+        return sc.padZero(Math.floor(t / 60)) + ":" + sc.padZero(t % 60);
+    }
 }
-
-

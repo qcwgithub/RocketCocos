@@ -99,7 +99,7 @@ export class GamePanel extends Component {
         if (this.remainTime < 0) {
             this.remainTime = 0;
         }
-        this.remainTimeLabel.string = this.remainTime.toString();
+        this.remainTimeLabel.string = sc.formatTime(this.remainTime);
 
         if (this.remainTime == 0) {
             gameData.result = -1;
