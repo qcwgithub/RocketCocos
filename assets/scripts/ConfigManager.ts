@@ -1,17 +1,26 @@
-import { _decorator, assert, Component, TextAsset } from 'cc';
+import { _decorator, assert, Component, TextAsset, widgetManager } from 'cc';
 const { ccclass, property } = _decorator;
 import { LevelConfig } from "./LevelConfig";
 import { CsvLoader } from './CsvLoader';
+import { Shape } from './Shape';
 
 @ccclass('ConfigManager')
 export class ConfigManager extends Component {
     @property({ type: TextAsset })
     levelCsv: TextAsset;
-    public levelConfigs: LevelConfig[];
 
+    @property({ type: TextAsset })
+    fixedStartCsv: TextAsset;
+
+    levelConfigs: LevelConfig[];
     public maxLevel: number;
 
     public load(): void {
+        this.loadLevelConfig();
+        this.loadFixedStarts();
+    }
+
+    loadLevelConfig(): void {
         let loader = new CsvLoader();
         loader.load(this.levelCsv.text);
 
@@ -42,6 +51,39 @@ export class ConfigManager extends Component {
         }
 
         this.maxLevel = this.levelConfigs[this.levelConfigs.length - 1].level;
+    }
+
+    loadFixedStarts(): void {
+        let text: string = this.fixedStartCsv.text;
+        let loader = new CsvLoader();
+        loader.load(text);
+        while (loader.readRow()) {
+            let s = loader.readString("0");
+            let level = parseInt(s);
+
+            let levelConfig = this.getLevelConfig(level);
+            assert(levelConfig != null, `levelConfig is null, level ${level}`);
+
+            let shapes: Shape[][] = new Array(levelConfig.width);
+            for (let x = 0; x < levelConfig.width; x++) {
+                shapes[x] = new Array(levelConfig.height);
+            }
+
+            for (let y = levelConfig.height - 1; y >= 0; y--) {
+                let ok = loader.readRow();
+                assert(ok, "ok is false");
+
+                for (let x = 0; x < levelConfig.width; x++) {
+                    s = loader.readString(x.toString())
+                    let shape: Shape = Shape[s];
+                    assert(shape >= 0 && shape < Shape.Count, `invalid shape ${shape} x ${x} s ${s}`);
+
+                    shapes[x][y] = shape;
+                }
+            }
+
+            levelConfig.fixedStart = shapes;
+        }
     }
 
     public getLevelConfig(level: number): LevelConfig {

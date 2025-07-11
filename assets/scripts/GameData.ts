@@ -24,7 +24,13 @@ export class GameData {
             for (let y = 0; y < this.levelConfig.height; y++) {
                 let cell: CellData = this.boardData.at(x, y);
                 cell.forbidLink = false;
-                cell.shape = this.randomShape();
+
+                if (this.levelConfig.fixedStart != null) {
+                    cell.shape = this.levelConfig.fixedStart[x][y];
+                }
+                else {
+                    cell.shape = this.randomShape();
+                }
             }
         }
 

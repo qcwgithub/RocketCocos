@@ -1,3 +1,5 @@
+import { Shape } from "./Shape";
+
 export class LevelConfig {
     public level: number;
     public width: number;
@@ -9,4 +11,6 @@ export class LevelConfig {
     public LB_RT_RB_TB: number;
     public LRT_LRB_LTB_RTB: number;
     public LRTB: number;
+
+    public fixedStart: Shape[][];
 }
