@@ -41,6 +41,8 @@ export class MyGame extends Component {
     public fireGroup: FireGroup = new FireGroup();
     public moveGroup: MoveGroup = new MoveGroup();
 
+    onClickHandler: (x: number, y: number, rotateDir: RotateDir) => void;
+
     onCellRotateFinish_bind: (cell: Cell, rotateDir: RotateDir) => void;
     onPreviewFinish_bind: (poses: number[]) => void;
     onFireRocket_bind: (y: number) => void;
@@ -58,6 +60,8 @@ export class MyGame extends Component {
         this.previewGroup.cleanup();
         this.moveGroup.cleanup();
 
+        this.onClickHandler = null;
+
         this.onCellRotateFinish_bind = null;
         this.onPreviewFinish_bind = null;
         this.onFireRocket_bind = null;
@@ -65,7 +69,7 @@ export class MyGame extends Component {
         this.onCellMoveFinish_bind = null;
     }
 
-    public startGame(gameData: GameData): void {
+    public startGame(gameData: GameData, onClickHandler: (x: number, y: number, rotateDir: RotateDir) => void): void {
         this.gameData = gameData;
         this.board.startGame(this);
 
@@ -76,6 +80,8 @@ export class MyGame extends Component {
         this.previewGroup.startGame(this);
         this.fireGroup.startGame(this);
         this.moveGroup.startGame(this);
+
+        this.onClickHandler = onClickHandler;
 
         this.onCellRotateFinish_bind = this.onCellRotateFinish.bind(this);
         this.onPreviewFinish_bind = this.onPreviewFinish.bind(this);
@@ -186,7 +192,10 @@ export class MyGame extends Component {
 
     public onClick(x: number, y: number, rotateDir: RotateDir): void {
         console.log(`Click (${x}, ${y})`);
+        this.onClickHandler(x, y, rotateDir);
+    }
 
+    public clickRotate(x: number, y: number, rotateDir: RotateDir): void {
         let cell: Cell = this.board.at(x, y);
         if (!cell.state.askRotate()) {
             return;

@@ -1,9 +1,10 @@
-import { _decorator, Component, Label, macro, Node } from 'cc';
+import { _decorator, Component, Label, macro, Node, Sprite } from 'cc';
 import { MyGame } from '../MyGame';
 import { sc } from '../sc';
 import { GameData } from '../GameData';
 import { MySettings } from '../MySettings';
 import { Panel } from './Panel';
+import { RotateDir } from '../RotateDir';
 const { ccclass, property } = _decorator;
 
 @ccclass('GamePanel')
@@ -20,8 +21,15 @@ export class GamePanel extends Panel {
     @property({ type: Label })
     levelLabel: Label;
 
+    @property({ type: Node })
+    pauseNode: Node;
+
+    @property({ type: Node })
+    resumeNode: Node;
+
     public remainTime: number;
     prevTime: number;
+    public paused: boolean;
     public startGame(): void {
         this.cleanup();
 
@@ -34,7 +42,7 @@ export class GamePanel extends Panel {
         this.remainTime = gameData.levelConfig.time;
         this.prevTime = sc.timeInt();
 
-        this.game.startGame(gameData);
+        this.game.startGame(gameData, this.onClickHandler.bind(this));
 
         this.refreshRocketCount();
 
@@ -47,11 +55,25 @@ export class GamePanel extends Panel {
         this.schedule(this.refreshRemainTime, 1, macro.REPEAT_FOREVER);
     }
 
+    onClickHandler(x: number, y: number, rotateDir: RotateDir): void {
+        if (this.paused) {
+            return;
+        }
+
+        this.game.clickRotate(x, y, rotateDir);
+    }
+
     update(dt: number): void {
+        if (this.paused) {
+            return;
+        }
         this.game.myUpdate(dt);
     }
 
     public cleanup(): void {
+        this.paused = false;
+        this.pauseNode.active = !this.paused;
+        this.resumeNode.active = this.paused;
         this.game.eventTarget.off(MyGame.Events.collectRockets, this.onCollectRockets, this);
         this.game.cleanup();
 
@@ -133,5 +155,29 @@ export class GamePanel extends Panel {
     public onClickHome(): void {
         this.hide();
         sc.panelManager.mainPanel.show();
+    }
+
+    public onClickPause(): void {
+        this.pause();
+    }
+
+    pause(): void {
+        this.paused = true;
+        this.pauseNode.active = false;
+        this.resumeNode.active = true;
+        this.unschedule(this.refreshRemainTime);
+    }
+
+    public onClickResume(): void {
+        this.resume();
+    }
+
+    resume(): void {
+        this.paused = false;
+        this.pauseNode.active = true;
+        this.resumeNode.active = false;
+
+        this.prevTime = sc.timeInt();
+        this.schedule(this.refreshRemainTime, 1, macro.REPEAT_FOREVER);
     }
 }
