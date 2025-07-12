@@ -9,9 +9,6 @@ const { ccclass, property } = _decorator;
 
 @ccclass('GamePanel')
 export class GamePanel extends Panel {
-    @property({ type: MyGame })
-    public game: MyGame;
-
     @property({ type: Label })
     rocketCountLabel: Label;
 
@@ -27,11 +24,14 @@ export class GamePanel extends Panel {
     @property({ type: Node })
     resumeNode: Node;
 
+    game: MyGame;
     public remainTime: number;
     prevTime: number;
     public paused: boolean;
     public startGame(): void {
         this.cleanup();
+
+        this.game = sc.game;
 
         let level: number = sc.profile.level;
         this.levelLabel.string = `第 ${level} 关`;

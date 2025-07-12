@@ -19,12 +19,15 @@ export class Bootstrap extends Component {
     audioManager: AudioManager;
     @property({ type: ConfigManager })
     configManager: ConfigManager;
+    @property({ type: MyGame })
+    public game: MyGame;
 
     onLoad() {
         sc.bootstrap = this;
         sc.panelManager = this.panelManager;
         sc.myAssets = this.myAssets;
         sc.audioManager = this.audioManager;
+        sc.game = this.game;
         sc.pool = new Pool();
 
         sc.configManager = this.configManager;

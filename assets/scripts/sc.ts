@@ -13,6 +13,7 @@ export class sc {
     public static panelManager: PanelManager;
     public static myAssets: MyAssets;
     public static configManager: ConfigManager;
+    public static game: MyGame;
     public static profile: Profile;
     public static audioManager: AudioManager;
     public static pool: Pool;
