@@ -8,7 +8,7 @@ export class LevelConfig {
     public time: number; // 时间多长
     public L_R_T_B: number;
     public LR_TB: number;
-    public LB_RT_RB_TB: number;
+    public LB_RT_RB_LT: number;
     public LRT_LRB_LTB_RTB: number;
     public LRTB: number;
 

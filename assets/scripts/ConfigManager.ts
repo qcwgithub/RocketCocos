@@ -40,11 +40,11 @@ export class ConfigManager extends Component {
 
             config.L_R_T_B = loader.readInt("L_R_T_B");
             config.LR_TB = loader.readInt("LR_TB");
-            config.LB_RT_RB_TB = loader.readInt("LB_RT_RB_TB");
+            config.LB_RT_RB_LT = loader.readInt("LB_RT_RB_LT");
             config.LRT_LRB_LTB_RTB = loader.readInt("LRT_LRB_LTB_RTB");
             config.LRTB = loader.readInt("LRTB");
 
-            let total = config.L_R_T_B + config.LR_TB + config.LB_RT_RB_TB + config.LRT_LRB_LTB_RTB + config.LRTB;
+            let total = config.L_R_T_B + config.LR_TB + config.LB_RT_RB_LT + config.LRT_LRB_LTB_RTB + config.LRTB;
             assert(total == 100, `level ${level} total is not 100, it is ${total}`);
 
             this.levelConfigs.push(config);

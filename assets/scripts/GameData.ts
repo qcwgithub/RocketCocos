@@ -83,7 +83,7 @@ export class GameData {
             }
         }
 
-        v += this.levelConfig.LB_RT_RB_TB;
+        v += this.levelConfig.LB_RT_RB_LT;
         if (r < v) {
             let r2 = randomRangeInt(0, 4);
             switch (r2) {
@@ -95,7 +95,7 @@ export class GameData {
                     return Shape.RB;
                 case 3:
                 default:
-                    return Shape.TB;
+                    return Shape.LT;
             }
         }
 

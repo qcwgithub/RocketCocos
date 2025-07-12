@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Toggle } from 'cc';
+import { _decorator, Component, EditBox, Node, Toggle } from 'cc';
 import { Panel } from './Panel';
 import { sc } from '../sc';
 const { ccclass, property } = _decorator;
@@ -13,6 +13,9 @@ export class SettingsPanel extends Panel {
 
     @property({ type: Toggle })
     toggleVibrate: Toggle;
+
+    @property({ type: EditBox })
+    resetLevel: EditBox;
 
     public override show(): void {
         super.show();
@@ -35,9 +38,11 @@ export class SettingsPanel extends Panel {
     }
 
     public onClickResetProgress(): void {
-        sc.profile.level = 1;
-        // sc.panelManager.gamePanel.startGame();
-        sc.panelManager.mainPanel.refreshLevel();
+        let level = parseInt(this.resetLevel.string);
+        if (level >= 1 && level <= sc.configManager.maxLevel) {
+            sc.profile.level = level;
+            sc.panelManager.mainPanel.refreshLevel();
+        }
     }
 }
 
