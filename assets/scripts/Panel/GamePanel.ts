@@ -1,10 +1,11 @@
-import { _decorator, Component, Label, macro, Node, Sprite } from 'cc';
+import { _decorator, assert, Component, Label, macro, Node, Sprite } from 'cc';
 import { MyGame } from '../MyGame';
 import { sc } from '../sc';
 import { GameData } from '../GameData';
 import { MySettings } from '../MySettings';
 import { Panel } from './Panel';
 import { RotateDir } from '../RotateDir';
+import { Guide } from './Guide';
 const { ccclass, property } = _decorator;
 
 @ccclass('GamePanel')
@@ -23,6 +24,9 @@ export class GamePanel extends Panel {
 
     @property({ type: Node })
     resumeNode: Node;
+
+    @property({ type: Guide })
+    guide: Guide;
 
     game: MyGame;
     public remainTime: number;
@@ -50,9 +54,20 @@ export class GamePanel extends Panel {
 
         this.show();
 
+        if (this.guide.show(level, this.onClickGuideHandler.bind(this))) {
+            this.pause();
+        }
+
         this._forceRefreshRemainTime = true;
         this.refreshRemainTime();
-        this.schedule(this.refreshRemainTime, 1, macro.REPEAT_FOREVER);
+        this.schedule(this.onSchedule1, 1, macro.REPEAT_FOREVER);
+    }
+
+    onClickGuideHandler(): void {
+        this.guide.hide();
+
+        this.resume();
+        this.onClickHandler(3, 3, RotateDir.CCW);
     }
 
     onClickHandler(x: number, y: number, rotateDir: RotateDir): void {
@@ -77,7 +92,7 @@ export class GamePanel extends Panel {
         this.game.eventTarget.off(MyGame.Events.collectRockets, this.onCollectRockets, this);
         this.game.cleanup();
 
-        this.unschedule(this.refreshRemainTime);
+        this.unschedule(this.onSchedule1);
     }
 
     onCollectRockets(): void {
@@ -102,6 +117,10 @@ export class GamePanel extends Panel {
     refreshRocketCount(): void {
         let gameData: GameData = this.game.gameData;
         this.rocketCountLabel.string = gameData.collectedRockets + "/" + gameData.levelConfig.rocket;
+    }
+
+    onSchedule1(): void {
+        this.refreshRemainTime();
     }
 
     _forceRefreshRemainTime: boolean;
@@ -162,10 +181,11 @@ export class GamePanel extends Panel {
     }
 
     pause(): void {
+        assert(!this.paused, "pause(): this.paused is already true");
         this.paused = true;
         this.pauseNode.active = false;
         this.resumeNode.active = true;
-        this.unschedule(this.refreshRemainTime);
+        this.unschedule(this.onSchedule1);
     }
 
     public onClickResume(): void {
@@ -173,11 +193,12 @@ export class GamePanel extends Panel {
     }
 
     resume(): void {
+        assert(this.paused, "resume(): this.paused is not true");
         this.paused = false;
         this.pauseNode.active = true;
         this.resumeNode.active = false;
 
         this.prevTime = sc.timeInt();
-        this.schedule(this.refreshRemainTime, 1, macro.REPEAT_FOREVER);
+        this.schedule(this.onSchedule1, 1, macro.REPEAT_FOREVER);
     }
 }

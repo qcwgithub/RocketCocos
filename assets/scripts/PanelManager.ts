@@ -22,6 +22,14 @@ export class PanelManager extends Component {
 
     @property({ type: SettingsPanel })
     public settingsPanel: SettingsPanel;
+
+    onLoad(): void {
+        this.mainPanel.show();
+        this.gamePanel.hide();
+        this.successPanel.hide();
+        this.failPanel.hide();
+        this.settingsPanel.hide();
+    }
 }
 
 
